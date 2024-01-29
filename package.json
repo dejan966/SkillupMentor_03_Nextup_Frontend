@@ -6,20 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "code:format": "prettier --ignore-path .gitignore --write \"**/*.{ts,tsx,js,css,scss,html,json}\"",
+    "prepare": "husky install",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "check-types": "tsc --pretty --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.17.19",
+    "@tanstack/react-query-devtools": "^5.17.21",
     "@types/node": "20.11.6",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "autoprefixer": "10.4.17",
-    "eslint": "8.56.0",
+    "axios": "^1.6.7",
     "eslint-config-next": "14.1.0",
     "next": "14.1.0",
     "postcss": "8.4.33",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.4",
+    "husky": "^8.0.0"
   }
 }

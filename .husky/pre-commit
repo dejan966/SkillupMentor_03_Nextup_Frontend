@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo 'Styling, testing and building your project before committing'
+
+# tsconfig standards
+npm run check-types || (
+    echo 'Failed type check nigga'
+    false;
+)
+
+# eslint standards
+npm run check-types || (
+    echo 'Failed eslint check nigga'
+    false;
+)
+
+# If everything passes
+echo 'Well done, code looks good nigga'
+
+npm run build ||
+(
+    echo 'Better call Bob cause the build failed.'
+)
+
+# If it builds
+echo 'Committing code nigga'
