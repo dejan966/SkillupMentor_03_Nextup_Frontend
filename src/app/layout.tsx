@@ -1,6 +1,8 @@
 import Provider from '@/components/providers/Provider'
 import { Poppins } from 'next/font/google'
-import './globals.css'
+import Header from '@/components/header/Header'
+import Footer from '@/components/footer/Footer'
+import '@/styles/globals.css'
 
 const poppins = Poppins({ subsets: ['latin'], weight: '300' })
 
@@ -17,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Provider>{children}</Provider>
+        <Provider>
+          <Header />
+          <div className="content">{children}</div>
+          <Footer />
+        </Provider>
       </body>
     </html>
   )

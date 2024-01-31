@@ -1,5 +1,5 @@
 @tailwind base;
-@tailwind components;
+@tailwindcss components;
 @tailwind utilities;
 
 :root {
@@ -21,4 +21,22 @@
 body {
   color: var(--color-secondary);
   background: var(--color-primary);
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  background-color: #ffffff;
+}
+
+.dF {
+  display: block;
 }
