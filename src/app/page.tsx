@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <main className="flex p-24">
-      <div className="z-10  items-center justify-between  ">Hello</div>
+    <main className="pl-24">
+      <div className="text-black font-bold">FIND THE BEST EVENTS</div>
     </main>
   )
 }

@@ -33,10 +33,11 @@ body {
   min-height: 100vh;
 }
 
-.footer {
-  background-color: #ffffff;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 2fr);
 }
 
-.dF {
-  display: block;
+* {
+  margin: 0;
 }
