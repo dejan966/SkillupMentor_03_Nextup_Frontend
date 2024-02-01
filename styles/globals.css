@@ -23,6 +23,10 @@ body {
   background: var(--color-primary);
 }
 
+#home-page footer {
+  display: none !important;
+}
+
 .content {
   flex-grow: 1;
 }
