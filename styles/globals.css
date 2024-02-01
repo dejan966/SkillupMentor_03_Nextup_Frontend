@@ -23,6 +23,15 @@ body {
   background: var(--color-primary);
 }
 
+.padding-0 {
+  padding-right: 0;
+}
+
+.footerDiv {
+  position: absolute;
+  bottom: 0px;
+}
+
 #home-page footer {
   display: none !important;
 }
