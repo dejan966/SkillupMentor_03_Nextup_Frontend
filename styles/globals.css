@@ -27,17 +27,13 @@ body {
   flex-grow: 1;
 }
 
+.myQuotes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.1fr;
+}
+
 .display {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 2fr);
-}
-
-* {
-  margin: 0;
 }
