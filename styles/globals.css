@@ -18,26 +18,43 @@
   }
 }
 
+input[type='date']::-webkit-calendar-picker-indicator {
+  content: url(/dateIcon.svg);
+  position: absolute;
+  left: 6px;
+  width: 20px;
+  height: 20px;
+}
+
 body {
   color: var(--color-secondary);
   background: var(--color-primary);
+}
+
+.padding-0 {
+  padding-right: 0;
+}
+
+.footerDiv {
+  position: absolute;
+  bottom: 0px;
+}
+
+#home-page footer {
+  display: none !important;
 }
 
 .content {
   flex-grow: 1;
 }
 
+.myQuotes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.1fr;
+}
+
 .display {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 2fr);
-}
-
-* {
-  margin: 0;
 }

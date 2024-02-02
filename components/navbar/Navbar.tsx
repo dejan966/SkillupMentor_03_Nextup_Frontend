@@ -17,7 +17,7 @@ export default function Navbar() {
           <a href="#">Login</a>
           <button
             type="button"
-            className="bg-blue-800 text-white h-10 w-28 rounded-full"
+            className="bg-blue-800 text-white h-10 w-28 rounded-full hover:bg-blue-500"
           >
             Sign up
           </button>
