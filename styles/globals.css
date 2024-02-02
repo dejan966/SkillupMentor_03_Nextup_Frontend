@@ -18,6 +18,14 @@
   }
 }
 
+input[type='date']::-webkit-calendar-picker-indicator {
+  content: url(/dateIcon.svg);
+  position: absolute;
+  left: 6px;
+  width: 20px;
+  height: 20px;
+}
+
 body {
   color: var(--color-secondary);
   background: var(--color-primary);
