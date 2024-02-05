@@ -14,12 +14,12 @@ export default function Navbar() {
           <a href="#">Search</a>
         </div>
         <div className="space-x-8">
-          <a href="#">Login</a>
+          <a href={routes.LOGIN}>Login</a>
           <button
             type="button"
             className="bg-blue-800 text-white h-10 w-28 rounded-full hover:bg-blue-500"
           >
-            Sign up
+            <a href={routes.SIGNUP}>Sign up</a>
           </button>
         </div>
       </nav>

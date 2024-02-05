@@ -21,6 +21,7 @@ export default function LoginForm() {
 
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await API.login(data)
+    console.log(response)
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -36,7 +37,7 @@ export default function LoginForm() {
     <div className="flex justify-center items-center">
       <div className="px-8 pt-6 pb-8 mb-4">
         <h1 className="text-6xl">Welcome back!</h1>
-        <p className="text-lg text-black font-bold">
+        <p className="text-lg text-black font-bold mb-4">
           We are glad you are back.
         </p>
         <form method="POST" onSubmit={onSubmit}>
@@ -92,6 +93,9 @@ export default function LoginForm() {
                   <div className="text-red-500 text-xs">
                     {errors.password.message}
                   </div>
+                )}
+                {showError && (
+                  <div className="text-red-500 text-md">{apiError}</div>
                 )}
               </div>
             )}
