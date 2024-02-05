@@ -1,6 +1,5 @@
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 
 const onDefault = () => {
   document.title = 'Home'
