@@ -6,8 +6,6 @@ export default function Home() {
   const [width, height] = useDeviceSize()
   const onSubmit = (event: any) => {
     event.preventDefault()
-    /*     console.log(event.target.searchValue.value)
-    console.log(event.target.dateValue.value) */
   }
   return (
     <main>

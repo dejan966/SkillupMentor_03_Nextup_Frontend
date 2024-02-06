@@ -9,3 +9,10 @@ export const getAllEvents = () => {
     apiRequest<undefined, EventType>('get', apiRoutes.FETCH_EVENTS),
   )
 }
+
+export const getEvent = (_id: string) => {
+  return query(
+    ['oneEvent'],
+    apiRequest<undefined, EventType>('get', `${apiRoutes.FETCH_EVENTS}/${_id}`),
+  )
+}
