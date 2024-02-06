@@ -34,8 +34,8 @@ export default function Navbar() {
           <Image src="/cgp.png" alt="Nextup logo" height={30} width={30} />
         </Link>
         <div className="space-x-8">
-          <a href={routes.HOME}>Home</a>
-          <a href="#">Search</a>
+          <Link href={routes.HOME}>Home</Link>
+          <Link href="#">Search</Link>
         </div>
         {authStore.user ? (
           <div>
