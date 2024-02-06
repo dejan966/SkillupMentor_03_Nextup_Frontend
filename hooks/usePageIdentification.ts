@@ -17,11 +17,16 @@ const onSignup = () => {
   document.title = 'Signup'
   document.body.id = 'signup-page'
 }
+const onEvent = () => {
+  document.title = 'Event'
+  document.body.id = 'event-page'
+}
 
 const callbacks: any = {
   '/': [onHome],
   '/login': [onLogin],
   '/signup': [onSignup],
+  //'/events/[eventId]': [onEvent],
   '*': [onDefault],
 }
 

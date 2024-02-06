@@ -32,21 +32,47 @@ export default function Event({ params }: Props) {
       <div>
         {isSuccess && (
           <div className="grid grid-cols-2 space-x-8 pl-24">
-            <div>
+            <div className="grid-rows-5">
               <div className="flex justify-between">
-                <div>{eventData.data.date}</div>
+                <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
                 <div>{eventData.data.hour}</div>
               </div>
               <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
               <br />
               <div className="flex justify-between">
-                <div>{eventData.data.location}</div>
-                <div>{eventData.data.max_users}</div>
+                <div className="flex justify-start">
+                  <Image
+                    src="/locationIcon.svg"
+                    alt="location icon"
+                    width={20}
+                    height={20}
+                  />
+                  {eventData.data.location}
+                </div>
+                <div className="flex justify-start">
+                  <Image
+                    src="/avatarIcon.svg"
+                    alt="avatar icon"
+                    width={20}
+                    height={20}
+                  />
+                  {eventData.data.max_users}
+                </div>
               </div>
               <br />
               <br />
               <div className="font-bold">EVENT DESCRIPTION</div>
-              <div>df</div>
+              <div>{eventData.data.description}</div>
+              <br />
+              <br />
+              <div className="text-end">
+                <button
+                  type="button"
+                  className="bg-blue-800 text-white h-12 w-20 rounded-xl hover:bg-blue-500"
+                >
+                  Back
+                </button>
+              </div>
             </div>
             <div>
               <Image
