@@ -118,7 +118,6 @@ export default function RegisterForm() {
                 <input
                   {...field}
                   type="email"
-                  placeholder="example@gmail.com"
                   aria-label="Email"
                   aria-describedby="email"
                   className={
@@ -146,7 +145,6 @@ export default function RegisterForm() {
                 <input
                   {...field}
                   type="password"
-                  placeholder="******************"
                   aria-label="Password"
                   aria-describedby="password"
                   className={
@@ -165,7 +163,7 @@ export default function RegisterForm() {
           />
           <Controller
             control={control}
-            name="password"
+            name="confirm_password"
             render={({ field }) => (
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -174,7 +172,6 @@ export default function RegisterForm() {
                 <input
                   {...field}
                   type="password"
-                  placeholder="******************"
                   aria-label="confirm_password"
                   aria-describedby="confirm_password"
                   className={

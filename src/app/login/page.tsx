@@ -51,7 +51,6 @@ export default function LoginForm() {
                 <input
                   {...field}
                   type="email"
-                  placeholder="example@gmail.com"
                   aria-label="Email"
                   aria-describedby="email"
                   className={
@@ -79,7 +78,6 @@ export default function LoginForm() {
                 <input
                   {...field}
                   type="password"
-                  placeholder="******************"
                   aria-label="Password"
                   aria-describedby="password"
                   className={
