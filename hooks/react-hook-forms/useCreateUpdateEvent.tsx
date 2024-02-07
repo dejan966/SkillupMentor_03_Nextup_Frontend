@@ -8,7 +8,7 @@ export interface CreateEventFields {
   location: string
   date: string
   hour: string
-  max_user: number
+  max_users: number
   description?: string
   image: string
 }
@@ -18,7 +18,7 @@ export interface UpdateEventFields {
   location?: string
   date?: string
   hour?: string
-  max_user?: number
+  max_users?: number
   description?: string
   image?: string
 }
