@@ -1,4 +1,4 @@
-import EventBlock from '@/components/EventBlock'
+import EventBlock from '@/components/events/EventBlock'
 
 export default function AllUpcomingEvents() {
   return (

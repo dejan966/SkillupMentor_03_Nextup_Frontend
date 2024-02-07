@@ -19,10 +19,6 @@ export default function Event({ params }: Props) {
     },
   )
 
-  if (eventData?.data.message === 'Unauthorized') {
-    return <div>Unauthorized</div>
-  }
-
   if (isSuccess === true && !eventData?.data._id) {
     notFound()
   }
