@@ -29,7 +29,7 @@ export default function EventEdit({ params }: Props) {
 
   return (
     <div>
-      <CreateUpdateEvent title="Manage event" event={eventData?.data} />
+      <CreateUpdateEvent title="Manage event" defaultValues={eventData?.data} />
     </div>
   )
 }
