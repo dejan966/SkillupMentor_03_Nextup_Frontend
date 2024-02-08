@@ -10,7 +10,6 @@ export interface CreateEventFields {
   hour: string
   max_users: number
   description?: string
-  image: string
 }
 
 export interface UpdateEventFields {
@@ -32,9 +31,11 @@ const createEventSchema = z.object({
   location: z.string().min(1, { message: 'Location is required' }),
   date: z.string().min(1, { message: 'Date is required' }),
   hour: z.string().min(1, { message: 'Hour is required' }),
-  max_users: z.number().min(1, { message: 'Max users is required' }),
+  max_users: z.number().optional(),
   description: z.string().optional(),
-  image: z.string().min(1, { message: 'Image is required' }),
+  /*   image: z
+    .string()
+    .refine((files) => files?.length >= 1, { message: 'Image is required.' }), */
 })
 
 const updateEventSchema = z.object({

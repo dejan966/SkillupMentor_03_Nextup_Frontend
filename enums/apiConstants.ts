@@ -10,4 +10,5 @@ export enum apiRoutes {
   UPLOAD_AVATAR_IMAGE = '/users/upload',
   FETCH_EVENTS = '/events',
   EVENTS_PREFIX = '/events',
+  UPLOAD_EVENT_IMAGE = '/events/upload',
 }

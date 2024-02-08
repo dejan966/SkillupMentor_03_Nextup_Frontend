@@ -37,17 +37,20 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }
 
   const uploadFile = () => {
-    document.getElementById('locationUpload')?.click()
+    document.getElementById('eventUpload')?.click()
+  }
+
+  const handleFileError = () => {
+    if (!file) setFileError(true)
+    else setFileError(false)
   }
 
   const onSubmit = handleSubmit(
     async (data: CreateEventFields | UpdateEventFields) => {
-      console.log(data)
       if (defaultValues) {
         handleUpdate(data as UpdateEventFields)
       } else if (!defaultValues) {
-        data.max_users = 100
-        data.image = 'event-picture.png'
+        //data.max_users = 100
         handleCreate(data as CreateEventFields)
       }
     },
@@ -75,12 +78,27 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      router.push(routes.HOME)
+      const formData = new FormData()
+      formData.append('image', file!, file!.name)
+      const fileResponse = await API.uploadEventImage(
+        formData,
+        response.data._id,
+      )
+      if (fileResponse.status === StatusCode.BAD_REQUEST) {
+        setApiError(fileResponse.data.message)
+        setShowError(true)
+      } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(fileResponse.data.message)
+        setShowError(true)
+      } else {
+        router.push(routes.HOME)
+      }
     }
   }
 
   const clearImg = () => {
-    setPreview('/location_placeholder.png')
+    //remove image from input type file
+    setFile(null)
   }
 
   useEffect(() => {
@@ -92,7 +110,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       }
       reader.readAsDataURL(file)
     } else {
-      setPreview('/location_placeholder.png')
+      setPreview('')
     }
   }, [file])
 
@@ -215,7 +233,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 )}
               />
             </div>
-            {/* <div className="w-52">
+            <div className="w-52">
               <Controller
                 control={control}
                 name="max_users"
@@ -225,13 +243,13 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       Max users
                     </label>
                     <input
-                      {...field}
+                      name="max_users"
                       type="number"
                       aria-label="max_users"
                       aria-describedby="max_users"
-                      onChange={(event) =>
+                      /* onChange={(event) =>
                         field.onChange(Number(event.target.value))
-                      }
+                      } */
                       className={
                         errors.max_users
                           ? 'border border-red-500 rounded-full h-10 w-full'
@@ -246,9 +264,8 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   </div>
                 )}
               />
-            </div> */}
+            </div>
           </div>
-
           <Controller
             control={control}
             name="description"
@@ -276,47 +293,62 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               </div>
             )}
           />
-          <Controller
-            control={control}
-            name="image"
-            render={({ field }) => (
-              <div className="mb-4">
+          <div className="mb-4">
+            {preview && (
+              <div className="flex justify-between">
                 <input
-                  {...field}
-                  onChange={handleFileChange}
-                  id="eventUpload"
-                  type="file"
-                  accept="image/png, 'image/jpg', image/jpeg"
+                  type="image"
+                  src={preview as string}
+                  width={123}
+                  height={123}
+                  aria-label="image"
+                  aria-describedby="image"
                 />
+                {/*                     <Image
+                      src={preview as string}
+                      alt="img"
+                      width={123}
+                      height={123}
+                    /> */}
                 <button
-                  className="bg-black text-white h-10 w-full rounded-full hover:bg-blue-500 mb-4"
                   type="button"
+                  className="rounded-lg h-10 w-14 text-white bg-red-600 hover:bg-red-800"
+                  onClick={clearImg}
                 >
-                  Add image
+                  x
                 </button>
-                {errors.image && (
-                  <div className="text-red-500 text-xs">
-                    {errors.image.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
               </div>
             )}
-          />
-          {/* <div>
+            <br />
             <button
-              className="bg-black text-white h-10 w-full rounded-full hover:bg-blue-500 mb-4"
+              className="bg-black text-white h-10 w-full rounded-full hover:bg-stone-700 mb-4"
               type="button"
+              onClick={uploadFile}
             >
               Add image
             </button>
-          </div> */}
+            <input
+              type="file"
+              id="eventUpload"
+              name="image"
+              onChange={handleFileChange}
+              aria-label="image"
+              aria-describedby="image"
+              accept="image/png, 'image/jpg', image/jpeg"
+              className="hidden"
+            />
+            {fileError && (
+              <div className="text-red-500 text-xs">Image is required</div>
+            )}
+            {showError && (
+              <div className="text-red-500 text-md">{apiError}</div>
+            )}
+          </div>
           <div>
             <button
-              className="bg-blue-800 text-white h-10 w-full rounded-full hover:bg-blue-500 mb-4"
+              className="bg-blue-800 text-white h-10 w-full rounded-full hover:bg-blue-500"
               type="submit"
+              onMouseUp={handleFileError}
             >
               Submit
             </button>
