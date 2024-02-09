@@ -9,3 +9,10 @@ export const getAllUsers = () => {
     apiRequest<undefined, UserType>('get', apiRoutes.FETCH_USERS),
   )
 }
+
+export const getCurrUser = () => {
+  return query(
+    ['currUsers'],
+    apiRequest<undefined, UserType>('get', apiRoutes.ME),
+  )
+}

@@ -11,6 +11,9 @@ import { Controller } from 'react-hook-form'
 import * as API from '@/api/api'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
+import { getCurrUser } from '@/hooks/useUsers'
+import EventCard from './EventCard'
+import Image from 'next/image'
 
 type Props = {
   defaultValues?: EventType
@@ -18,6 +21,8 @@ type Props = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
+  const { data: currUser } = getCurrUser()
+
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
     defaultValues,
   })
@@ -50,7 +55,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       if (defaultValues) {
         handleUpdate(data as UpdateEventFields)
       } else if (!defaultValues) {
-        //data.max_users = 100
         handleCreate(data as CreateEventFields)
       }
     },
@@ -65,7 +69,21 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      router.push(routes.HOME)
+      const formData = new FormData()
+      formData.append('image', file!, file!.name)
+      const fileResponse = await API.uploadEventImage(
+        formData,
+        response.data._id,
+      )
+      if (fileResponse.status === StatusCode.BAD_REQUEST) {
+        setApiError(fileResponse.data.message)
+        setShowError(true)
+      } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(fileResponse.data.message)
+        setShowError(true)
+      } else {
+        router.push(routes.HOME)
+      }
     }
   }
 
@@ -115,9 +133,9 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }, [file])
 
   return (
-    <div className="grid grid-cols-2 pl-24 pr-24">
+    <div className="grid grid-cols-2 pl-24 pr-24 space-x-8">
       <div>
-        <h1 className="text-2xl text-black">{title}</h1>
+        <h1 className="text-2xl text-black font-bold">{title}</h1>
         <br />
         <form method="POST" onSubmit={onSubmit}>
           <Controller
@@ -247,9 +265,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       type="number"
                       aria-label="max_users"
                       aria-describedby="max_users"
-                      /* onChange={(event) =>
-                        field.onChange(Number(event.target.value))
-                      } */
+                      onChange={(event) => console.log(event.target.value)}
                       className={
                         errors.max_users
                           ? 'border border-red-500 rounded-full h-10 w-full'
@@ -296,20 +312,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
           <div className="mb-4">
             {preview && (
               <div className="flex justify-between">
-                <input
-                  type="image"
+                <Image
                   src={preview as string}
+                  alt="img"
                   width={123}
                   height={123}
-                  aria-label="image"
-                  aria-describedby="image"
                 />
-                {/*                     <Image
-                      src={preview as string}
-                      alt="img"
-                      width={123}
-                      height={123}
-                    /> */}
                 <button
                   type="button"
                   className="rounded-lg h-10 w-14 text-white bg-red-600 hover:bg-red-800"
@@ -356,7 +364,16 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         </form>
       </div>
       <div>
-        <h1 className="text-2xl text-black">Added events</h1>
+        <h1 className="text-2xl text-black font-bold">Added events</h1>
+        {currUser?.data.created_events.slice(0, 5).map((event: EventType) => {
+          return (
+            <EventCard
+              key={event._id.toString()}
+              event={event}
+              type="created_events"
+            />
+          )
+        })}
       </div>
     </div>
   )

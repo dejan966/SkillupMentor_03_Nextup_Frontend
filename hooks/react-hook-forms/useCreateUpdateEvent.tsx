@@ -31,11 +31,8 @@ const createEventSchema = z.object({
   location: z.string().min(1, { message: 'Location is required' }),
   date: z.string().min(1, { message: 'Date is required' }),
   hour: z.string().min(1, { message: 'Hour is required' }),
-  max_users: z.number().optional(),
+  max_users: z.number(),
   description: z.string().optional(),
-  /*   image: z
-    .string()
-    .refine((files) => files?.length >= 1, { message: 'Image is required.' }), */
 })
 
 const updateEventSchema = z.object({
