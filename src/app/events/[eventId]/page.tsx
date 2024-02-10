@@ -64,7 +64,7 @@ export default function Event({ params }: Props) {
               <div className="text-end">
                 <button
                   type="button"
-                  className="bg-blue-800 text-white h-12 w-20 rounded-xl hover:bg-blue-500"
+                  className="blue text-white h-12 w-20 rounded-xl"
                 >
                   Back
                 </button>

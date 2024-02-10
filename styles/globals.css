@@ -31,19 +31,41 @@ body {
   background: var(--color-primary);
 }
 
-.forms2 {
-  width: min(100%, 420px);
-  margin: 0 auto;
-  padding: 25px 0;
-}
-
-.padding-0 {
-  padding-right: 0;
-}
-
 .footerDiv {
   position: absolute;
   bottom: 0px;
+}
+
+.tailwind-form-control {
+  @apply border rounded-full h-10 w-full p-3.5;
+}
+
+.tailwind-form-control-errors {
+  @apply border border-red-500 rounded-full h-10 w-full p-3.5 focus:outline-none focus:ring-0 focus:border-2 focus:border-red-500;
+}
+
+.validation-feedback {
+  @apply text-red-500 text-xs;
+}
+
+.divGrid {
+  @apply grid grid-cols-3;
+}
+
+.centered {
+  @apply flex justify-center items-center;
+}
+
+.inputText {
+  @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.blueButton {
+  @apply bg-blue-800 hover:bg-blue-500 text-white h-10 w-full rounded-full mb-4;
+}
+
+.blue {
+  @apply bg-blue-800 hover:bg-blue-500;
 }
 
 #home-page footer {

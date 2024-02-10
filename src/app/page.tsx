@@ -56,7 +56,7 @@ export default function Home() {
                   />
                   <button
                     type="submit"
-                    className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-800 rounded-e-lg border border-blue-800 hover:border-blue-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
+                    className="blue absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white rounded-e-lg border border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
                   >
                     <svg
                       className="w-4 h-4"
@@ -91,7 +91,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="divGrid gap-6">
           <div className="col-span-2 relative">
             <Image src="/picture-1.png" alt="Picture 1" fill />
           </div>

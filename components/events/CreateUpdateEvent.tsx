@@ -143,9 +143,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             name="name"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Event name
-                </label>
+                <label className="inputText">Event name</label>
                 <input
                   {...field}
                   type="text"
@@ -153,12 +151,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   aria-describedby="name"
                   className={
                     errors.name
-                      ? 'border border-red-500 rounded-full h-10 w-full'
-                      : 'border rounded-full h-10 w-full'
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
                   }
                 />
                 {errors.name && (
-                  <div className="text-red-500 text-xs">
+                  <div className="validation-feedback">
                     {errors.name.message}
                   </div>
                 )}
@@ -170,9 +168,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             name="location"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Location
-                </label>
+                <label className="inputText">Location</label>
                 <input
                   {...field}
                   type="text"
@@ -180,28 +176,26 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   aria-describedby="location"
                   className={
                     errors.location
-                      ? 'border border-red-500 rounded-full h-10 w-full'
-                      : 'border rounded-full h-10 w-full'
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
                   }
                 />
                 {errors.location && (
-                  <div className="text-red-500 text-xs">
+                  <div className="validation-feedback">
                     {errors.location.message}
                   </div>
                 )}
               </div>
             )}
           />
-          <div className="grid grid-cols-3">
+          <div className="divGrid">
             <div className="w-52 mb-4">
               <Controller
                 control={control}
                 name="date"
                 render={({ field }) => (
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Date
-                    </label>
+                    <label className="inputText">Date</label>
                     <input
                       {...field}
                       type="text"
@@ -209,12 +203,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       aria-describedby="date"
                       className={
                         errors.date
-                          ? 'border border-red-500 rounded-full h-10 w-full'
-                          : 'border rounded-full h-10 w-full'
+                          ? 'tailwind-form-control-errors'
+                          : 'tailwind-form-control'
                       }
                     />
                     {errors.date && (
-                      <div className="text-red-500 text-xs">
+                      <div className="validation-feedback">
                         {errors.date.message}
                       </div>
                     )}
@@ -228,9 +222,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 name="hour"
                 render={({ field }) => (
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Hour
-                    </label>
+                    <label className="inputText">Hour</label>
                     <input
                       {...field}
                       type="text"
@@ -238,12 +230,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       aria-describedby="hour"
                       className={
                         errors.hour
-                          ? 'border border-red-500 rounded-full h-10 w-full'
-                          : 'border rounded-full h-10 w-full'
+                          ? 'tailwind-form-control-errors'
+                          : 'tailwind-form-control'
                       }
                     />
                     {errors.hour && (
-                      <div className="text-red-500 text-xs">
+                      <div className="validation-feedback">
                         {errors.hour.message}
                       </div>
                     )}
@@ -257,9 +249,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 name="max_users"
                 render={({ field }) => (
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Max users
-                    </label>
+                    <label className="inputText">Max users</label>
                     <input
                       name="max_users"
                       type="number"
@@ -268,12 +258,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       onChange={(event) => console.log(event.target.value)}
                       className={
                         errors.max_users
-                          ? 'border border-red-500 rounded-full h-10 w-full'
-                          : 'border rounded-full h-10 w-full'
+                          ? 'tailwind-form-control-errors'
+                          : 'tailwind-form-control'
                       }
                     />
                     {errors.max_users && (
-                      <div className="text-red-500 text-xs">
+                      <div className="validation-feedback">
                         {errors.max_users.message}
                       </div>
                     )}
@@ -287,9 +277,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             name="description"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Description
-                </label>
+                <label className="inputText">Description</label>
                 <input
                   {...field}
                   type="text"
@@ -297,12 +285,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   aria-describedby="description"
                   className={
                     errors.description
-                      ? 'border border-red-500 rounded-full h-10 w-full'
-                      : 'border rounded-full h-10 w-full'
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
                   }
                 />
                 {errors.description && (
-                  <div className="text-red-500 text-xs">
+                  <div className="validation-feedback">
                     {errors.description.message}
                   </div>
                 )}
@@ -346,7 +334,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               className="hidden"
             />
             {fileError && (
-              <div className="text-red-500 text-xs">Image is required</div>
+              <div className="validation-feedback">Image is required</div>
             )}
             {showError && (
               <div className="text-red-500 text-md">{apiError}</div>
@@ -354,7 +342,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
           </div>
           <div>
             <button
-              className="bg-blue-800 text-white h-10 w-full rounded-full hover:bg-blue-500"
+              className="blue text-white h-10 w-full rounded-full"
               type="submit"
               onMouseUp={handleFileError}
             >

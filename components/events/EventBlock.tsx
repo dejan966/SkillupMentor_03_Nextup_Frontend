@@ -6,7 +6,7 @@ import Image from 'next/image'
 export default function Events() {
   const { data: allEvents } = getAllEvents()
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="divGrid gap-4">
       {allEvents?.data.map((event: EventType) => {
         return (
           <div key={event._id} className="bg-white w-96">

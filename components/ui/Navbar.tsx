@@ -49,7 +49,7 @@ export default function Navbar() {
             <Link href={routes.LOGIN}>Login</Link>
             <button
               type="button"
-              className="bg-blue-800 text-white h-10 w-28 rounded-full hover:bg-blue-500"
+              className="blue text-white h-10 w-28 rounded-full"
             >
               <Link href={routes.SIGNUP}>Sign up</Link>
             </button>
