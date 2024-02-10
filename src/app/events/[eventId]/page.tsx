@@ -71,8 +71,8 @@ export default function Event({ params }: Props) {
               </div>
             </div>
             <div>
-              <Image
-                src={`/${eventData.data.image}`}
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
                 alt="Event image"
                 width={730}
                 height={630}

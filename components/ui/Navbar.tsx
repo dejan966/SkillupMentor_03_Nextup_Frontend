@@ -39,9 +39,18 @@ export default function Navbar() {
           {authStore.user && <Link href="/events/add">Event manager</Link>}
         </div>
         {authStore.user ? (
-          <div>
-            <Link href="#" onClick={signout}>
+          <div className="space-x-7">
+            <Link href="/me">Profile settings</Link>
+            <Link href="/" onClick={signout}>
               Signout
+            </Link>
+            <Link href="/me/events">
+              <Image
+                src="/default-profile.svg"
+                alt="User avatar"
+                height={60}
+                width={50}
+              />
             </Link>
           </div>
         ) : (
