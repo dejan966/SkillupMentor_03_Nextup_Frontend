@@ -63,4 +63,4 @@ export const useRegisterForm = () => {
   }
 }
 
-export type LoginForm = z.infer<typeof registerSchema>
+export type RegisterForm = z.infer<typeof registerSchema>

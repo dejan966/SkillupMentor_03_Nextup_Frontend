@@ -36,6 +36,7 @@ export default function Navbar() {
         <div className="space-x-8">
           <Link href={routes.HOME}>Home</Link>
           <Link href="#">Search</Link>
+          {authStore.user && <Link href="/events/add">Event manager</Link>}
         </div>
         {authStore.user ? (
           <div>
