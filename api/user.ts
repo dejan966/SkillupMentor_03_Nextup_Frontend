@@ -30,7 +30,7 @@ export const fetchCurrUser = async () =>
 export const fetchUser = async (_id: string) =>
   apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/${_id}`)
 
-export const updateUser = async (data: UpdateUserFields, id: number) =>
+export const updateUser = async (data: UpdateUserFields, id: string) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.USERS_PREFIX}/${id}`,
@@ -43,3 +43,23 @@ export const passwordResetEmail = async ({ email }: UpdateUserFields) =>
     `${apiRoutes.ME}/reset-password`,
     { email },
   )
+
+export const fetchTokenInfo = async (user_id: string, token: string) =>
+  apiRequest<string, boolean>(
+    'get',
+    `${apiRoutes.USERS_PREFIX}/${user_id}/${token}`,
+  )
+
+export const updateUserPass = async ({
+  current_password,
+  password,
+  confirm_password,
+}: UpdateUserFields) =>
+  apiRequest<UpdateUserFields, UserType>(
+    'patch',
+    `${apiRoutes.ME}/update-password`,
+    { current_password, password, confirm_password },
+  )
+
+export const deleteUser = async (id: string) =>
+  apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)

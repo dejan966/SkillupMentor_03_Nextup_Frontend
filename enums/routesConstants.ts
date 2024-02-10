@@ -3,7 +3,8 @@ export enum routes {
   SIGNUP = '/signup',
   HOME = '/',
   USERINFO = '/me',
-  USEREDIT = '../me/edit',
-  USERPASSWORDRESET = '../me/reset-password',
-  USERAVATAREDIT = '../me/update-avatar',
+  USEREDIT = '/me/edit',
+  USERPASSWORDRESET = '/me/reset-password',
+  USERAVATAREDIT = '/me/update-avatar',
+  EVENTADD = '/events/add',
 }

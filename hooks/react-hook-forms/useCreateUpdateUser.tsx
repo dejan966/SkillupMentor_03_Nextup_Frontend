@@ -54,9 +54,11 @@ const createUserSchema = z
 
 const updateUserSchema = z
   .object({
+    avatar: z.string().optional(),
     first_name: z.string().optional(),
     last_name: z.string().optional(),
     email: z.string().email({ message: 'Must be a valid email' }).optional(),
+    current_password: z.string().optional(),
     password: z
       .string()
       .regex(new RegExp('.*[A-Z].*'), 'One uppercase character')
@@ -71,8 +73,9 @@ const updateUserSchema = z
   })
   .refine((data) => data.password === data.confirm_password, {
     path: ['confirm_password'],
-    message: 'Passwords does not match',
+    message: 'Passwords do not match',
   })
+
 export const useCreateUpdateUserForm = ({ defaultValues }: Props) => {
   const {
     handleSubmit,
@@ -85,7 +88,6 @@ export const useCreateUpdateUserForm = ({ defaultValues }: Props) => {
       email: '',
       password: '',
       confirm_password: '',
-      role_id: '',
       ...defaultValues,
     },
     mode: 'onSubmit',

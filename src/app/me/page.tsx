@@ -1,8 +1,8 @@
 'use client'
-import { routes } from '@/enums/routesConstants'
 import { getCurrUser } from '@/hooks/useUsers'
 import Link from 'next/link'
 import Image from 'next/image'
+import { routes } from '@/enums/routesConstants'
 
 export default function UserInfo() {
   const { data: currUser, isLoading: isLoadingUser } = getCurrUser()
@@ -69,8 +69,11 @@ export default function UserInfo() {
                     />
                   </div>
                   <div className="flex justify-between">
-                    <Link href="/me/edit">
-                      <button type="button" className="blueButton">
+                    <Link href={routes.USEREDIT}>
+                      <button
+                        type="button"
+                        className="blue text-white rounded-full h-10 w-28"
+                      >
                         Edit
                       </button>
                     </Link>

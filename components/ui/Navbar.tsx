@@ -40,11 +40,11 @@ export default function Navbar() {
         </div>
         {authStore.user ? (
           <div className="space-x-7">
-            <Link href="/me">Profile settings</Link>
-            <Link href="/" onClick={signout}>
+            <Link href={routes.USERINFO}>Profile settings</Link>
+            <Link href={routes.HOME} onClick={signout}>
               Signout
             </Link>
-            <Link href="/me/events">
+            <Link href={routes.EVENTADD}>
               <Image
                 src="/default-profile.svg"
                 alt="User avatar"

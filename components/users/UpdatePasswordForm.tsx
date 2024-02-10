@@ -1,0 +1,138 @@
+'use client'
+import * as API from '@/api/api'
+import { StatusCode } from '@/enums/errorConstants'
+import { routes } from '@/enums/routesConstants'
+import {
+  useCreateUpdateUserForm,
+  UpdateUserFields,
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { Controller } from 'react-hook-form'
+
+export default function UpdatePasswordForm() {
+  const router = useRouter()
+  const { handleSubmit, errors, control } = useCreateUpdateUserForm({})
+
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
+    handleUpdate(data as UpdateUserFields)
+  })
+
+  const handleUpdate = async (data: UpdateUserFields) => {
+    const response = await API.updateUserPass(data)
+    if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      router.push(routes.USERINFO)
+    }
+  }
+
+  return (
+    <div className="centered">
+      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+        <h1 className="text-7xl font-bold">Profile settings</h1>
+        <div className="mb-3">Change your password</div>
+        <form method="POST" onSubmit={onSubmit}>
+          <Controller
+            control={control}
+            name="current_password"
+            render={({ field }) => (
+              <div className="mb-3">
+                <label className="inputText">Current password</label>
+                <input
+                  {...field}
+                  type="password"
+                  placeholder="******"
+                  aria-label="old_password"
+                  aria-describedby="old_password"
+                  className={
+                    errors.current_password
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
+                  }
+                />
+                {errors.password && (
+                  <div className="validation-feedback">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field }) => (
+              <div className="mb-3">
+                <label className="inputText">New password</label>
+                <input
+                  {...field}
+                  type="password"
+                  placeholder="******"
+                  aria-label="newPassword"
+                  aria-describedby="newPassword"
+                  className={
+                    errors.password
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
+                  }
+                />
+                {errors.password && (
+                  <div className="validation-feedback">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
+            )}
+          />
+          <Controller
+            control={control}
+            name="confirm_password"
+            render={({ field }) => (
+              <div className="mb-3">
+                <label className="inputText">Confirm new password</label>
+                <input
+                  {...field}
+                  type="password"
+                  aria-label="Confirm new password"
+                  aria-describedby="confirm_new_password"
+                  className={
+                    errors.confirm_password
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
+                  }
+                />
+                {errors.confirm_password && (
+                  <div className="validation-feedback">
+                    {errors.confirm_password.message}
+                  </div>
+                )}
+                {showError && (
+                  <div className="text-red-500 text-md">{apiError}</div>
+                )}
+              </div>
+            )}
+          />
+          <button className="blueButton" type="submit">
+            Submit
+          </button>
+          <a className="text-decoration-none col-md-3" href={routes.USERINFO}>
+            Cancel
+          </a>
+        </form>
+      </div>
+    </div>
+  )
+}
