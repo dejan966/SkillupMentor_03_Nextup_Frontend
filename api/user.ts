@@ -3,7 +3,7 @@ import { LoginUserFields } from '@/hooks/react-hook-forms/useLogin'
 import { UserType } from '@/models/auth'
 import { apiRequest } from './api'
 import { RegisterUserFields } from '@/hooks/react-hook-forms/useRegister'
-import { UpdateUserFields } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import { UpdateUserFields } from '@/hooks/react-hook-forms/useUpdateUserForm'
 
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
@@ -51,14 +51,14 @@ export const fetchTokenInfo = async (user_id: string, token: string) =>
   )
 
 export const updateUserPass = async ({
-  current_password,
   password,
+  new_password,
   confirm_password,
 }: UpdateUserFields) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.ME}/update-password`,
-    { current_password, password, confirm_password },
+    { password, new_password, confirm_password },
   )
 
 export const deleteUser = async (id: string) =>

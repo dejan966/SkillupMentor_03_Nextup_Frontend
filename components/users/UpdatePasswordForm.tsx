@@ -3,16 +3,16 @@ import * as API from '@/api/api'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
-  useCreateUpdateUserForm,
+  useUpdateUserForm,
   UpdateUserFields,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
+} from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 export default function UpdatePasswordForm() {
   const router = useRouter()
-  const { handleSubmit, errors, control } = useCreateUpdateUserForm({})
+  const { handleSubmit, errors, control } = useUpdateUserForm({})
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -42,12 +42,12 @@ export default function UpdatePasswordForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-7xl font-bold">Profile settings</h1>
+        <h1 className="text-4xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your password</div>
         <form method="POST" onSubmit={onSubmit}>
           <Controller
             control={control}
-            name="current_password"
+            name="password"
             render={({ field }) => (
               <div className="mb-3">
                 <label className="inputText">Current password</label>
@@ -55,10 +55,10 @@ export default function UpdatePasswordForm() {
                   {...field}
                   type="password"
                   placeholder="******"
-                  aria-label="old_password"
-                  aria-describedby="old_password"
+                  aria-label="password"
+                  aria-describedby="password"
                   className={
-                    errors.current_password
+                    errors.password
                       ? 'tailwind-form-control-errors'
                       : 'tailwind-form-control'
                   }
@@ -73,7 +73,7 @@ export default function UpdatePasswordForm() {
           />
           <Controller
             control={control}
-            name="password"
+            name="new_password"
             render={({ field }) => (
               <div className="mb-3">
                 <label className="inputText">New password</label>
@@ -84,14 +84,14 @@ export default function UpdatePasswordForm() {
                   aria-label="newPassword"
                   aria-describedby="newPassword"
                   className={
-                    errors.password
+                    errors.new_password
                       ? 'tailwind-form-control-errors'
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.password && (
+                {errors.new_password && (
                   <div className="validation-feedback">
-                    {errors.password.message}
+                    {errors.new_password.message}
                   </div>
                 )}
               </div>
@@ -125,12 +125,17 @@ export default function UpdatePasswordForm() {
               </div>
             )}
           />
-          <button className="blueButton" type="submit">
-            Submit
-          </button>
-          <a className="text-decoration-none col-md-3" href={routes.USERINFO}>
-            Cancel
-          </a>
+          <div className="flex items-center justify-between">
+            <button
+              className="blue text-white rounded-full h-10 w-28 submit"
+              type="submit"
+            >
+              Submit
+            </button>
+            <a className="text-decoration-none col-md-3" href={routes.USERINFO}>
+              Cancel
+            </a>
+          </div>
         </form>
       </div>
     </div>

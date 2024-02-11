@@ -16,3 +16,13 @@ export const getCurrUser = () => {
     apiRequest<undefined, UserType>('get', apiRoutes.ME),
   )
 }
+
+export const getTokenInfo = (user_id: string, token: string) => {
+  return query(
+    ['password_token_info'],
+    apiRequest<string, boolean>(
+      'get',
+      `${apiRoutes.USERS_PREFIX}/${user_id}/${token}`,
+    ),
+  )
+}

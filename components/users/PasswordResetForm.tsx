@@ -3,14 +3,14 @@ import * as API from '@/api/api'
 import { StatusCode } from '@/enums/errorConstants'
 import {
   UpdateUserFields,
-  useCreateUpdateUserForm,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
+  useUpdateUserForm,
+} from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 export default function PasswordResetForm() {
-  const { handleSubmit, errors, control } = useCreateUpdateUserForm({})
+  const { handleSubmit, errors, control } = useUpdateUserForm({})
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -24,7 +24,6 @@ export default function PasswordResetForm() {
   const handleChange = async (data: UpdateUserFields) => {
     const response = await API.passwordResetEmail(data)
     if (response.status === StatusCode.BAD_REQUEST) {
-      console.log(data)
       setApiError(response.data.message)
       setShowError(true)
     } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
@@ -38,7 +37,7 @@ export default function PasswordResetForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-7xl font-bold">Reset your password</h1>
+        <h1 className="text-2xl font-bold">Reset your password</h1>
         <div className="mb-3">
           Enter your email address and we will send you a password reset link.
         </div>

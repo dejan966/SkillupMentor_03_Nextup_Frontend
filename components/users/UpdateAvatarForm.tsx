@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useEffect, useState } from 'react'
 import * as API from '@/api/api'
-import { useCreateUpdateUserForm } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import { useUpdateUserForm } from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ import authStore from '@/stores/auth.store'
 export default function UpdateAvatarForm() {
   const defaultValues = authStore.user!
   const router = useRouter()
-  const { handleSubmit } = useCreateUpdateUserForm({
+  const { handleSubmit } = useUpdateUserForm({
     defaultValues,
   })
 
@@ -75,7 +75,7 @@ export default function UpdateAvatarForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-7xl font-bold">Profile settings</h1>
+        <h1 className="text-4xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your profile photo</div>
         <form method="POST" onSubmit={onSubmit}>
           <div className="mb-3">
@@ -85,7 +85,7 @@ export default function UpdateAvatarForm() {
               height={110}
               alt="Avatar"
             />
-            <button className="blueButton" onClick={uploadFile}>
+            <button className="pinkButton" onClick={uploadFile}>
               Upload new image
             </button>
             <input
@@ -102,10 +102,15 @@ export default function UpdateAvatarForm() {
               <div className="text-red-500 text-md">{apiError}</div>
             )}
           </div>
-          <button className="blueButton" type="submit">
-            Submit
-          </button>
-          <p>Cancel</p>
+          <div className="flex items-center justify-between">
+            <button
+              className="blue text-white rounded-full h-10 w-28 submit"
+              type="submit"
+            >
+              Submit
+            </button>
+            <p>Cancel</p>
+          </div>
         </form>
       </div>
     </div>

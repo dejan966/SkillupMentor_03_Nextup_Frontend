@@ -3,9 +3,9 @@ import { useRouter } from 'next/navigation'
 import * as API from '@/api/api'
 import { StatusCode } from '@/enums/errorConstants'
 import {
-  useCreateUpdateUserForm,
+  useUpdateUserForm,
   UpdateUserFields,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
+} from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { useState } from 'react'
 import { routes } from '@/enums/routesConstants'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ import { getCurrUser } from '@/hooks/useUsers'
 export default function UpdateUserForm() {
   const { data: currUser } = getCurrUser()
   const defaultValues = currUser?.data
-  const { handleSubmit, errors, control } = useCreateUpdateUserForm({
+  const { handleSubmit, errors, control } = useUpdateUserForm({
     defaultValues,
   })
 
@@ -42,7 +42,7 @@ export default function UpdateUserForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-7xl font-bold">Profile settings</h1>
+        <h1 className="text-4xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your profile settings</div>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-between">
@@ -129,16 +129,21 @@ export default function UpdateUserForm() {
               </div>
             )}
           />
-          <button className="blueButton" type="button">
+          <button className="pinkButton" type="button">
             <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
           </button>
           <button className="blueButton" type="button">
             <Link href={routes.USERPASSWORDRESET}>Change your password</Link>
           </button>
-          <button className="blueButton" type="submit">
-            Submit
-          </button>
-          <a href={routes.USERINFO}>Cancel</a>
+          <div className="flex items-center justify-between">
+            <button
+              className="blue text-white rounded-full h-10 w-28 submit"
+              type="submit"
+            >
+              Submit
+            </button>
+            <a href={routes.USERINFO}>Cancel</a>
+          </div>
         </form>
       </div>
     </div>
