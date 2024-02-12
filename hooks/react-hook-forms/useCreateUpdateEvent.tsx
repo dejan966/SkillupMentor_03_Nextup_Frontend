@@ -17,7 +17,7 @@ export interface UpdateEventFields {
   location?: string
   date?: string
   hour?: string
-  max_users?: number
+  max_users?: string
   description?: string
   image?: string
 }
@@ -29,9 +29,15 @@ interface Props {
 const createEventSchema = z.object({
   name: z.string().min(1, { message: 'Event name is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
-  date: z.string().min(1, { message: 'Date is required' }),
+  date: z
+    .string()
+    .min(1, { message: 'Date is required' })
+    .transform((str) => new Date(str)),
   hour: z.string().min(1, { message: 'Hour is required' }),
-  max_users: z.number(),
+  max_users: z
+    .string()
+    .min(1, { message: 'Max users is required' })
+    .transform(Number),
   description: z.string().optional(),
 })
 
@@ -40,7 +46,7 @@ const updateEventSchema = z.object({
   location: z.string().optional(),
   date: z.string().optional(),
   hour: z.string().optional(),
-  max_users: z.number().optional(),
+  max_users: z.string().optional().transform(Number),
   description: z.string().optional(),
   image: z.string().optional(),
 })
@@ -55,9 +61,8 @@ export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {
     defaultValues: {
       name: '',
       location: '',
-      date: '',
       hour: '',
-      max_users: 0,
+      max_users: '',
       description: '',
       image: '',
       ...defaultValues,

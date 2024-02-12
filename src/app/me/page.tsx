@@ -1,8 +1,9 @@
 'use client'
 import { getCurrUser } from '@/hooks/useUsers'
 import Link from 'next/link'
-import Image from 'next/image'
+
 import { routes } from '@/enums/routesConstants'
+import authStore from '@/stores/auth.store'
 
 export default function UserInfo() {
   const { data: currUser, isLoading: isLoadingUser } = getCurrUser()
@@ -19,11 +20,11 @@ export default function UserInfo() {
                 <h1 className="text-4xl font-bold text-center">Your info!</h1>
                 <div>
                   <div className="flex justify-center">
-                    <Image
-                      src="/default-profile.svg"
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`}
                       alt="Avatar"
+                      className="userAvatar"
                       width={110}
-                      height={110}
                     />
                   </div>
                   <div className="flex justify-between">

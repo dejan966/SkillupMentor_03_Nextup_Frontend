@@ -76,6 +76,18 @@ body {
   @apply bg-pink-500 hover:bg-pink-300 text-white h-10 w-full rounded-full mb-4;
 }
 
+.userAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.navbarAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
 #home-page footer {
   display: none !important;
 }

@@ -5,7 +5,7 @@ import { useUpdateUserForm } from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+
 import authStore from '@/stores/auth.store'
 
 export default function UpdateAvatarForm() {
@@ -79,13 +79,19 @@ export default function UpdateAvatarForm() {
         <div className="mb-3">Change your profile photo</div>
         <form method="POST" onSubmit={onSubmit}>
           <div className="mb-3">
-            <Image
-              src={preview ? (preview as string) : '/default-profile.svg'}
-              className="rounded-full"
-              width={110}
-              height={110}
-              alt="Avatar"
-            />
+            <div className="flex justify-center">
+              <img
+                src={
+                  preview
+                    ? (preview as string)
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`
+                }
+                className="userAvatar"
+                width={120}
+                alt="Avatar"
+              />
+            </div>
+            <br />
             <button className="pinkButton" onClick={uploadFile}>
               Upload new image
             </button>

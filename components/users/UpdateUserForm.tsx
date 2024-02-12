@@ -27,7 +27,11 @@ export default function UpdateUserForm() {
   })
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUser(data, defaultValues._id)
+    const { first_name, last_name, email } = data
+    const response = await API.updateUser(
+      { first_name, last_name, email },
+      defaultValues._id,
+    )
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

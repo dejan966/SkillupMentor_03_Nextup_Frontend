@@ -10,7 +10,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import Image from 'next/image'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
@@ -41,11 +40,11 @@ export default function RegisterForm() {
         </p>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-center">
-            <Image
-              src="/default-profile.svg"
+            <img
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`}
               alt="Avatar"
+              className="userAvatar"
               width={110}
-              height={110}
             />
           </div>
           <div className="flex justify-between">

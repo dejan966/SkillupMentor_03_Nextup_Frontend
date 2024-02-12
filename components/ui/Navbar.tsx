@@ -27,6 +27,7 @@ export default function Navbar() {
       router.push(routes.HOME)
     }
   }
+
   return (
     <header>
       <nav className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
@@ -44,12 +45,12 @@ export default function Navbar() {
             <Link href={routes.HOME} onClick={signout}>
               Signout
             </Link>
-            <Link href={routes.EVENTADD}>
-              <Image
-                src="/default-profile.svg"
-                alt="User avatar"
-                height={60}
-                width={50}
+            <Link href={routes.USERPROFILE}>
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`}
+                alt="Avatar"
+                className="navbarAvatar"
+                width={40}
               />
             </Link>
           </div>
