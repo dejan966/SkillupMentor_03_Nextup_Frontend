@@ -81,6 +81,7 @@ export default function UpdateAvatarForm() {
           <div className="mb-3">
             <Image
               src={preview ? (preview as string) : '/default-profile.svg'}
+              className="rounded-full"
               width={110}
               height={110}
               alt="Avatar"
