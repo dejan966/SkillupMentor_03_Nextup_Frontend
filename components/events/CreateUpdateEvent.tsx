@@ -198,6 +198,19 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                     <label className="inputText">Date</label>
                     <input
                       {...field}
+                      type="date"
+                      id="date"
+                      defaultValue={new Date().toISOString().substring(0, 10)}
+                      min="2018-01-01"
+                      max="2031-12-31"
+                      className={
+                        errors.date
+                          ? 'tailwind-form-control-errors'
+                          : 'tailwind-form-control'
+                      }
+                    />
+                    {/* <input
+                      {...field}
                       type="text"
                       aria-label="date"
                       aria-describedby="date"
@@ -206,7 +219,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                           ? 'tailwind-form-control-errors'
                           : 'tailwind-form-control'
                       }
-                    />
+                    /> */}
                     {errors.date && (
                       <div className="validation-feedback">
                         {errors.date.message}
