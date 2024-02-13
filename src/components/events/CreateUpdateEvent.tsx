@@ -189,7 +189,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             )}
           />
           <div className="divGrid">
-            <div className="w-52 mb-4">
+            <div className="w-6/7 mb-4">
               <Controller
                 control={control}
                 name="date"
@@ -201,7 +201,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       type="date"
                       id="date"
                       defaultValue={new Date().toISOString().substring(0, 10)}
-                      min="2018-01-01"
+                      min="2023-01-01"
                       max="2031-12-31"
                       className={
                         errors.date
@@ -209,17 +209,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                           : 'tailwind-form-control'
                       }
                     />
-                    {/* <input
-                      {...field}
-                      type="text"
-                      aria-label="date"
-                      aria-describedby="date"
-                      className={
-                        errors.date
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    /> */}
                     {errors.date && (
                       <div className="validation-feedback">
                         {errors.date.message}
@@ -229,7 +218,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 )}
               />
             </div>
-            <div className="w-52">
+            <div className="w-6/7">
               <Controller
                 control={control}
                 name="hour"
@@ -256,7 +245,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 )}
               />
             </div>
-            <div className="w-52">
+            <div className="w-6/7">
               <Controller
                 control={control}
                 name="max_users"

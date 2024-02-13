@@ -10,7 +10,8 @@ export default function UserProfile() {
   return (
     <div>
       <h1 className="text-4xl text-center font-bold">
-        {authStore.user && authStore.user.first_name}
+        {authStore.user &&
+          authStore.user.first_name + ' ' + authStore.user.last_name}
       </h1>
       <br />
       <div className="grid grid-cols-2 pl-24 space-x-8">
