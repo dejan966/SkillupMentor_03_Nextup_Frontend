@@ -1,25 +1,37 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import * as API from '@/api/api'
 import { StatusCode } from '@/enums/errorConstants'
-import { routes } from '@/enums/routesConstants'
 import {
-  useRegisterForm,
-  RegisterUserFields,
-} from '@/hooks/react-hook-forms/useRegister'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+  useUpdateUserForm,
+  UpdateUserFields,
+} from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { useState } from 'react'
+import { routes } from '@/enums/routesConstants'
+import Link from 'next/link'
 import { Controller } from 'react-hook-form'
+import { getCurrUser } from '@/hooks/useUsers'
 
-export default function RegisterForm() {
-  const { handleSubmit, errors, control } = useRegisterForm()
+export default function UpdateUserForm() {
+  const { data: currUser } = getCurrUser()
+  const defaultValues = currUser?.data
+  const { handleSubmit, errors, control } = useUpdateUserForm({
+    defaultValues,
+  })
+
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
-  const router = useRouter()
+  const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
+    handleUpdate(data as UpdateUserFields)
+  })
 
-  const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    const response = await API.register(data)
+  const handleUpdate = async (data: UpdateUserFields) => {
+    const { first_name, last_name, email } = data
+    const response = await API.updateUser(
+      { first_name, last_name, email },
+      defaultValues._id,
+    )
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -27,33 +39,23 @@ export default function RegisterForm() {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      router.push(routes.LOGIN)
+      router.push(routes.USERINFO)
     }
-  })
-
+  }
+  const router = useRouter()
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-6xl">Hello!</h1>
-        <p className="text-lg text-black font-bold mb-4">
-          Get started with your free account today.
-        </p>
+        <h1 className="text-4xl font-bold">Profile settings</h1>
+        <div className="mb-3">Change your profile settings</div>
         <form method="POST" onSubmit={onSubmit}>
-          <div className="flex justify-center">
-            <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`}
-              alt="Avatar"
-              className="userAvatar"
-              width={110}
-            />
-          </div>
           <div className="flex justify-between">
-            <div className="mb-4">
+            <div className="col-md-5">
               <Controller
                 control={control}
                 name="first_name"
                 render={({ field }) => (
-                  <div className="w-[16.5rem]">
+                  <div className="mb-3">
                     <label className="inputText">First name</label>
                     <input
                       {...field}
@@ -80,7 +82,7 @@ export default function RegisterForm() {
                 control={control}
                 name="last_name"
                 render={({ field }) => (
-                  <div className="w-[16.5rem]">
+                  <div className="mb-3">
                     <label className="inputText">Last name</label>
                     <input
                       {...field}
@@ -107,7 +109,7 @@ export default function RegisterForm() {
             control={control}
             name="email"
             render={({ field }) => (
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="inputText">Email</label>
                 <input
                   {...field}
@@ -121,58 +123,8 @@ export default function RegisterForm() {
                   }
                 />
                 {errors.email && (
-                  <div className="validation-feedback">
+                  <div className="invalid-feedback text-danger">
                     {errors.email.message}
-                  </div>
-                )}
-              </div>
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Password</label>
-                <input
-                  {...field}
-                  type="password"
-                  aria-label="Password"
-                  aria-describedby="password"
-                  className={
-                    errors.password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.password && (
-                  <div className="validation-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
-              </div>
-            )}
-          />
-          <Controller
-            control={control}
-            name="confirm_password"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Confirm password</label>
-                <input
-                  {...field}
-                  type="password"
-                  aria-label="confirm_password"
-                  aria-describedby="confirm_password"
-                  className={
-                    errors.confirm_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.confirm_password && (
-                  <div className="validation-feedback">
-                    {errors.confirm_password.message}
                   </div>
                 )}
                 {showError && (
@@ -181,19 +133,20 @@ export default function RegisterForm() {
               </div>
             )}
           />
-          <div>
-            <button className="blueButton" type="submit">
-              Sign up
-            </button>
-          </div>
-          <div className="flex justify-between">
-            <p className="text-black text-start">Already have an account?</p>
-            <Link
-              className="text-decoration-none hover:text-blue-500"
-              href={routes.LOGIN}
+          <button className="pinkButton" type="button">
+            <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
+          </button>
+          <button className="blueButton" type="button">
+            <Link href={routes.USERPASSWORDRESET}>Change your password</Link>
+          </button>
+          <div className="flex items-center justify-between">
+            <button
+              className="blue text-white rounded-full h-10 w-28 submit"
+              type="submit"
             >
-              Sign in
-            </Link>
+              Submit
+            </button>
+            <a href={routes.USERINFO}>Cancel</a>
           </div>
         </form>
       </div>

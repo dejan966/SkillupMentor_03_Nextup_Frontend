@@ -16,3 +16,17 @@ export const getEvent = (_id: string) => {
     apiRequest<undefined, EventType>('get', `${apiRoutes.FETCH_EVENTS}/${_id}`),
   )
 }
+
+export const getUpcomingEvents = () => {
+  return query(
+    ['upcomingEvents'],
+    apiRequest<undefined, EventType>('get', `${apiRoutes.UPCOMING_EVENTS}`),
+  )
+}
+
+export const getRecentEvents = () => {
+  return query(
+    ['recentEvents'],
+    apiRequest<undefined, EventType>('get', `${apiRoutes.RECENT_EVENTS}`),
+  )
+}

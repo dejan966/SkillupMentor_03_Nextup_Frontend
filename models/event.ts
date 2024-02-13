@@ -8,6 +8,6 @@ export type EventType = {
   location: string
   date: string
   hour: string
-  max_users: number
+  max_users: string
   creator: UserType
 }

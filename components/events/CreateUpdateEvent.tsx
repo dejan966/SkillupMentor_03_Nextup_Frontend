@@ -198,6 +198,19 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                     <label className="inputText">Date</label>
                     <input
                       {...field}
+                      type="date"
+                      id="date"
+                      defaultValue={new Date().toISOString().substring(0, 10)}
+                      min="2018-01-01"
+                      max="2031-12-31"
+                      className={
+                        errors.date
+                          ? 'tailwind-form-control-errors'
+                          : 'tailwind-form-control'
+                      }
+                    />
+                    {/* <input
+                      {...field}
                       type="text"
                       aria-label="date"
                       aria-describedby="date"
@@ -206,7 +219,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                           ? 'tailwind-form-control-errors'
                           : 'tailwind-form-control'
                       }
-                    />
+                    /> */}
                     {errors.date && (
                       <div className="validation-feedback">
                         {errors.date.message}
@@ -251,11 +264,10 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   <div>
                     <label className="inputText">Max users</label>
                     <input
-                      name="max_users"
-                      type="number"
+                      {...field}
+                      type="text"
                       aria-label="max_users"
                       aria-describedby="max_users"
-                      onChange={(event) => console.log(event.target.value)}
                       className={
                         errors.max_users
                           ? 'tailwind-form-control-errors'
@@ -302,7 +314,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               <div className="flex justify-between">
                 <Image
                   src={preview as string}
-                  alt="img"
+                  alt="event img"
                   width={123}
                   height={123}
                 />
@@ -353,12 +365,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       </div>
       <div>
         <h1 className="text-2xl text-black font-bold">Added events</h1>
-        {currUser?.data.created_events.slice(0, 5).map((event: EventType) => {
+        {currUser?.data.created_events.slice(0, 4).map((event: EventType) => {
           return (
             <EventCard
-              key={event._id.toString()}
+              key={event._id}
               event={event}
-              type="created_events"
+              typeIcon="/settingsIcon.svg"
             />
           )
         })}
