@@ -17,7 +17,7 @@ export default function UserInfo() {
           {currUser.data && (
             <div className="centered">
               <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-                <h1 className="text-4xl font-bold text-center">Your info!</h1>
+                <h1 className="text-6xl font-bold text-center">Your info!</h1>
                 <div>
                   <div className="flex justify-center">
                     <img

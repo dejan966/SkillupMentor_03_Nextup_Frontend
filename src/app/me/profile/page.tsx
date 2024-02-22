@@ -9,7 +9,7 @@ export default function UserProfile() {
   const { data: recentEvents } = getRecentEvents()
   return (
     <div>
-      <h1 className="text-4xl text-center font-bold">
+      <h1 className="text-6xl text-center font-bold">
         {authStore.user &&
           authStore.user.first_name + ' ' + authStore.user.last_name}
       </h1>

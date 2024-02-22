@@ -36,7 +36,7 @@ export default function LoginForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-6xl">Welcome back!</h1>
+        <h1 className="text-5xl">Welcome back!</h1>
         <p className="text-lg text-black font-bold mb-4">
           We are glad you are back.
         </p>

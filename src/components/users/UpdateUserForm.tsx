@@ -46,7 +46,7 @@ export default function UpdateUserForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-4xl font-bold">Profile settings</h1>
+        <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your profile settings</div>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-between">
@@ -133,7 +133,7 @@ export default function UpdateUserForm() {
               </div>
             )}
           />
-          <button className="pinkButton" type="button">
+          <button className="pinkButton mt-3" type="button">
             <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
           </button>
           <button className="blueButton" type="button">

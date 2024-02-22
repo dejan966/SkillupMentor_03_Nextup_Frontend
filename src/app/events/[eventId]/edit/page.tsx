@@ -1,8 +1,7 @@
 'use client'
-import * as API from '@/api/api'
 import CreateUpdateEvent from '@/components/events/CreateUpdateEvent'
+import { getEvent } from '@/hooks/useEvents'
 import { notFound } from 'next/navigation'
-import { useQuery } from 'react-query'
 
 type Props = {
   params: {
@@ -11,13 +10,7 @@ type Props = {
 }
 
 export default function EventEdit({ params }: Props) {
-  const { data: eventData, isSuccess } = useQuery(
-    ['eventData'],
-    () => API.fetchEvent(params.eventId),
-    {
-      refetchOnWindowFocus: false,
-    },
-  )
+  const { data: eventData, isSuccess } = getEvent(params.eventId)
 
   if (eventData?.data.message === 'Unauthorized') {
     return <div>Unauthorized</div>

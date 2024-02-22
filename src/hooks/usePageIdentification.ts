@@ -26,7 +26,7 @@ const callbacks: any = {
   '/': [onHome],
   '/login': [onLogin],
   '/signup': [onSignup],
-  //'/events/[eventId]': [onEvent],
+  '/events/eventId': [onEvent],
   '*': [onDefault],
 }
 

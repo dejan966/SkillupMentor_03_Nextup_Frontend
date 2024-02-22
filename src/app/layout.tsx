@@ -1,5 +1,5 @@
 import { Poppins } from 'next/font/google'
-import '@/styles/globals.css'
+import './globals.css'
 import Layout from '@/components/ui/Layout'
 
 const poppins = Poppins({ subsets: ['latin'], weight: '300' })
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning lang="en">
       <body className={poppins.className}>
         <Layout>{children}</Layout>
       </body>

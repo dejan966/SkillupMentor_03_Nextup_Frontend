@@ -332,7 +332,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               aria-label="image"
               aria-describedby="image"
               accept="image/png, 'image/jpg', image/jpeg"
-              className="hidden"
+              className="none"
             />
             {fileError && (
               <div className="validation-feedback">Image is required</div>

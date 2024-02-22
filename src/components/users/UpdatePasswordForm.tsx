@@ -42,7 +42,7 @@ export default function UpdatePasswordForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-4xl font-bold">Profile settings</h1>
+        <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your password</div>
         <form method="POST" onSubmit={onSubmit}>
           <Controller
