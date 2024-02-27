@@ -1,5 +1,5 @@
 import { Poppins } from 'next/font/google'
-import './globals.css'
+import '@/styles/globals.css'
 import Layout from '@/components/ui/Layout'
 
 const poppins = Poppins({ subsets: ['latin'], weight: '300' })

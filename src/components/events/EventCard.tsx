@@ -9,7 +9,7 @@ interface Props {
 
 export default function EventCard({ event, typeIcon }: Props) {
   return (
-    <div className="divGrid rounded-xl bg-white h-20 mr-4 mt-4 mb-4">
+    <div className="divGrid rounded-xl bg-white h-20 mr-4 mb-4">
       <div className="grid grid-rows-2 justify-center items-center">
         <div className="text-lg text-black font-bold">
           {event.date.substring(0, 10)}

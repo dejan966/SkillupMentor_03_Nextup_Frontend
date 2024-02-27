@@ -40,11 +40,7 @@ export default function Navbar() {
           {authStore.user && <Link href="/events/add">Event manager</Link>}
         </div>
         {authStore.user ? (
-          <div className="space-x-7">
-            <Link href={routes.USERINFO}>Profile settings</Link>
-            <Link href={routes.HOME} onClick={signout}>
-              Signout
-            </Link>
+          <div className="flex items-center">
             <Link href={routes.USERPROFILE}>
               <img
                 src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`}
@@ -53,6 +49,12 @@ export default function Navbar() {
                 width={40}
               />
             </Link>
+            <div>
+              <Link href={routes.USERINFO}>Profile settings</Link>
+              <Link href={routes.HOME} onClick={signout}>
+                Signout
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="space-x-8">

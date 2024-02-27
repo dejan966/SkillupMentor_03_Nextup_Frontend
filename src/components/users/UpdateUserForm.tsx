@@ -47,15 +47,15 @@ export default function UpdateUserForm() {
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-6xl font-bold">Profile settings</h1>
-        <div className="mb-3">Change your profile settings</div>
+        <div className="mb-4">Change your profile settings</div>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-between">
-            <div className="col-md-5">
+            <div className="col-md-6">
               <Controller
                 control={control}
                 name="first_name"
                 render={({ field }) => (
-                  <div className="mb-3">
+                  <div className="mb-4">
                     <label className="inputText">First name</label>
                     <input
                       {...field}
@@ -109,7 +109,7 @@ export default function UpdateUserForm() {
             control={control}
             name="email"
             render={({ field }) => (
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="inputText">Email</label>
                 <input
                   {...field}
@@ -133,7 +133,7 @@ export default function UpdateUserForm() {
               </div>
             )}
           />
-          <button className="pinkButton mt-3" type="button">
+          <button className="pinkButton" type="button">
             <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
           </button>
           <button className="blueButton" type="button">
