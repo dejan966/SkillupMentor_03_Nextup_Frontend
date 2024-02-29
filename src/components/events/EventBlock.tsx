@@ -3,7 +3,7 @@ import { getAllEvents } from '@/hooks/useEvents'
 import { EventType } from '@/models/event'
 import Image from 'next/image'
 
-export default function Events() {
+export default function EventBlock() {
   const { data: allEvents } = getAllEvents()
   return (
     <div className="divGrid gap-4">
