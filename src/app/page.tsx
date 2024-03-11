@@ -9,7 +9,7 @@ export default function Home() {
   const onSubmit = (event: any) => {
     event.preventDefault()
     router.push(
-      `/search?q=${event.target.searchValue.value}+${event.target.dateValue.value}`,
+      `/search?location=${event.target.searchValue.value}&date=${event.target.dateValue.value}`,
     )
   }
   return (

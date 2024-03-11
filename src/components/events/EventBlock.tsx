@@ -6,7 +6,7 @@ import Image from 'next/image'
 export default function EventBlock() {
   const { data: allEvents } = getAllEvents()
   return (
-    <div className="divGrid gap-4">
+    <div className="grid gap-6 phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4">
       {allEvents?.data.map((event: EventType) => {
         return (
           <div key={event._id} className="bg-white w-96">

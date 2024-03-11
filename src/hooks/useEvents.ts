@@ -17,10 +17,20 @@ export const getEvent = (_id: string) => {
   )
 }
 
-export const getUpcomingEvents = () => {
+export const getAllUpcomingEvents = () => {
   return query(
     ['upcomingEvents'],
     apiRequest<undefined, EventType>('get', `${apiRoutes.UPCOMING_EVENTS}`),
+  )
+}
+
+export const getUserUpcomingEvents = () => {
+  return query(
+    ['currUserUpcomingEvents'],
+    apiRequest<undefined, EventType>(
+      'get',
+      `${apiRoutes.EVENTS_PREFIX}/user/upcomingEvents`,
+    ),
   )
 }
 

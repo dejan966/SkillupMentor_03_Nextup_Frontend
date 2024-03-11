@@ -1,11 +1,12 @@
 'use client'
 import EventCard from '@/components/events/EventCard'
-import { getRecentEvents, getUpcomingEvents } from '@/hooks/useEvents'
+import { getRecentEvents, getUserUpcomingEvents } from '@/hooks/useEvents'
 import { EventType } from '@/models/event'
 import authStore from '@/stores/auth.store'
 
 export default function UserProfile() {
-  const { data: upcomingEvents } = getUpcomingEvents()
+  const { data: upcomingEvents } = getUserUpcomingEvents()
+  console.log(upcomingEvents)
   const { data: recentEvents } = getRecentEvents()
   return (
     <div>
