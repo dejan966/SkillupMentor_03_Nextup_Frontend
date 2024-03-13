@@ -28,3 +28,9 @@ export const uploadEventImage = async (formData: FormData, _id: string) =>
     `${apiRoutes.UPLOAD_EVENT_IMAGE}/${_id}`,
     formData,
   )
+
+export const searchEvents = async (searchValue: string, dateValue: string) =>
+  apiRequest<string, void>(
+    'get',
+    `${apiRoutes.EVENTS_PREFIX}/search/${searchValue}/${dateValue}`,
+  )
