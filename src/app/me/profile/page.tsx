@@ -1,5 +1,6 @@
 'use client'
 import EventCard from '@/components/events/EventCard'
+import EventList from '@/components/events/EventList'
 import { getRecentEvents, getUserUpcomingEvents } from '@/hooks/useEvents'
 import { EventType } from '@/models/event'
 import authStore from '@/stores/auth.store'
@@ -18,21 +19,11 @@ export default function UserProfile() {
       <div className="grid grid-cols-2 pl-24 space-x-8">
         <div>
           <h1 className="text-2xl">All upcoming events</h1>
-          {upcomingEvents?.data.slice(0, 4).map((event: EventType) => {
-            return (
-              <EventCard
-                key={event._id}
-                event={event}
-                typeIcon="/tickIcon.svg"
-              />
-            )
-          })}
+          <EventList events={upcomingEvents?.data} type="card" cardIcon />
         </div>
         <div>
           <h1 className="text-2xl">Recent events</h1>
-          {recentEvents?.data.slice(0, 4).map((event: EventType) => {
-            return <EventCard key={event._id} event={event} />
-          })}
+          <EventList events={recentEvents?.data} type="card" />
         </div>
       </div>
     </div>

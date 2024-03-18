@@ -14,6 +14,7 @@ import { routes } from '@/enums/routesConstants'
 import { getCurrUser } from '@/hooks/useUsers'
 import EventCard from './EventCard'
 import Image from 'next/image'
+import EventList from './EventList'
 
 type Props = {
   defaultValues?: EventType
@@ -352,15 +353,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       </div>
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">Added events</h1>
-        {currUser?.data.created_events.slice(0, 4).map((event: EventType) => {
-          return (
-            <EventCard
-              key={event._id}
-              event={event}
-              typeIcon="/settingsIcon.svg"
-            />
-          )
-        })}
+        <EventList
+          events={currUser?.data.created_events}
+          type="card"
+          cardIcon
+          edit
+        />
       </div>
     </div>
   )
