@@ -135,8 +135,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   return (
     <div className="grid grid-cols-2 pl-24 pr-24 space-x-8">
       <div>
-        <h1 className="text-2xl text-black font-bold">{title}</h1>
-        <br />
+        <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form method="POST" onSubmit={onSubmit}>
           <Controller
             control={control}
@@ -300,7 +299,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
           />
           <div className="mb-4">
             {preview && (
-              <div className="flex justify-between">
+              <div className="flex justify-between mb-4">
                 <Image
                   src={preview as string}
                   alt="event img"
@@ -316,23 +315,22 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 </button>
               </div>
             )}
-            <br />
             <button
-              className="bg-black text-white h-10 w-full rounded-full hover:bg-stone-700 mb-4"
+              className="bg-black text-white h-10 w-full rounded-full hover:bg-stone-700"
               type="button"
               onClick={uploadFile}
             >
               Add image
             </button>
             <input
-              type="file"
+              onChange={handleFileChange}
               id="eventUpload"
               name="image"
-              onChange={handleFileChange}
+              type="file"
               aria-label="image"
               aria-describedby="image"
+              className="hidden"
               accept="image/png, 'image/jpg', image/jpeg"
-              className="none"
             />
             {fileError && (
               <div className="validation-feedback">Image is required</div>
@@ -343,7 +341,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
           </div>
           <div>
             <button
-              className="blue text-white h-10 w-full rounded-full"
+              className="blue text-white h-10 w-full rounded-full mb-4"
               type="submit"
               onMouseUp={handleFileError}
             >
@@ -353,7 +351,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         </form>
       </div>
       <div>
-        <h1 className="text-2xl text-black font-bold">Added events</h1>
+        <h1 className="text-2xl text-black font-bold mb-4">Added events</h1>
         {currUser?.data.created_events.slice(0, 4).map((event: EventType) => {
           return (
             <EventCard

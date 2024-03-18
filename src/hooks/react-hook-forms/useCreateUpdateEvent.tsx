@@ -32,6 +32,7 @@ const createEventSchema = z.object({
   date: z
     .string()
     .min(1, { message: 'Date is required' })
+    .default(new Date().toISOString().substring(0, 10))
     .transform((str) => new Date(str)),
   hour: z.string().min(1, { message: 'Hour is required' }),
   max_users: z

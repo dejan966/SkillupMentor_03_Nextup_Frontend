@@ -37,8 +37,8 @@ export default function PasswordResetForm() {
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
-        <h1 className="text-2xl font-bold">Reset your password</h1>
-        <div className="mb-3">
+        <h1 className="text-6xl font-bold mb-4">Reset your password</h1>
+        <div className="mb-4">
           Enter your email address and we will send you a password reset link.
         </div>
         <form method="POST" onSubmit={onSubmit}>
@@ -46,7 +46,7 @@ export default function PasswordResetForm() {
             control={control}
             name="email"
             render={({ field }) => (
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="inputText">Email</label>
                 <input
                   {...field}

@@ -76,10 +76,10 @@ export default function UpdateAvatarForm() {
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-6xl font-bold">Profile settings</h1>
-        <div className="mb-3">Change your profile photo</div>
+        <div className="mb-4">Change your profile photo</div>
         <form method="POST" onSubmit={onSubmit}>
-          <div className="mb-3">
-            <div className="flex justify-center">
+          <div>
+            <div className="flex justify-center mb-4">
               <img
                 src={
                   preview
@@ -91,7 +91,6 @@ export default function UpdateAvatarForm() {
                 alt="Avatar"
               />
             </div>
-            <br />
             <button className="pinkButton" onClick={uploadFile}>
               Upload new image
             </button>
