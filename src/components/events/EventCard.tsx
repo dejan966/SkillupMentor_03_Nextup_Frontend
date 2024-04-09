@@ -31,6 +31,9 @@ export default function EventCard({ event, typeIcon }: Props) {
           </button>
         </div>
       )}
+      <button type="button" className="blueButton">
+        <Link href={`/events/${event._id}`}>Check</Link>
+      </button>
     </div>
   )
 }

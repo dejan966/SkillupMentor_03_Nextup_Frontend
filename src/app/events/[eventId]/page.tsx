@@ -1,9 +1,10 @@
 'use client'
 
 import { fetchEvent } from '@/lib/event'
-import { notFound } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
+import LoadingCircle from '@/components/ui/LoadingCircle'
 
 type Props = {
   params: {
@@ -12,14 +13,43 @@ type Props = {
 }
 
 export default function Event({ params }: Props) {
-  const { data: eventData, isSuccess } = useQuery({
+  const router = useRouter()
+  const {
+    data: eventData,
+    isSuccess,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ['fetchEvent'],
     queryFn: () => fetchEvent(params.eventId),
   })
-  //const { data: eventData, isSuccess } = await fetchEvent(params.eventId)
 
   if (isSuccess === true && !eventData?.data._id) {
     notFound()
+  }
+
+  if (isError) {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
+        <button
+          type="button"
+          className="blue text-white h-12 w-20 rounded-xl"
+          onClick={() => refetch()}
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingCircle />
+      </div>
+    )
   }
 
   return (
@@ -64,6 +94,7 @@ export default function Event({ params }: Props) {
                 <button
                   type="button"
                   className="blue text-white h-12 w-20 rounded-xl"
+                  onClick={() => router.back()}
                 >
                   Back
                 </button>

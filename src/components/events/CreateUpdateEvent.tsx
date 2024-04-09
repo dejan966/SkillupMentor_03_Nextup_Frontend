@@ -25,7 +25,6 @@ type Props = {
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   const {
     data: currUser,
-    isLoading,
     isError,
     refetch,
   } = useQuery({
@@ -355,12 +354,25 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       </div>
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">Added events</h1>
-        <EventList
-          events={currUser?.data.created_events}
-          type="card"
-          cardIcon
-          edit
-        />
+        {isError ? (
+          <div>
+            <h2>Something went wrong!</h2>
+            <button
+              type="button"
+              className="blueButton"
+              onClick={() => refetch()}
+            >
+              Try again
+            </button>
+          </div>
+        ) : (
+          <EventList
+            events={currUser?.data.created_events}
+            type="card"
+            cardIcon
+            edit
+          />
+        )}
       </div>
     </div>
   )

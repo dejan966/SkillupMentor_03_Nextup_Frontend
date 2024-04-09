@@ -10,13 +10,27 @@ export default function UserInfo() {
   const [value] = useLocalStorage()
   const {
     data: currUser,
-    isLoading,
     isError,
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
     queryFn: fetchCurrUser,
   })
+
+  if (isError) {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
+        <button
+          type="button"
+          className="blue text-white h-12 w-20 rounded-xl"
+          onClick={() => refetch()}
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div>

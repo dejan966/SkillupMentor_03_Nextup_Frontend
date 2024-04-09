@@ -1,5 +1,6 @@
 import { EventType } from '@/models/event'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Props {
   event: EventType
@@ -8,13 +9,15 @@ interface Props {
 export default function EventBlock({ event }: Props) {
   return (
     <div>
-      <Image
-        src={`/${event.image}`}
-        alt="Event image"
-        width={322}
-        height={100}
-        className="w-full h-52"
-      />
+      <Link href={`/events/${event._id}`}>
+        <Image
+          src={`/${event.image}`}
+          alt="Event image"
+          width={322}
+          height={100}
+          className="w-full h-52"
+        />
+      </Link>
       <div className="p-3">
         <div className="text-2xl font-bold">{event.name}</div>
         <div>
