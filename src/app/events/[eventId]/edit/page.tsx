@@ -1,6 +1,8 @@
 'use client'
+
 import CreateUpdateEvent from '@/components/events/CreateUpdateEvent'
-import { getEvent } from '@/hooks/useEvents'
+import { fetchEvent } from '@/lib/event'
+import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 
 type Props = {
@@ -10,8 +12,10 @@ type Props = {
 }
 
 export default function EventEdit({ params }: Props) {
-  const { data: eventData, isSuccess } = getEvent(params.eventId)
-
+  const { data: eventData, isSuccess } = useQuery({
+    queryKey: ['fetchEvent'],
+    queryFn: () => fetchEvent(params.eventId),
+  })
   if (eventData?.data.message === 'Unauthorized') {
     return <div>Unauthorized</div>
   }

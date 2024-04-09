@@ -1,4 +1,5 @@
 'use client'
+
 import {
   CreateEventFields,
   UpdateEventFields,
@@ -8,13 +9,13 @@ import { EventType } from '@/models/event'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import * as API from '@/api/api'
+import { createEvent, updateEvent, uploadEventImage } from '@/lib/event'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
-import { getCurrUser } from '@/hooks/useUsers'
-import EventCard from './EventCard'
+import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
+import { useQuery } from '@tanstack/react-query'
 
 type Props = {
   defaultValues?: EventType
@@ -22,8 +23,15 @@ type Props = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
-  const { data: currUser } = getCurrUser()
-
+  const {
+    data: currUser,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['currUser'],
+    queryFn: fetchCurrUser,
+  })
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
     defaultValues,
   })
@@ -62,7 +70,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateEventFields) => {
-    const response = await API.updateEvent(data, defaultValues!._id)
+    const response = await updateEvent(data, defaultValues!._id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -72,10 +80,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     } else {
       const formData = new FormData()
       formData.append('image', file!, file!.name)
-      const fileResponse = await API.uploadEventImage(
-        formData,
-        response.data._id,
-      )
+      const fileResponse = await uploadEventImage(formData, response.data._id)
       if (fileResponse.status === StatusCode.BAD_REQUEST) {
         setApiError(fileResponse.data.message)
         setShowError(true)
@@ -89,7 +94,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }
 
   const handleCreate = async (data: CreateEventFields) => {
-    const response = await API.createEvent(data)
+    const response = await createEvent(data)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -99,10 +104,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     } else {
       const formData = new FormData()
       formData.append('image', file!, file!.name)
-      const fileResponse = await API.uploadEventImage(
-        formData,
-        response.data._id,
-      )
+      const fileResponse = await uploadEventImage(formData, response.data._id)
       if (fileResponse.status === StatusCode.BAD_REQUEST) {
         setApiError(fileResponse.data.message)
         setShowError(true)

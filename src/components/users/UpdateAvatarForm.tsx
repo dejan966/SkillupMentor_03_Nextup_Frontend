@@ -1,15 +1,16 @@
 'use client'
+
 import { ChangeEvent, useEffect, useState } from 'react'
-import * as API from '@/api/api'
+import { uploadAvatar } from '@/lib/user'
 import { useUpdateUserForm } from '@/hooks/react-hook-forms/useUpdateUserForm'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
-
-import authStore from '@/stores/auth.store'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 export default function UpdateAvatarForm() {
-  const defaultValues = authStore.user!
+  const [value] = useLocalStorage()
+  const defaultValues = value!
   const router = useRouter()
   const { handleSubmit } = useUpdateUserForm({
     defaultValues,
@@ -29,7 +30,7 @@ export default function UpdateAvatarForm() {
   const handleUpdate = async () => {
     const formData = new FormData()
     formData.append('avatar', file!, file?.name!)
-    const fileResponse = await API.uploadAvatar(formData, defaultValues._id)
+    const fileResponse = await uploadAvatar(formData, defaultValues._id)
     if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(fileResponse.data.message)
       setShowError(true)
@@ -84,7 +85,7 @@ export default function UpdateAvatarForm() {
                 src={
                   preview
                     ? (preview as string)
-                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`
                 }
                 className="userAvatar"
                 width={120}

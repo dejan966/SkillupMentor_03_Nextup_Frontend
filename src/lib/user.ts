@@ -5,7 +5,7 @@ import { apiRequest } from './api'
 import { RegisterUserFields } from '@/hooks/react-hook-forms/useRegister'
 import { UpdateUserFields } from '@/hooks/react-hook-forms/useUpdateUserForm'
 
-export const signout = async () =>
+export const userSignout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
 
 export const login = async (data: LoginUserFields) =>

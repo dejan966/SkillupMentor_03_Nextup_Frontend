@@ -1,14 +1,16 @@
 'use client'
+
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
-import authStore from '@/stores/auth.store'
 import Image from 'next/image'
 import Link from 'next/link'
-import * as API from '@/api/api'
+import { userSignout } from '@/lib/user'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
-export default function Navbar() {
+const Navbar = () => {
+  const [value, setValue, logout] = useLocalStorage()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -23,7 +25,7 @@ export default function Navbar() {
   }
 
   const signout = async () => {
-    const response = await API.signout()
+    const response = await userSignout()
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -31,7 +33,7 @@ export default function Navbar() {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      authStore.signout()
+      logout()
       router.push(routes.HOME)
     }
   }
@@ -61,15 +63,15 @@ export default function Navbar() {
               <div className="space-x-8">
                 <Link href={routes.HOME}>Home</Link>
                 <Link href="/search">Search</Link>
-                {authStore.user && (
+                {Object.keys(value).length > 0 && (
                   <Link href="/events/add">Event manager</Link>
                 )}
               </div>
-              {authStore.user ? (
+              {Object.keys(value).length > 0 ? (
                 <div className="flex items-center">
                   <Link href={routes.USERPROFILE}>
                     <img
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
                       alt="Avatar"
                       className="navbarAvatar"
                       width={40}
@@ -166,13 +168,15 @@ export default function Navbar() {
         <div className="space-x-8">
           <Link href={routes.HOME}>Home</Link>
           <Link href="/search">Search</Link>
-          {authStore.user && <Link href="/events/add">Event manager</Link>}
+          {Object.keys(value).length > 0 && (
+            <Link href="/events/add">Event manager</Link>
+          )}
         </div>
-        {authStore.user ? (
+        {Object.keys(value).length > 0 ? (
           <div className="flex items-center">
             <Link href={routes.USERPROFILE}>
               <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${authStore.user?.avatar}`}
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
                 alt="Avatar"
                 className="navbarAvatar"
                 width={40}
@@ -200,3 +204,5 @@ export default function Navbar() {
     </header>
   )
 }
+
+export default Navbar

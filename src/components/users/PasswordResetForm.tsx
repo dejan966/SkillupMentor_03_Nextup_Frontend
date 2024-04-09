@@ -1,5 +1,6 @@
 'use client'
-import * as API from '@/api/api'
+
+import { passwordResetEmail } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import {
   UpdateUserFields,
@@ -22,7 +23,7 @@ export default function PasswordResetForm() {
   })
 
   const handleChange = async (data: UpdateUserFields) => {
-    const response = await API.passwordResetEmail(data)
+    const response = await passwordResetEmail(data)
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

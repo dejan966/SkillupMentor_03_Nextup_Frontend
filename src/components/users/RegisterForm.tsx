@@ -1,5 +1,6 @@
 'use client'
-import * as API from '@/api/api'
+
+import { register } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
@@ -19,7 +20,7 @@ export default function RegisterForm() {
   const router = useRouter()
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    const response = await API.register(data)
+    const response = await register(data)
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

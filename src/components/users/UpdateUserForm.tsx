@@ -1,6 +1,7 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
-import * as API from '@/api/api'
+import { updateUser } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import {
   useUpdateUserForm,
@@ -10,10 +11,19 @@ import { useState } from 'react'
 import { routes } from '@/enums/routesConstants'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
-import { getCurrUser } from '@/hooks/useUsers'
+import { fetchCurrUser } from '@/lib/user'
+import { useQuery } from '@tanstack/react-query'
 
 export default function UpdateUserForm() {
-  const { data: currUser } = getCurrUser()
+  const {
+    data: currUser,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['currUser'],
+    queryFn: fetchCurrUser,
+  })
   const defaultValues = currUser?.data
   const { handleSubmit, errors, control } = useUpdateUserForm({
     defaultValues,
@@ -28,7 +38,7 @@ export default function UpdateUserForm() {
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const { first_name, last_name, email } = data
-    const response = await API.updateUser(
+    const response = await updateUser(
       { first_name, last_name, email },
       defaultValues._id,
     )

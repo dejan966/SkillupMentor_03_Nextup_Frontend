@@ -1,26 +1,28 @@
 'use client'
+
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
   useLoginForm,
   LoginUserFields,
 } from '@/hooks/react-hook-forms/useLogin'
-import authStore from '@/stores/auth.store'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import * as API from '@/api/api'
+import { login } from '@/lib/user'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
+  const [value, setValue] = useLocalStorage()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
 
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
-    const response = await API.login(data)
+    const response = await login(data)
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -28,7 +30,7 @@ export default function LoginForm() {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      authStore.login(response.data)
+      setValue(response.data)
       router.push(routes.HOME)
     }
   })

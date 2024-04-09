@@ -38,3 +38,15 @@ export const searchEvents = async (
     'get',
     `${apiRoutes.EVENTS_PREFIX}/search?name=${searchValue}&date=${dateValue}&page=${pageNumber}`,
   )
+
+export const getAllUpcomingEvents = () =>
+  apiRequest<undefined, EventType>('get', `${apiRoutes.UPCOMING_EVENTS}`)
+
+export const getUserUpcomingEvents = () =>
+  apiRequest<undefined, EventType>(
+    'get',
+    `${apiRoutes.EVENTS_PREFIX}/user/upcomingEvents`,
+  )
+
+export const getRecentEvents = () =>
+  apiRequest<undefined, EventType>('get', `${apiRoutes.RECENT_EVENTS}`)

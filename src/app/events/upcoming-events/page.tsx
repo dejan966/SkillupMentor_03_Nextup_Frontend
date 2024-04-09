@@ -1,11 +1,20 @@
 'use client'
+
 import EventBlock from '@/components/events/EventBlock'
-import { getAllEvents } from '@/hooks/useEvents'
+import { fetchEvents } from '@/lib/event'
 import { EventType } from '@/models/event'
-import Image from 'next/image'
+import { useQuery } from '@tanstack/react-query'
 
 export default function AllUpcomingEvents() {
-  const { data: allEvents } = getAllEvents()
+  const {
+    data: allEvents,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useQuery({
+    queryKey: ['fetchEvent'],
+    queryFn: fetchEvents,
+  })
   return (
     <div className="pl-24 pr-24">
       <h1 className="text-5xl">Events</h1>

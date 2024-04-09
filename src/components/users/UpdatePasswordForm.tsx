@@ -1,5 +1,6 @@
 'use client'
-import * as API from '@/api/api'
+
+import { updateUserPass } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
@@ -27,7 +28,7 @@ export default function UpdatePasswordForm() {
   })
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await API.updateUserPass(data)
+    const response = await updateUserPass(data)
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

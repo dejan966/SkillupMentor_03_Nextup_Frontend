@@ -1,4 +1,5 @@
 'use client'
+
 import useDeviceSize from '@/hooks/useDeviceSize'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'

@@ -1,8 +1,9 @@
 'use client'
-import * as API from '@/api/api'
-import { useQuery } from 'react-query'
+
+import { fetchEvent } from '@/lib/event'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import { useQuery } from '@tanstack/react-query'
 
 type Props = {
   params: {
@@ -11,13 +12,11 @@ type Props = {
 }
 
 export default function Event({ params }: Props) {
-  const { data: eventData, isSuccess } = useQuery(
-    ['eventData'],
-    () => API.fetchEvent(params.eventId),
-    {
-      refetchOnWindowFocus: false,
-    },
-  )
+  const { data: eventData, isSuccess } = useQuery({
+    queryKey: ['fetchEvent'],
+    queryFn: () => fetchEvent(params.eventId),
+  })
+  //const { data: eventData, isSuccess } = await fetchEvent(params.eventId)
 
   if (isSuccess === true && !eventData?.data._id) {
     notFound()

@@ -1,29 +1,31 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
-import { getAllUpcomingEvents } from '@/hooks/useEvents'
-import EventCard from '@/components/events/EventCard'
-import { EventType } from '@/models/event'
-import { useQuery } from 'react-query'
-import * as API from '@/api/api'
-import { useState } from 'react'
-import EventList from '@/components/events/EventList'
 
-export default function SearchPage() {
-  const { data: upcomingEvents } = getAllUpcomingEvents()
+import { useSearchParams } from 'next/navigation'
+import { getAllUpcomingEvents } from '@/lib/event'
+import EventList from '@/components/events/EventList'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { searchEvents } from '@/lib/event'
+
+const SearchPage = () => {
+  const {
+    data: upcomingEvents,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['upcomingEvents'],
+    queryFn: getAllUpcomingEvents,
+  })
   const [pageNumber, setPageNumber] = useState(1)
 
   const searchParams = useSearchParams()
   const searchLocation = searchParams.get('location')
   const searchDate = searchParams.get('date')
 
-  const { data: searchEvent } = useQuery(
-    ['searchEvents', pageNumber],
-    () => API.searchEvents(searchLocation!, searchDate!, pageNumber),
-    {
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-    },
-  )
+  const { data: searchEvent, isError: isLoadingError } = useQuery({
+    queryKey: ['searchEvents', pageNumber],
+    queryFn: () => searchEvents(searchLocation!, searchDate!, pageNumber),
+  })
 
   return (
     <div className="px-24 pt-9 pb-9">
@@ -38,3 +40,5 @@ export default function SearchPage() {
     </div>
   )
 }
+
+export default SearchPage

@@ -1,19 +1,27 @@
 'use client'
-import EventCard from '@/components/events/EventCard'
+
 import EventList from '@/components/events/EventList'
-import { getRecentEvents, getUserUpcomingEvents } from '@/hooks/useEvents'
-import { EventType } from '@/models/event'
-import authStore from '@/stores/auth.store'
+import useLocalStorage from '@/hooks/useLocalStorage'
+import { getRecentEvents, getUserUpcomingEvents } from '@/lib/event'
+import { useQuery } from '@tanstack/react-query'
 
 export default function UserProfile() {
-  const { data: upcomingEvents } = getUserUpcomingEvents()
-  console.log(upcomingEvents)
-  const { data: recentEvents } = getRecentEvents()
+  const { data: upcomingEvents } = useQuery({
+    queryKey: ['upcomingEvents'],
+    queryFn: getUserUpcomingEvents,
+  })
+
+  const { data: recentEvents } = useQuery({
+    queryKey: ['recentEvents'],
+    queryFn: getRecentEvents,
+  })
+
+  const [value] = useLocalStorage()
+
   return (
     <div>
       <h1 className="text-6xl text-center font-bold">
-        {authStore.user &&
-          authStore.user.first_name + ' ' + authStore.user.last_name}
+        {value && value.first_name + ' ' + value.last_name}
       </h1>
       <br />
       <div className="grid grid-cols-2 pl-24 space-x-8">
