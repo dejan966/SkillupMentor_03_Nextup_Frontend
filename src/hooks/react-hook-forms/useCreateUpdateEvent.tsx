@@ -32,8 +32,7 @@ const createEventSchema = z.object({
   date: z
     .string()
     .min(1, { message: 'Date is required' })
-    .default(new Date().toISOString().substring(0, 10))
-    .transform((str) => new Date(str)),
+    .default(new Date().toISOString().substring(0, 10)),
   hour: z.string().min(1, { message: 'Hour is required' }),
   max_users: z
     .string()
@@ -41,11 +40,16 @@ const createEventSchema = z.object({
     .transform(Number),
   description: z.string().optional(),
 })
-
+//const stringToDate = z.string().pipe(z.coerce.date());
 const updateEventSchema = z.object({
   name: z.string().optional(),
   location: z.string().optional(),
-  date: z.string().optional(),
+  date: z
+    .string()
+    .datetime()
+    .refine((str) => {
+      return new Date(str).toISOString().substring(0, 10)
+    }),
   hour: z.string().optional(),
   max_users: z.string().optional().transform(Number),
   description: z.string().optional(),
@@ -64,6 +68,7 @@ export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {
       location: '',
       hour: '',
       max_users: '',
+      date: new Date().toISOString().substring(0, 10),
       description: '',
       image: '',
       ...defaultValues,

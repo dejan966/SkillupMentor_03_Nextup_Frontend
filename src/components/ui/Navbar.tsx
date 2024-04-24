@@ -160,8 +160,8 @@ const Navbar = () => {
   }
 
   return (
-    <header>
-      <nav className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
+    <header className="pl-24 pb-9 pr-24 pt-9">
+      <nav className="flex items-center justify-between">
         <Link href={routes.HOME}>
           <Image src="/cgp.png" alt="Nextup logo" height={30} width={30} />
         </Link>

@@ -16,11 +16,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={poppins.className}>
         <div className="display">
           <Navbar />
-          <div className="content">{children}</div>
+          <main>{children}</main>
           <Footer />
         </div>
       </body>

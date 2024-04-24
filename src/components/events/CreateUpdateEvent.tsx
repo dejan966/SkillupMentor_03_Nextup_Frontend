@@ -201,7 +201,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       {...field}
                       type="date"
                       id="date"
-                      defaultValue={new Date().toISOString().substring(0, 10)}
+                      //defaultValue={new Date().toISOString().substring(0, 10)}
                       min="2023-01-01"
                       max="2031-12-31"
                       className={

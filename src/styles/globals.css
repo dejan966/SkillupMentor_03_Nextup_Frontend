@@ -48,8 +48,22 @@ body {
   @apply text-red-500 text-xs;
 }
 
+.searchForm {
+  padding-top: 1rem;
+  position: absolute;
+}
+
+.images {
+  position: relative;
+  float: right;
+}
+
+.siteText {
+  position: static;
+}
+
 .divGrid {
-  @apply grid grid-cols-3 gap-6;
+  @apply grid grid-cols-3;
 }
 
 .centered {
@@ -96,12 +110,12 @@ body {
   display: none !important;
 }
 
-.content {
-  flex-grow: 1;
-}
-
 .display {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
 }

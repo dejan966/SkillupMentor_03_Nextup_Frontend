@@ -8,11 +8,7 @@ import { useState } from 'react'
 import { searchEvents } from '@/lib/event'
 
 const SearchPage = () => {
-  const {
-    data: upcomingEvents,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: upcomingEvents } = useQuery({
     queryKey: ['upcomingEvents'],
     queryFn: getAllUpcomingEvents,
   })
@@ -21,8 +17,8 @@ const SearchPage = () => {
   const searchParams = useSearchParams()
   const searchLocation = searchParams.get('location')
   const searchDate = searchParams.get('date')
-
-  const { data: searchEvent, isError: isLoadingError } = useQuery({
+  console.log(searchLocation)
+  const { data: searchEvent } = useQuery({
     queryKey: ['searchEvents', pageNumber],
     queryFn: () => searchEvents(searchLocation!, searchDate!, pageNumber),
   })

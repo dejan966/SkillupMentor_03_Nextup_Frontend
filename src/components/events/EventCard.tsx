@@ -19,7 +19,7 @@ export default function EventCard({ event, typeIcon }: Props) {
       <div className="text-lg text-black font-bold centered">
         {event.location}
       </div>
-      {typeIcon && (
+      {typeIcon ? (
         <div className="centered">
           <button
             type="button"
@@ -30,10 +30,11 @@ export default function EventCard({ event, typeIcon }: Props) {
             </Link>
           </button>
         </div>
+      ) : (
+        <button type="button" className="blueButton">
+          <Link href={`/events/${event._id}`}>Check</Link>
+        </button>
       )}
-      <button type="button" className="blueButton">
-        <Link href={`/events/${event._id}`}>Check</Link>
-      </button>
     </div>
   )
 }
