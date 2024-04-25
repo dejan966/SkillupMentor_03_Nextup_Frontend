@@ -173,7 +173,7 @@ const Navbar = () => {
           )}
         </div>
         {Object.keys(value).length > 0 ? (
-          <div className="flex items-center">
+          <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
               <img
                 src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
@@ -182,12 +182,10 @@ const Navbar = () => {
                 width={40}
               />
             </Link>
-            <div>
-              <Link href={routes.USERINFO}>Profile settings</Link>
-              <Link href={routes.HOME} onClick={signout}>
-                Signout
-              </Link>
-            </div>
+            <Link href={routes.USERINFO}>Profile settings</Link>
+            <Link href={routes.HOME} onClick={signout}>
+              Signout
+            </Link>
           </div>
         ) : (
           <div className="space-x-8">

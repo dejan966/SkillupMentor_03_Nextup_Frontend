@@ -1,12 +1,10 @@
 'use client'
 
-import useDeviceSize from '@/hooks/useDeviceSize'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const router = useRouter()
-  const [width, height] = useDeviceSize()
   const onSubmit = (event: any) => {
     event.preventDefault()
     router.push(

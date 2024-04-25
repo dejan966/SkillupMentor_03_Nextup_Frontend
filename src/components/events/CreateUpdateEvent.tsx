@@ -31,6 +31,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     queryKey: ['currUser'],
     queryFn: fetchCurrUser,
   })
+
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
     defaultValues,
   })
@@ -201,7 +202,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       {...field}
                       type="date"
                       id="date"
-                      //defaultValue={new Date().toISOString().substring(0, 10)}
                       min="2023-01-01"
                       max="2031-12-31"
                       className={
@@ -255,7 +255,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                     <label className="inputText">Max users</label>
                     <input
                       {...field}
-                      type="text"
+                      type="number"
                       aria-label="max_users"
                       aria-describedby="max_users"
                       className={
@@ -299,8 +299,9 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               </div>
             )}
           />
+
           <div className="mb-4">
-            {preview && (
+            {preview ? (
               <div className="flex justify-between mb-4">
                 <Image
                   src={preview as string}
@@ -316,6 +317,24 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   x
                 </button>
               </div>
+            ) : (
+              defaultValues && (
+                <div className="flex justify-between mb-4">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${defaultValues?.image}`}
+                    alt="event img"
+                    width={123}
+                    height={123}
+                  />
+                  <button
+                    type="button"
+                    className="rounded-lg h-10 w-14 text-white bg-red-600 hover:bg-red-800"
+                    onClick={clearImg}
+                  >
+                    x
+                  </button>
+                </div>
+              )
             )}
             <button
               className="bg-black text-white h-10 w-full rounded-full hover:bg-stone-700"
@@ -324,18 +343,29 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             >
               Add image
             </button>
-            <input
-              onChange={handleFileChange}
-              id="eventUpload"
-              name="image"
-              type="file"
-              aria-label="image"
-              aria-describedby="image"
-              className="hidden"
-              accept="image/png, 'image/jpg', image/jpeg"
+            <Controller
+              control={control}
+              name="eventImage"
+              render={({ field }) => (
+                <input
+                  onChange={(e) => {
+                    handleFileChange(e)
+                    field.onChange(e.target.files)
+                  }}
+                  id="eventUpload"
+                  name={field.name}
+                  type="file"
+                  aria-label="image"
+                  aria-describedby="image"
+                  className="hidden"
+                  accept="image/png, 'image/jpg', image/jpeg"
+                />
+              )}
             />
-            {fileError && (
-              <div className="validation-feedback">Image is required</div>
+            {errors.eventImage && (
+              <div className="validation-feedback">
+                {errors.eventImage.message}
+              </div>
             )}
             {showError && (
               <div className="text-red-500 text-md">{apiError}</div>

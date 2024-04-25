@@ -23,7 +23,7 @@ export default function EventEdit({ params }: Props) {
     queryKey: ['fetchEvent'],
     queryFn: () => fetchEvent(params.eventId),
   })
-  console.log(eventData)
+
   if (eventData?.data.message === 'Unauthorized') {
     return <div>Unauthorized</div>
   }

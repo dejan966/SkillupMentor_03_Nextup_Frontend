@@ -17,7 +17,7 @@ const SearchPage = () => {
   const searchParams = useSearchParams()
   const searchLocation = searchParams.get('location')
   const searchDate = searchParams.get('date')
-  console.log(searchLocation)
+
   const { data: searchEvent } = useQuery({
     queryKey: ['searchEvents', pageNumber],
     queryFn: () => searchEvents(searchLocation!, searchDate!, pageNumber),

@@ -10,6 +10,8 @@ export interface CreateEventFields {
   hour: string
   max_users: number
   description?: string
+  image: string
+  eventImage: any
 }
 
 export interface UpdateEventFields {
@@ -17,43 +19,60 @@ export interface UpdateEventFields {
   location?: string
   date?: string
   hour?: string
-  max_users?: string
+  max_users?: number
   description?: string
   image?: string
+  eventImage?: any
 }
 
 interface Props {
   defaultValues?: EventType
 }
 
+const MAX_FILE_SIZE = 5000000
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg']
+
 const createEventSchema = z.object({
   name: z.string().min(1, { message: 'Event name is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
-  date: z
-    .string()
-    .min(1, { message: 'Date is required' })
-    .default(new Date().toISOString().substring(0, 10)),
+  date: z.string().transform((str) => new Date(str)),
   hour: z.string().min(1, { message: 'Hour is required' }),
   max_users: z
     .string()
-    .min(1, { message: 'Max users is required' })
-    .transform(Number),
+    .refine((max_users) => !isNaN(parseInt(max_users)), {
+      message: 'Max users is required',
+    })
+    .transform((max_users) => Number(max_users)),
   description: z.string().optional(),
+  eventImage: z
+    .any()
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      'Max image size is 5MB.',
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      'Only .jpg, .jpeg formats are supported.',
+    ),
 })
-//const stringToDate = z.string().pipe(z.coerce.date());
+
 const updateEventSchema = z.object({
   name: z.string().optional(),
   location: z.string().optional(),
-  date: z
-    .string()
-    .datetime()
-    .refine((str) => {
-      return new Date(str).toISOString().substring(0, 10)
-    }),
+  date: z.string().transform((str) => new Date(str)),
   hour: z.string().optional(),
-  max_users: z.string().optional().transform(Number),
+  max_users: z.string().transform((max_users) => Number(max_users)),
   description: z.string().optional(),
-  image: z.string().optional(),
+  eventImage: z
+    .any()
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      'Max image size is 5MB.',
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      'Only .jpg, .jpeg formats are supported.',
+    ),
 })
 
 export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {
@@ -67,10 +86,12 @@ export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {
       name: '',
       location: '',
       hour: '',
-      max_users: '',
-      date: new Date().toISOString().substring(0, 10),
+      max_users: 0,
+      date: defaultValues
+        ? new Date(defaultValues.date).toISOString().substring(0, 10)
+        : new Date().toISOString().substring(0, 10),
       description: '',
-      image: '',
+      eventImage: undefined,
       ...defaultValues,
     },
     mode: 'onSubmit',
