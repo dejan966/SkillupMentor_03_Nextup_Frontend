@@ -5,6 +5,7 @@ import { fetchCurrUser } from '@/lib/user'
 import { routes } from '@/enums/routesConstants'
 import { useQuery } from '@tanstack/react-query'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import Image from 'next/image'
 
 export default function UserInfo() {
   const [value] = useLocalStorage()
@@ -39,11 +40,12 @@ export default function UserInfo() {
           <h1 className="text-6xl font-bold text-center">Your info!</h1>
           <div>
             <div className="flex justify-center">
-              <img
+              <Image
                 src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
                 alt="Avatar"
                 className="userAvatar"
-                width={110}
+                width={120}
+                height={120}
               />
             </div>
             <div className="flex justify-between">

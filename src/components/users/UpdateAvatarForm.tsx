@@ -7,12 +7,14 @@ import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import { Controller } from 'react-hook-form'
+import Image from 'next/image'
 
 export default function UpdateAvatarForm() {
   const [value] = useLocalStorage()
   const defaultValues = value!
   const router = useRouter()
-  const { handleSubmit } = useUpdateUserForm({
+  const { handleSubmit, errors, control } = useUpdateUserForm({
     defaultValues,
   })
 
@@ -21,13 +23,8 @@ export default function UpdateAvatarForm() {
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
 
-  const onSubmit = handleSubmit(() => {
-    handleUpdate()
-  })
-
-  const handleUpdate = async () => {
+  const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
     formData.append('avatar', file!, file?.name!)
     const fileResponse = await uploadAvatar(formData, defaultValues._id)
@@ -42,15 +39,10 @@ export default function UpdateAvatarForm() {
     } else {
       router.push(routes.USERINFO)
     }
-  }
+  })
 
   const uploadFile = () => {
     document.getElementById('avatarUpload')?.click()
-  }
-
-  const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
   }
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +57,6 @@ export default function UpdateAvatarForm() {
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreview(reader.result as string)
-        setFileError(false)
       }
       reader.readAsDataURL(file)
     } else {
@@ -81,30 +72,47 @@ export default function UpdateAvatarForm() {
         <form method="POST" onSubmit={onSubmit}>
           <div>
             <div className="flex justify-center mb-4">
-              <img
+              <Image
                 src={
                   preview
                     ? (preview as string)
-                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`
                 }
-                className="userAvatar"
-                width={120}
                 alt="Avatar"
+                className="userAvatar"
+                width={110}
+                height={110}
               />
             </div>
+            <Controller
+              control={control}
+              name="userImage"
+              render={({ field }) => (
+                <>
+                  <input
+                    onChange={(e) => {
+                      handleFileChange(e)
+                      field.onChange(e.target.files)
+                    }}
+                    id="avatarUpload"
+                    name={field.name}
+                    type="file"
+                    aria-label="avatar"
+                    aria-describedby="avatar"
+                    className="hidden"
+                    accept="image/png, 'image/jpg', image/jpeg"
+                  />
+                  {errors.userImage && (
+                    <div className="validation-feedback">
+                      {errors.userImage.message}
+                    </div>
+                  )}
+                </>
+              )}
+            />
             <button className="pinkButton" onClick={uploadFile}>
               Upload new image
             </button>
-            <input
-              onChange={handleFileChange}
-              id="avatarUpload"
-              name="avatar"
-              type="file"
-              aria-label="Avatar"
-              aria-describedby="avatar"
-              className="hidden"
-              accept="image/png, 'image/jpg', image/jpeg"
-            />
             {showError && (
               <div className="text-red-500 text-md">{apiError}</div>
             )}

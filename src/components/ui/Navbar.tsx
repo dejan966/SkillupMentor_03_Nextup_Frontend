@@ -175,11 +175,12 @@ const Navbar = () => {
         {Object.keys(value).length > 0 ? (
           <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`}
                 alt="Avatar"
                 className="navbarAvatar"
                 width={40}
+                height={40}
               />
             </Link>
             <Link href={routes.USERINFO}>Profile settings</Link>

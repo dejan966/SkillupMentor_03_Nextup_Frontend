@@ -30,7 +30,7 @@ interface Props {
 }
 
 const MAX_FILE_SIZE = 5000000
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg']
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 const createEventSchema = z.object({
   name: z.string().min(1, { message: 'Event name is required' }),
@@ -43,16 +43,23 @@ const createEventSchema = z.object({
       message: 'Max users is required',
     })
     .transform((max_users) => Number(max_users)),
-  description: z.string().optional(),
+  description: z
+    .string()
+    .optional()
+    .transform((desc) => {
+      if (desc === '') return null
+      return desc
+    }),
   eventImage: z
     .any()
+    .refine((files) => files?.length >= 1, { message: 'Photo is required.' })
     .refine(
       (files) => files?.[0]?.size <= MAX_FILE_SIZE,
       'Max image size is 5MB.',
     )
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      'Only .jpg, .jpeg formats are supported.',
+      'Only .jpg, .jpeg, .png formats are supported.',
     ),
 })
 
@@ -72,7 +79,8 @@ const updateEventSchema = z.object({
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       'Only .jpg, .jpeg formats are supported.',
-    ),
+    )
+    .optional(),
 })
 
 export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {

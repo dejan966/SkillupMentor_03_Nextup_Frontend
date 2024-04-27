@@ -35,11 +35,11 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
     defaultValues,
   })
+
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
 
   const router = useRouter()
 
@@ -52,11 +52,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
 
   const uploadFile = () => {
     document.getElementById('eventUpload')?.click()
-  }
-
-  const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
   }
 
   const onSubmit = handleSubmit(
@@ -118,7 +113,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }
 
   const clearImg = () => {
-    //remove image from input type file
     setFile(null)
   }
 
@@ -127,7 +121,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreview(reader.result as string)
-        setFileError(false)
       }
       reader.readAsDataURL(file)
     } else {
@@ -299,7 +292,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               </div>
             )}
           />
-
           <div className="mb-4">
             {preview ? (
               <div className="flex justify-between mb-4">
@@ -347,26 +339,28 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               control={control}
               name="eventImage"
               render={({ field }) => (
-                <input
-                  onChange={(e) => {
-                    handleFileChange(e)
-                    field.onChange(e.target.files)
-                  }}
-                  id="eventUpload"
-                  name={field.name}
-                  type="file"
-                  aria-label="image"
-                  aria-describedby="image"
-                  className="hidden"
-                  accept="image/png, 'image/jpg', image/jpeg"
-                />
+                <>
+                  <input
+                    onChange={(e) => {
+                      handleFileChange(e)
+                      field.onChange(e.target.files)
+                    }}
+                    id="eventUpload"
+                    name={field.name}
+                    type="file"
+                    aria-label="image"
+                    aria-describedby="image"
+                    className="hidden"
+                    accept="image/png, 'image/jpg', image/jpeg"
+                  />
+                  {errors.eventImage && (
+                    <div className="validation-feedback">
+                      {errors.eventImage.message}
+                    </div>
+                  )}
+                </>
               )}
             />
-            {errors.eventImage && (
-              <div className="validation-feedback">
-                {errors.eventImage.message}
-              </div>
-            )}
             {showError && (
               <div className="text-red-500 text-md">{apiError}</div>
             )}
@@ -375,7 +369,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             <button
               className="blue text-white h-10 w-full rounded-full mb-4"
               type="submit"
-              onMouseUp={handleFileError}
             >
               Submit
             </button>

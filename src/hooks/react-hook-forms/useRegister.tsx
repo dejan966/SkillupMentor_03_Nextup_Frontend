@@ -3,17 +3,34 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export interface RegisterUserFields {
+  avatar?: string
   first_name?: string
   last_name?: string
   email: string
   password: string
   confirm_password: string
+  userImage?: any
 }
+
+const MAX_FILE_SIZE = 5000000
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 const registerSchema = z
   .object({
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
+    first_name: z
+      .string()
+      .optional()
+      .transform((name) => {
+        if (name === '') return null
+        return name
+      }),
+    last_name: z
+      .string()
+      .optional()
+      .transform((surname) => {
+        if (surname === '') return null
+        return surname
+      }),
     email: z
       .string()
       .min(1, { message: 'Email is required' })
@@ -31,6 +48,17 @@ const registerSchema = z
     confirm_password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters.' }),
+    userImage: z
+      .any()
+      .refine(
+        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        'Max image size is 5MB.',
+      )
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        'Only .jpg, .jpeg, .png formats are supported.',
+      )
+      .optional(),
   })
   .refine((data) => data.password === data.confirm_password, {
     path: ['confirm_password'],
@@ -50,6 +78,7 @@ export const useRegisterForm = () => {
       email: '',
       password: '',
       confirm_password: '',
+      userImage: undefined,
     },
     mode: 'onSubmit',
     resolver: zodResolver(registerSchema),

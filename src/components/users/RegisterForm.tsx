@@ -1,6 +1,6 @@
 'use client'
 
-import { register } from '@/lib/user'
+import { fetchCurrUser, login, register, uploadAvatar } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
@@ -8,16 +8,33 @@ import {
   RegisterUserFields,
 } from '@/hooks/react-hook-forms/useRegister'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
+  const [value, setValue] = useLocalStorage()
   const router = useRouter()
+
+  useEffect(() => {
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setPreview('')
+    }
+  }, [file])
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
     const response = await register(data)
@@ -28,9 +45,59 @@ export default function RegisterForm() {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      router.push(routes.LOGIN)
+      const loginResponse = await login({
+        email: data.email,
+        password: data.password,
+      })
+      if (loginResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
+        setApiError(loginResponse.data.message)
+        setShowError(true)
+      } else if (
+        loginResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+      ) {
+        setApiError(loginResponse.data.message)
+        setShowError(true)
+      } else {
+        if (file) {
+          const formData = new FormData()
+          formData.append('avatar', file, file.name)
+          const fileResponse = await uploadAvatar(formData, response.data._id)
+          if (fileResponse.status === StatusCode.BAD_REQUEST) {
+            setApiError(fileResponse.data.message)
+            setShowError(true)
+          } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
+            setApiError(fileResponse.data.message)
+            setShowError(true)
+          } else {
+            const userResponse = await fetchCurrUser()
+            if (
+              userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+            ) {
+              setApiError(fileResponse.data.message)
+              setShowError(true)
+            } else {
+              setValue(userResponse.data)
+              router.push(routes.HOME)
+              return
+            }
+          }
+        }
+        setValue(loginResponse.data)
+        router.push(routes.HOME)
+      }
     }
   })
+
+  const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (target.files) {
+      const myfile = target.files[0]
+      setFile(myfile)
+    }
+  }
+
+  const uploadFile = () => {
+    document.getElementById('avatarUpload')?.click()
+  }
 
   return (
     <div className="centered">
@@ -41,13 +108,45 @@ export default function RegisterForm() {
         </p>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-center">
-            <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`}
+            <Image
+              src={
+                preview
+                  ? (preview as string)
+                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`
+              }
               alt="Avatar"
               className="userAvatar"
               width={110}
+              height={110}
+              onClick={uploadFile}
             />
           </div>
+          <Controller
+            control={control}
+            name="userImage"
+            render={({ field }) => (
+              <>
+                <input
+                  onChange={(e) => {
+                    handleFileChange(e)
+                    field.onChange(e.target.files)
+                  }}
+                  id="avatarUpload"
+                  name={field.name}
+                  type="file"
+                  aria-label="avatar"
+                  aria-describedby="avatar"
+                  className="hidden"
+                  accept="image/png, 'image/jpg', image/jpeg"
+                />
+                {errors.userImage && (
+                  <div className="validation-feedback">
+                    {errors.userImage.message}
+                  </div>
+                )}
+              </>
+            )}
+          />
           <div className="flex justify-between">
             <div className="mb-4">
               <Controller

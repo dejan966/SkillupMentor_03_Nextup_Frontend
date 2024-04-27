@@ -11,7 +11,11 @@ export interface UpdateUserFields {
   new_password?: string
   confirm_password?: string
   avatar?: string
+  userImage?: any
 }
+
+const MAX_FILE_SIZE = 5000000
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 interface Props {
   defaultValues?: UserType
@@ -26,6 +30,17 @@ const updateUserSchema = z
     password: z.string().optional(),
     new_password: z.string().optional(),
     confirm_password: z.string().optional(),
+    userImage: z
+      .any()
+      .refine(
+        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        'Max image size is 5MB.',
+      )
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        'Only .jpg, .jpeg, .png formats are supported.',
+      )
+      .optional(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
     path: ['confirm_password'],
@@ -45,6 +60,7 @@ export const useUpdateUserForm = ({ defaultValues }: Props) => {
       password: '',
       new_password: '',
       confirm_password: '',
+      userImage: undefined,
       ...defaultValues,
     },
     mode: 'onSubmit',
