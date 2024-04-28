@@ -125,7 +125,7 @@ export default function RegisterForm() {
             control={control}
             name="userImage"
             render={({ field }) => (
-              <>
+              <div>
                 <input
                   onChange={(e) => {
                     handleFileChange(e)
@@ -144,7 +144,7 @@ export default function RegisterForm() {
                     {errors.userImage.message}
                   </div>
                 )}
-              </>
+              </div>
             )}
           />
           <div className="flex justify-between">

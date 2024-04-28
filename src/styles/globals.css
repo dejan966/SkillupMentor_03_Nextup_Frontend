@@ -31,11 +31,6 @@ body {
   background: var(--color-primary);
 }
 
-.footerDiv {
-  position: absolute;
-  bottom: 0px;
-}
-
 .tailwind-form-control {
   @apply border rounded-full h-10 w-full p-3.5;
 }
@@ -56,10 +51,6 @@ body {
 .images {
   position: relative;
   float: right;
-}
-
-.siteText {
-  position: static;
 }
 
 .divGrid {
@@ -98,20 +89,8 @@ body {
   border-radius: 50%;
 }
 
-#home-page footer {
-  display: none !important;
-}
-
-#event-page footer {
-  display: none !important;
-}
-
 .display {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-footer {
-  margin-top: auto;
 }

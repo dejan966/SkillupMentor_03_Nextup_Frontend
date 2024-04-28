@@ -21,7 +21,7 @@ export default function EventList({
   edit,
 }: Props) {
   return (
-    <>
+    <div>
       {type == 'block' ? (
         <div className="grid gap-6 phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 relative">
           {events?.map((event: EventType) => {
@@ -48,7 +48,7 @@ export default function EventList({
             return (
               <>
                 {cardIcon !== undefined && cardIcon ? (
-                  <>
+                  <div>
                     {edit !== undefined && edit ? (
                       <EventCard
                         key={event._id}
@@ -62,7 +62,7 @@ export default function EventList({
                         typeIcon="/tickIcon.svg"
                       />
                     )}
-                  </>
+                  </div>
                 ) : (
                   <EventCard key={event._id} event={event} />
                 )}
@@ -81,6 +81,6 @@ export default function EventList({
           )}
         </div>
       )}
-    </>
+    </div>
   )
 }

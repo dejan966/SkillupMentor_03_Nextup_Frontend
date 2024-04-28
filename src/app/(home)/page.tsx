@@ -14,21 +14,18 @@ export default function Home() {
   return (
     <div className="pl-24 pb-9 pt-9">
       <div className="relative">
-        <div className="flex images phone:gap-3">
-          <Image
-            src="/picture-1.png"
-            alt="Picture 1"
-            height={220}
-            width={382}
-          />
+        <div className="divGrid images phone:gap-3">
+          <div className="col-span-2 relative">
+            <Image src="/picture-1.png" alt="Picture 1" fill />
+          </div>
           <Image
             src="/picture-2.png"
             alt="Picture 2"
-            height={220}
-            width={235}
+            height={238}
+            width={238}
           />
         </div>
-        <div className="siteText">
+        <div className="static">
           <div className="text-black font-bold">FIND THE BEST EVENTS</div>
           <h1 className="text-7xl font-bold">
             Are you looking for your next event?
@@ -102,17 +99,6 @@ export default function Home() {
           </form>
         </div>
       </div>
-      {/* <div className="bg-white footerDiv" style={{ width: width / 2 }}>
-        <div className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
-          <Image
-            src="/nextup-logo.png"
-            alt="Nextup logo"
-            height={100}
-            width={100}
-          />
-          <p>All rights received | skillupmentor.com</p>
-        </div>
-      </div> */}
     </div>
   )
 }

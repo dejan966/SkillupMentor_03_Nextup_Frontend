@@ -16,5 +16,5 @@ export default function UpdatePassword() {
     queryFn: () => fetchTokenInfo(value._id, token),
   })
 
-  return <>{tokenInfo.data && <UpdatePasswordForm />}</>
+  return <div>{tokenInfo.data && <UpdatePasswordForm />}</div>
 }

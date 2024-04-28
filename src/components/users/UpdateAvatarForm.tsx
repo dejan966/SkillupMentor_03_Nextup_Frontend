@@ -88,7 +88,7 @@ export default function UpdateAvatarForm() {
               control={control}
               name="userImage"
               render={({ field }) => (
-                <>
+                <div>
                   <input
                     onChange={(e) => {
                       handleFileChange(e)
@@ -107,7 +107,7 @@ export default function UpdateAvatarForm() {
                       {errors.userImage.message}
                     </div>
                   )}
-                </>
+                </div>
               )}
             />
             <button className="pinkButton" onClick={uploadFile}>

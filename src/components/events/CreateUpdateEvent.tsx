@@ -339,7 +339,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               control={control}
               name="eventImage"
               render={({ field }) => (
-                <>
+                <div>
                   <input
                     onChange={(e) => {
                       handleFileChange(e)
@@ -358,7 +358,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       {errors.eventImage.message}
                     </div>
                   )}
-                </>
+                </div>
               )}
             />
             {showError && (

@@ -40,8 +40,8 @@ const Navbar = () => {
 
   if (location === '/search') {
     return (
-      <>
-        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <header>
+        <nav style={{ width: '100%', height: '100%', position: 'relative' }}>
           <Image
             src="/background-search.png"
             alt="Background image"
@@ -70,11 +70,12 @@ const Navbar = () => {
               {Object.keys(value).length > 0 ? (
                 <div className="flex items-center">
                   <Link href={routes.USERPROFILE}>
-                    <img
+                    <Image
                       src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
                       alt="Avatar"
                       className="navbarAvatar"
                       width={40}
+                      height={40}
                     />
                   </Link>
                   <div>
@@ -154,8 +155,8 @@ const Navbar = () => {
               </div>
             </form>
           </div>
-        </div>
-      </>
+        </nav>
+      </header>
     )
   }
 

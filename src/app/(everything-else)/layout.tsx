@@ -6,8 +6,8 @@ import '@/styles/globals.css'
 const poppins = Poppins({ subsets: ['latin'], weight: '300' })
 
 export const metadata = {
-  title: 'Home',
-  description: 'Home page made with NextJS',
+  title: 'Nextup',
+  description: 'Page made with NextJS',
 }
 
 export default function RootLayout({
@@ -18,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <div className="display">
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </div>
+        <main>
+          <div className="display">
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
+        </main>
       </body>
     </html>
   )
