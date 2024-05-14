@@ -153,7 +153,7 @@ export default function RegisterForm() {
                 control={control}
                 name="first_name"
                 render={({ field }) => (
-                  <div className="w-[16.5rem]">
+                  <div className="">
                     <label className="inputText">First name</label>
                     <input
                       {...field}
@@ -180,7 +180,7 @@ export default function RegisterForm() {
                 control={control}
                 name="last_name"
                 render={({ field }) => (
-                  <div className="w-[16.5rem]">
+                  <div className="">
                     <label className="inputText">Last name</label>
                     <input
                       {...field}

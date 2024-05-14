@@ -1,3 +1,4 @@
+'use client'
 import { UserType } from '@/models/auth'
 import { useEffect, useState } from 'react'
 
