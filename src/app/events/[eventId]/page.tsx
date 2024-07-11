@@ -53,10 +53,10 @@ export default function Event({ params }: Props) {
   }
 
   return (
-    <div className="pl-24 pb-9 pt-9">
+    <div className="pl-24 pb-16 pt-9">
       {isSuccess && (
         <div className="relative">
-          <div className="images">
+          <div className="images pl-4">
             <Image
               src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
               alt="Event image"

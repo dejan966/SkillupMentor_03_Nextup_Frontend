@@ -91,26 +91,8 @@ body {
   z-index: 1;
 }
 
-.holder {
-  min-height: 100%;
-  position: relative;
-}
-
-html,
-body {
-  height: 100%;
-}
-
 .body {
-  padding-bottom: 100px;
-}
-
-footer {
-  height: 100px;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  padding-bottom: 129px;
 }
 
 .searchImage {
@@ -122,7 +104,7 @@ footer {
   z-index: -1;
 }
 
-/* .display {
+.display {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -130,4 +112,4 @@ footer {
 
 footer {
   margin-top: auto;
-} */
+}

@@ -1,6 +1,6 @@
-'use client'
 import { UserType } from '@/models/auth'
 import { useEffect, useState } from 'react'
+import { isServer } from './useServer'
 
 const useLocalStorage = () => {
   const [user, setUser] = useState({} as UserType)
@@ -10,8 +10,10 @@ const useLocalStorage = () => {
   }
   useEffect(() => {
     try {
-      const value = window.localStorage.getItem('user')
-      checkUser(value!)
+      if (!isServer()) {
+        const value = window.localStorage.getItem('user')
+        checkUser(value!)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -19,8 +21,10 @@ const useLocalStorage = () => {
 
   const setValue = (value: UserType) => {
     try {
-      window.localStorage.setItem('user', JSON.stringify(value))
-      setUser(value)
+      if (!isServer()) {
+        window.localStorage.setItem('user', JSON.stringify(value))
+        setUser(value)
+      }
     } catch (error) {
       console.log(error)
     }
