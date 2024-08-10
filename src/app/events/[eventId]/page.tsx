@@ -53,58 +53,71 @@ export default function Event({ params }: Props) {
   }
 
   return (
-    <div className="pl-24 pb-16 pt-9">
-      {isSuccess && (
-        <div className="relative">
-          <div className="images pl-4">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
-              alt="Event image"
-              height={600}
-              width={785}
-            />
-          </div>
-          <div>
-            <div className="flex justify-between">
-              <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
-              <div>{eventData.data.hour}</div>
+    <>  
+      <div className="pl-24 pb-16 pt-9">
+        {isSuccess && (
+          <div className="relative">
+            <div className="images pl-4">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
+                alt="Event image"
+                height={600}
+                width={785}
+              />
             </div>
-            <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
-            <br />
-            <div className="flex justify-between pb-8">
-              <div className="flex justify-start">
-                <Image
-                  src="/locationIcon.svg"
-                  alt="location icon"
-                  width={20}
-                  height={20}
-                />
-                {eventData.data.location}
+            <div>
+              <div className="flex justify-between">
+                <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
+                <div>{eventData.data.hour}</div>
               </div>
-              <div className="flex justify-start">
-                <Image
-                  src="/avatarIcon.svg"
-                  alt="avatar icon"
-                  width={20}
-                  height={20}
-                />
-                {eventData.data.max_users}
+              <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
+              <br />
+              <div className="flex justify-between pb-8">
+                <div className="flex justify-start">
+                  <Image
+                    src="/locationIcon.svg"
+                    alt="location icon"
+                    width={20}
+                    height={20}
+                  />
+                  {eventData.data.location}
+                </div>
+                <div className="flex justify-start">
+                  <Image
+                    src="/avatarIcon.svg"
+                    alt="avatar icon"
+                    width={20}
+                    height={20}
+                  />
+                  {eventData.data.max_users}
+                </div>
+              </div>
+              <div className="font-bold">EVENT DESCRIPTION</div>
+              <div className="pb-8">{eventData.data.description}</div>
+              <div className="text-end">
+                <button
+                  type="button"
+                  className="blue text-white h-12 w-20 rounded-xl"
+                  onClick={() => router.back()}
+                >
+                  Back
+                </button>
               </div>
             </div>
-            <div className="font-bold">EVENT DESCRIPTION</div>
-            <div className="pb-8">{eventData.data.description}</div>
-            <div className="text-end">
-              <button
-                type="button"
-                className="blue text-white h-12 w-20 rounded-xl"
-                onClick={() => router.back()}
-              >
-                Back
-              </button>
-            </div>
           </div>
+        )}
+      </div>
+      <footer className="bg-white mt-[124px]">
+        <div className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
+          <Image
+            src="/nextup-logo.png"
+            alt="Nextup logo"
+            height={100}
+            width={100}
+          />
+          <p>All rights received | skillupmentor.com</p>
         </div>
-      )}
-    </div>
+      </footer>
+    </>
   )
 }

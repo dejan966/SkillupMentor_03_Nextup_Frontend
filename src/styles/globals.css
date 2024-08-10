@@ -91,6 +91,16 @@ body {
   z-index: 1;
 }
 
+.holder {
+  min-height: 100%;
+  position: relative;
+}
+
+html,
+body {
+  height: 100%;
+}
+
 .body {
   padding-bottom: 129px;
 }
@@ -110,6 +120,9 @@ body {
   min-height: 100vh;
 }
 
-footer {
-  margin-top: auto;
+.layoutFooter {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }

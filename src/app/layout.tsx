@@ -1,5 +1,4 @@
 import { Poppins } from 'next/font/google'
-import Footer from '@/components/ui/Footer'
 import Navbar from '@/components/ui/Navbar'
 import '@/styles/globals.css'
 
@@ -18,12 +17,9 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body className={poppins.className}>
-        <main>
-          <div className="display">
-            <Navbar />
-            {children}
-            <Footer />
-          </div>
+        <main className="holder">
+          <Navbar />
+          <div className="">{children}</div>
         </main>
       </body>
     </html>

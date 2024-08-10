@@ -1,15 +1,14 @@
-import Provider from '@/components/providers/Provider'
 import Footer from '@/components/ui/Footer'
 
-export default function UsersLayout({
+export default function EventAdd({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <Provider>
+    <>
       {children}
       <Footer />
-    </Provider>
+    </>
   )
 }
