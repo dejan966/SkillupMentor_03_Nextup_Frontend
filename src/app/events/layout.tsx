@@ -1,9 +1,9 @@
 import Provider from '@/components/providers/Provider'
 
 export default function EventsLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode
+  children: React.ReactNode
 }>) {
-    return <Provider>{children}</Provider>
+  return <Provider>{children}</Provider>
 }

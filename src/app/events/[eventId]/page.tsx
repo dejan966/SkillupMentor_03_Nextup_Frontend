@@ -53,7 +53,7 @@ export default function Event({ params }: Props) {
   }
 
   return (
-    <>  
+    <>
       <div className="pl-24 pb-16 pt-9">
         {isSuccess && (
           <div className="relative">

@@ -8,9 +8,7 @@ export default function UsersLayout({
 }>) {
   return (
     <Provider>
-      <div className="body">
-        {children}
-      </div>
+      <div className="body">{children}</div>
       <Footer />
     </Provider>
   )

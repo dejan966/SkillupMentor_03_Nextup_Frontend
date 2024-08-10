@@ -7,9 +7,7 @@ export default function EventEdit({
 }>) {
   return (
     <>
-      <div className="body">
-        {children}
-      </div>
+      <div className="body">{children}</div>
       <Footer />
     </>
   )
