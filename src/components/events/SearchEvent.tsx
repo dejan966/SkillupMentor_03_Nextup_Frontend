@@ -2,18 +2,42 @@
 
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { searchEvents } from '@/lib/event'
+import { useEffect, useState } from 'react'
+import EventList from './EventList'
 
-export function SearchEvent() {
+type Props = {
+  location?: string | null
+  date?: string | null
+  pageNumber?: number | null
+  setPageNumber?: React.Dispatch<React.SetStateAction<number>>
+}
+
+export function SearchEvent({ location, date, pageNumber }: Props) {
   const router = useRouter()
+  const [searchEvent, setSearchEvent] = useState<any>([])
+
+  const fetchEvents = async () => {
+    const res = await searchEvents(location!, date!, pageNumber!)
+    setSearchEvent(res.data)
+  }
+
+  useEffect(() => {
+    if (location) {
+      fetchEvents()
+    }
+  }, [location, date, pageNumber])
+
   const onSubmit = (event: any) => {
     event.preventDefault()
     router.push(
       `/search?location=${event.target.searchValue.value}&date=${event.target.dateValue.value}`,
     )
   }
+
   return (
-    <div className="searchForm w-2/3">
-      <form>
+    <>
+      <form onSubmit={onSubmit} className="mb-8">
         <div className="flex">
           <div className="relative w-full">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -68,6 +92,13 @@ export function SearchEvent() {
           </div>
         </div>
       </form>
-    </div>
+      {searchEvent && (
+        <EventList
+          events={searchEvent?.data}
+          type="block"
+          meta={searchEvent?.meta}
+        />
+      )}
+    </>
   )
 }

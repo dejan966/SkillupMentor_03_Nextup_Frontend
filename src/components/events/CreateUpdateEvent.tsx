@@ -74,6 +74,10 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setShowError(true)
     } else {
       const formData = new FormData()
+      if (!file) {
+        setApiError('Photo is required')
+        setShowError(true)
+      }
       formData.append('image', file!, file!.name)
       const fileResponse = await uploadEventImage(formData, response.data._id)
       if (fileResponse.status === StatusCode.BAD_REQUEST) {
@@ -98,6 +102,10 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setShowError(true)
     } else {
       const formData = new FormData()
+      if (!file) {
+        setApiError('Photo is required')
+        setShowError(true)
+      }
       formData.append('image', file!, file!.name)
       const fileResponse = await uploadEventImage(formData, response.data._id)
       if (fileResponse.status === StatusCode.BAD_REQUEST) {

@@ -32,7 +32,9 @@ export default function Home() {
             location.
           </div>
         </div>
-        <SearchEvent />
+        <div className="searchForm w-2/3">
+          <SearchEvent />
+        </div>
       </div>
       <footer className="bg-white mt-32">
         <div className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
