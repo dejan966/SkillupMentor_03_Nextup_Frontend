@@ -6,14 +6,14 @@ import { searchEvents } from '@/lib/event'
 import { useEffect, useState } from 'react'
 import EventList from './EventList'
 
-type Props = {
+interface Props {
   location?: string | null
   date?: string | null
   pageNumber?: number | null
   setPageNumber?: React.Dispatch<React.SetStateAction<number>>
 }
 
-export function SearchEvent({ location, date, pageNumber }: Props) {
+export function SearchEvent({ location, date, pageNumber, setPageNumber }: Props) {
   const router = useRouter()
   const [searchEvent, setSearchEvent] = useState<any>([])
 
@@ -97,6 +97,7 @@ export function SearchEvent({ location, date, pageNumber }: Props) {
           events={searchEvent?.data}
           type="block"
           meta={searchEvent?.meta}
+          setPageNumber={setPageNumber}
         />
       )}
     </>

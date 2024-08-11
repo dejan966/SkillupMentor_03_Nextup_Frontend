@@ -10,6 +10,7 @@ interface Props {
   loadmore?: boolean
   cardIcon?: boolean
   edit?: boolean
+  setPageNumber?: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function EventList({
@@ -19,6 +20,7 @@ export default function EventList({
   loadmore,
   cardIcon,
   edit,
+  setPageNumber
 }: Props) {
   return (
     <div>
@@ -33,12 +35,12 @@ export default function EventList({
           })}
           {meta?.page > 1 && (
             <div className="group-hover:block absolute top-1/2 left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-              <BsChevronCompactLeft size={30} />
+              <BsChevronCompactLeft size={30} onClick={() => setPageNumber!((prev) => prev - 1)} />
             </div>
           )}
           {meta?.page < meta?.last_page && (
             <div className="group-hover:block absolute top-1/2 right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-              <BsChevronCompactRight size={30} />
+              <BsChevronCompactRight size={30} onClick={() => setPageNumber!((prev) => prev + 1)} />
             </div>
           )}
         </div>
