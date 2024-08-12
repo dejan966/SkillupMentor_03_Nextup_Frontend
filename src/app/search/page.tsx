@@ -16,7 +16,7 @@ const SearchPage = () => {
 
   const [pageNumber, setPageNumber] = useState(1)
   const searchParams = useSearchParams()
-  const searchLocation = searchParams.get('location')
+  const searchLocation = searchParams.get('location') ?? ''
   const searchDate = searchParams.get('date')
 
   return (
