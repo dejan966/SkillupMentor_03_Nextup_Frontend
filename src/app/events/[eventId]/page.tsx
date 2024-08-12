@@ -5,6 +5,7 @@ import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '@/components/ui/LoadingCircle'
+import Footer from '@/components/ui/Footer'
 
 type Props = {
   params: {
@@ -58,11 +59,10 @@ export default function Event({ params }: Props) {
         {isSuccess && (
           <div className="relative">
             <div className="images pl-4">
-              <Image
+              <img
                 src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
                 alt="Event image"
-                height={600}
-                width={785}
+                className="img"
               />
             </div>
             <div>
@@ -107,17 +107,6 @@ export default function Event({ params }: Props) {
           </div>
         )}
       </div>
-      <footer className="bg-white mt-[124px]">
-        <div className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
-          <Image
-            src="/nextup-logo.png"
-            alt="Nextup logo"
-            height={100}
-            width={100}
-          />
-          <p>All rights received | skillupmentor.com</p>
-        </div>
-      </footer>
     </>
   )
 }

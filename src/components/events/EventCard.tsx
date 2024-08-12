@@ -10,11 +10,10 @@ interface Props {
 export default function EventCard({ event, typeIcon }: Props) {
   return (
     <div className="divGrid rounded-xl bg-white h-20 mr-4 mb-4">
-      <div className="grid grid-rows-2 justify-center items-center">
+      <div className="flex justify-center items-center">
         <div className="text-lg text-black font-bold">
-          {event.date.substring(0, 10)}
+          {event.date.substring(0, 10) + event.hour}
         </div>
-        <div className="text-black">{event.hour}</div>
       </div>
       <div className="text-lg text-black font-bold centered">
         {event.location}
@@ -31,9 +30,11 @@ export default function EventCard({ event, typeIcon }: Props) {
           </button>
         </div>
       ) : (
-        <button type="button" className="blueButton">
-          <Link href={`/events/${event._id}`}>Check</Link>
-        </button>
+        <div className="centered">
+          <button type="button" className="blueButton">
+            <Link href={`/events/${event._id}`}>Check</Link>
+          </button>
+        </div>
       )}
     </div>
   )

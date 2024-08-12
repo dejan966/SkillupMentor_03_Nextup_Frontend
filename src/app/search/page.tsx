@@ -20,7 +20,7 @@ const SearchPage = () => {
   const searchDate = searchParams.get('date')
 
   return (
-    <div className="px-24 pt-9 pb-9">
+    <div className="px-24 pt-[30px] pb-9">
       <div className="searchImage">
         <Image
           src="/background-search.png"

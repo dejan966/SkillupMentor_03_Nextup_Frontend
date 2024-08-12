@@ -8,8 +8,8 @@ export default function UsersLayout({
 }>) {
   return (
     <Provider>
-      {children}
-      <Footer />
+      <div className="pb-[120px]">{children}</div>
+      <Footer options={'absoluteFooter'} />
     </Provider>
   )
 }

@@ -9,7 +9,7 @@ export default function UsersLayout({
   return (
     <Provider>
       <div className="body">{children}</div>
-      <Footer />
+      <Footer options={'absoluteFooter'} />
     </Provider>
   )
 }

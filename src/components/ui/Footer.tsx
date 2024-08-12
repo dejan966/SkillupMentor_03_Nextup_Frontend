@@ -1,8 +1,11 @@
 import Image from 'next/image'
 
-export default function Footer() {
+interface Props {
+  options?: string | null
+}
+export default function Footer({ options }: Props) {
   return (
-    <footer className="layoutFooter bg-white">
+    <footer className={`${options} bg-white`}>
       <div className="flex justify-between items-center pl-24 pb-9 pr-24 pt-9">
         <Image
           src="/nextup-logo.png"

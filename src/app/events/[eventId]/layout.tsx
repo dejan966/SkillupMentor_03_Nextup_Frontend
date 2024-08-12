@@ -1,16 +1,18 @@
 import Provider from '@/components/providers/Provider'
 import Footer from '@/components/ui/Footer'
-import Image from 'next/image'
 
-export default function ClientLayout({
+export default function EventsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <>
-      <Provider>{children}</Provider>
-      <Footer />
+      <Provider>
+        <div className="">{children}</div>
+      </Provider>{' '}
+      {/**body */}
+      {/* <Footer options={'footer'} /> */}
     </>
   )
 }

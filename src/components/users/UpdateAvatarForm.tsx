@@ -124,7 +124,9 @@ export default function UpdateAvatarForm() {
             >
               Submit
             </button>
-            <p>Cancel</p>
+            <button type="button" onClick={() => router.back()}>
+              Back
+            </button>
           </div>
         </form>
       </div>

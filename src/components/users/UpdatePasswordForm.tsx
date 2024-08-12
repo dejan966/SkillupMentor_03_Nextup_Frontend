@@ -133,9 +133,9 @@ export default function UpdatePasswordForm() {
             >
               Submit
             </button>
-            <a className="text-decoration-none col-md-3" href={routes.USERINFO}>
-              Cancel
-            </a>
+            <button type="button" onClick={() => router.back()}>
+              Back
+            </button>
           </div>
         </form>
       </div>

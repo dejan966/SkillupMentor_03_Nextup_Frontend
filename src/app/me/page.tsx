@@ -99,7 +99,7 @@ export default function UserInfo() {
                   Edit
                 </button>
               </Link>
-              <p>Delete account</p>
+              <button type="button">Delete account</button>
             </div>
           </div>
         </div>

@@ -13,7 +13,12 @@ interface Props {
   setPageNumber?: React.Dispatch<React.SetStateAction<number>>
 }
 
-export function SearchEvent({ location, date, pageNumber, setPageNumber }: Props) {
+export function SearchEvent({
+  location,
+  date,
+  pageNumber,
+  setPageNumber,
+}: Props) {
   const router = useRouter()
   const [searchEvent, setSearchEvent] = useState<any>([])
 
