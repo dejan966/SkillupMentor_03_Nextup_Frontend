@@ -5,16 +5,32 @@ import { routes } from '@/enums/routesConstants'
 import Image from 'next/image'
 import Link from 'next/link'
 import { userSignout } from '@/lib/user'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import { auth } from '@/config/firebase-config'
+import { onAuthStateChanged, User } from 'firebase/auth'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null)
+
   const router = useRouter()
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setFirebaseUser(currentUser)
+    })
+    return () => unsubscribe()
+  }, [firebaseUser])
+
+  const firebaseLogout = () => {
+    auth.signOut();
+  }
+
 
   const signout = async () => {
     const response = await userSignout()
