@@ -8,12 +8,13 @@ import { userSignout } from '@/lib/user'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
+  const [firebaseUser, firebaseSignout] = useFirebaseAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
-
 
   const router = useRouter()
 
@@ -43,9 +44,9 @@ const Navbar = () => {
           {Object.keys(value).length > 0 && (
             <Link href="/events/add">Event manager</Link>
           )}
-          {/* {Object.keys(firebaseUser).length > 0 && (
+          {Object.keys(firebaseUser).length > 0 && (
             <Link href="/events/add">Event manager</Link>
-          )} */}
+          )}
         </div>
         {Object.keys(value).length > 0 ? (
           <div className="flex items-center space-x-8">
@@ -63,16 +64,34 @@ const Navbar = () => {
               Signout
             </Link>
           </div>
-        ) : (
-          <div className="space-x-8">
-            <Link href={routes.LOGIN}>Login</Link>
-            <button
-              type="button"
-              className="blue text-white h-10 w-28 rounded-full"
-            >
-              <Link href={routes.SIGNUP}>Sign up</Link>
-            </button>
-          </div>
+        ): (
+          Object.keys(firebaseUser).length > 0 ? (
+            <div className="flex items-center space-x-8">
+              <Link href={routes.USERPROFILE}>
+                <Image
+                  src={firebaseUser.photoURL!}
+                  alt="Avatar"
+                  className="navbarAvatar"
+                  width={40}
+                  height={40}
+                />
+              </Link>
+              <Link href={routes.USERINFO}>Profile settings</Link>
+              <Link href={routes.HOME} onClick={firebaseSignout}>
+                Signout
+              </Link>
+            </div>
+          ) : (
+            <div className="space-x-8">
+              <Link href={routes.LOGIN}>Login</Link>
+              <button
+                type="button"
+                className="blue text-white h-10 w-28 rounded-full"
+              >
+                <Link href={routes.SIGNUP}>Sign up</Link>
+              </button>
+            </div>
+          )
         )}
       </nav>
     </header>

@@ -12,22 +12,21 @@ import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { login } from '@/lib/user'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import useFirebase from '@/hooks/firebase/useFirebase'
 import { auth, provider } from '@/config/firebase-config'
 import { signInWithPopup } from 'firebase/auth'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
   const [value, setValue] = useLocalStorage()
-  const [firebaseUser, firebaseLogin] = useFirebase()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
 
-  const googleFirebaseSignIn = async () => {
-    signInWithPopup(auth, provider)
-    firebaseLogin()
+  const googleFirebaseSignIn = () => {
+    signInWithPopup(auth, provider).then((response) => {
+      router.push('/')
+    })
   }
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await login(data)
@@ -121,7 +120,7 @@ export default function LoginForm() {
           <div></div>
         </form>
         <button className="blueButton" onClick={googleFirebaseSignIn}>
-          Sign In with Google
+          Sign in with Google
         </button>
       </div>
     </div>
