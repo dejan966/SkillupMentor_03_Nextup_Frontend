@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { login } from '@/lib/user'
+import { firebaseLogin, login } from '@/lib/user'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import { auth, provider } from '@/config/firebase-config'
 import { signInWithPopup } from 'firebase/auth'
@@ -24,7 +24,9 @@ export default function LoginForm() {
   const router = useRouter()
 
   const googleFirebaseSignIn = () => {
-    signInWithPopup(auth, provider).then((response) => {
+    signInWithPopup(auth, provider).then(async (response) => {
+      await firebaseLogin(response.user)
+
       router.push('/')
     })
   }
