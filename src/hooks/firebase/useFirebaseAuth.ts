@@ -6,12 +6,14 @@ import { NextResponse } from 'next/server'
 
 const useFirebaseAuth = () => {
   const [firebaseUser, setFirebaseUser] = useState<User>({} as User)
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     if (!isServer()) {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (currentUser) {
           setFirebaseUser(currentUser)
+          setToken(await currentUser.getIdToken())
         }
       })
       return () => unsubscribe()
@@ -21,11 +23,11 @@ const useFirebaseAuth = () => {
   const firebaseSignout = () => {
     auth.signOut()
     localStorage.clear()
-    const response = NextResponse.next()
+    setToken('')
     setFirebaseUser({} as User)
   }
 
-  return [firebaseUser, firebaseSignout] as const
+  return [token, firebaseUser, firebaseSignout] as const
 }
 
 export default useFirebaseAuth

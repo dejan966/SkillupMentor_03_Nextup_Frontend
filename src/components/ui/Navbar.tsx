@@ -12,7 +12,7 @@ import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
-  const [firebaseUser, firebaseSignout] = useFirebaseAuth()
+  const [token, firebaseUser, firebaseSignout] = useFirebaseAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
