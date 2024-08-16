@@ -24,9 +24,9 @@ export default function LoginForm() {
   const router = useRouter()
 
   const googleFirebaseSignIn = () => {
-    signInWithPopup(auth, provider).then(async (response) => {
-      await firebaseLogin(response.user)
-
+    signInWithPopup(auth, provider).then(async (data) => {
+      const response = await firebaseLogin(data.user)
+      setValue(response.data)
       router.push('/')
     })
   }

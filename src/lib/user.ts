@@ -16,7 +16,7 @@ export const login = async (data: LoginUserFields) =>
   apiRequest<LoginUserFields, UserType>('post', apiRoutes.LOGIN, data)
 
 export const firebaseLogin = async (user: User) =>
-  apiRequest<any, User>('post', apiRoutes.FIREBASE_LOGIN, user)
+  apiRequest<User, UserType>('post', apiRoutes.FIREBASE_LOGIN, user)
 
 export const register = async (data: RegisterUserFields) =>
   apiRequest<RegisterUserFields, void>('post', apiRoutes.REGISTER, data)
@@ -24,24 +24,34 @@ export const register = async (data: RegisterUserFields) =>
 export const refreshTokens = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.REFRESH_TOKENS)
 
-export const uploadAvatar = async (formData: FormData, _id: string) =>
+export const uploadAvatar = async (
+  formData: FormData,
+  _id: string,
+  headers?: {},
+) =>
   apiRequest<FormData, void>(
     'post',
     `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${_id}`,
     formData,
+    headers,
   )
 
-export const fetchCurrUser = async () =>
-  apiRequest<never, UserType>('get', apiRoutes.ME)
+export const fetchCurrUser = async (headers?: {}) =>
+  apiRequest<never, UserType>('get', apiRoutes.ME, undefined, headers)
 
 export const fetchUser = async (_id: string) =>
   apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/${_id}`)
 
-export const updateUser = async (data: UpdateUserFields, id: string) =>
+export const updateUser = async (
+  data: UpdateUserFields,
+  id: string,
+  headers?: {},
+) =>
   apiRequest<UpdateUserFields, UserType>(
     'patch',
     `${apiRoutes.USERS_PREFIX}/${id}`,
     data,
+    headers,
   )
 
 export const passwordResetEmail = async ({ email }: UpdateUserFields) =>

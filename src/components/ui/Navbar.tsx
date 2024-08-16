@@ -12,7 +12,7 @@ import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
-  const [token, firebaseUser, firebaseSignout] = useFirebaseAuth()
+  const [token, firebaseSignout] = useFirebaseAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -27,12 +27,16 @@ const Navbar = () => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      firebaseUserSignout()
+      signout()
       firebaseSignout()
     }
   }
 
   const signout = async () => {
+    if (value.type === 'Google User') {
+      signOutFirebase()
+      return
+    }
     const response = await userSignout()
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -58,15 +62,16 @@ const Navbar = () => {
           {Object.keys(value).length > 0 && (
             <Link href="/events/add">Event manager</Link>
           )}
-          {Object.keys(firebaseUser).length > 0 && (
-            <Link href="/events/add">Event manager</Link>
-          )}
         </div>
         {Object.keys(value).length > 0 ? (
           <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
               <Image
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`}
+                src={
+                  value.avatar.startsWith('https')
+                    ? value.avatar
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`
+                }
                 alt="Avatar"
                 className="navbarAvatar"
                 width={40}
@@ -75,22 +80,6 @@ const Navbar = () => {
             </Link>
             <Link href={routes.USERINFO}>Profile settings</Link>
             <Link href={routes.HOME} onClick={signout}>
-              Signout
-            </Link>
-          </div>
-        ) : Object.keys(firebaseUser).length > 0 ? (
-          <div className="flex items-center space-x-8">
-            <Link href={routes.USERPROFILE}>
-              <Image
-                src={firebaseUser.photoURL!}
-                alt="Avatar"
-                className="navbarAvatar"
-                width={40}
-                height={40}
-              />
-            </Link>
-            <Link href={routes.USERINFO}>Profile settings</Link>
-            <Link href={routes.HOME} onClick={signOutFirebase}>
               Signout
             </Link>
           </div>

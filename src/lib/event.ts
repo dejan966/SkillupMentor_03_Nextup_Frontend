@@ -12,14 +12,24 @@ export const fetchEvent = async (_id: string) =>
 export const fetchEvents = async () =>
   apiRequest<undefined, EventType>('get', apiRoutes.FETCH_EVENTS)
 
-export const createEvent = async (data: CreateEventFields) =>
-  apiRequest<CreateEventFields, void>('post', apiRoutes.EVENTS_PREFIX, data)
+export const createEvent = async (data: CreateEventFields, headers?: {}) =>
+  apiRequest<CreateEventFields, void>(
+    'post',
+    apiRoutes.EVENTS_PREFIX,
+    data,
+    headers,
+  )
 
-export const updateEvent = async (data: UpdateEventFields, _id: string) =>
+export const updateEvent = async (
+  data: UpdateEventFields,
+  _id: string,
+  headers?: {},
+) =>
   apiRequest<UpdateEventFields, EventType>(
     'patch',
     `${apiRoutes.EVENTS_PREFIX}/${_id}`,
     data,
+    headers,
   )
 
 export const uploadEventImage = async (formData: FormData, _id: string) =>

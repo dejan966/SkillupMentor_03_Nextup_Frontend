@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
+import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 export default function UpdateUserForm() {
   const {
@@ -22,8 +23,18 @@ export default function UpdateUserForm() {
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
+    queryFn: async () => {
+      let data
+      if (token !== '')
+        data = await fetchCurrUser({
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      else data = await fetchCurrUser()
+      return data
+    },
   })
+
+  const [token] = useFirebaseAuth()
   const defaultValues = currUser?.data
   const { handleSubmit, errors, control } = useUpdateUserForm({
     defaultValues,
@@ -38,10 +49,20 @@ export default function UpdateUserForm() {
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const { first_name, last_name, email } = data
-    const response = await updateUser(
-      { first_name, last_name, email },
-      defaultValues._id,
-    )
+    let response
+    if (token !== '')
+      response = await updateUser(
+        { first_name, last_name, email },
+        defaultValues._id,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
+    else
+      response = await updateUser(
+        { first_name, last_name, email },
+        defaultValues._id,
+      )
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

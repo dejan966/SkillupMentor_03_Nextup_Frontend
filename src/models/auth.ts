@@ -9,5 +9,6 @@ export type UserType = {
   password: string
   confirm_password: string
   avatar: string
+  type: string
   created_events: EventType
 }
