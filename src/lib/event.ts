@@ -32,6 +32,14 @@ export const updateEvent = async (
     headers,
   )
 
+export const bookUserD = async (_id: string, headers?: {}) =>
+  apiRequest<string, EventType>(
+    'patch',
+    `${apiRoutes.EVENTS_PREFIX}/bookUser/${_id}`,
+    undefined,
+    headers,
+  )
+
 export const uploadEventImage = async (formData: FormData, _id: string) =>
   apiRequest<FormData, void>(
     'post',

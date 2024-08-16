@@ -1,11 +1,15 @@
 'use client'
 
-import { fetchEvent } from '@/lib/event'
+import { fetchEvent, bookUserD } from '@/lib/event'
 import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '@/components/ui/LoadingCircle'
-import Footer from '@/components/ui/Footer'
+import useLocalStorage from '@/hooks/useLocalStorage'
+import { StatusCode } from '@/enums/errorConstants'
+import { routes } from '@/enums/routesConstants'
+import { useState } from 'react'
+import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 type Props = {
   params: {
@@ -14,7 +18,11 @@ type Props = {
 }
 
 export default function Event({ params }: Props) {
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
   const router = useRouter()
+  const [value] = useLocalStorage()
+  const [token] = useFirebaseAuth()
   const {
     data: eventData,
     isSuccess,
@@ -53,48 +61,74 @@ export default function Event({ params }: Props) {
     )
   }
 
+  const bookUser = async () => {
+    let response
+    if (token !== '')
+      response = await bookUserD(eventData.data._id, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    else response = await bookUserD(eventData.data._id)
+    if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      router.push(routes.HOME)
+    }
+  }
+
   return (
-    <>
-      <div className="pl-24 pb-16 pt-9">
-        {isSuccess && (
-          <div className="relative">
-            <div className="images pl-4">
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
-                alt="Event image"
-                className="img"
-              />
+    <div className="pl-24 pb-16 pt-9">
+      {isSuccess && (
+        <div className="relative">
+          <div className="images pl-4">
+            <img
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
+              alt="Event image"
+              className="img"
+            />
+          </div>
+          <div>
+            <div className="flex justify-between">
+              <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
+              <div>{eventData.data.hour}</div>
             </div>
-            <div>
-              <div className="flex justify-between">
-                <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
-                <div>{eventData.data.hour}</div>
+            <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
+            <br />
+            <div className="flex justify-between pb-8">
+              <div className="flex justify-start">
+                <Image
+                  src="/locationIcon.svg"
+                  alt="location icon"
+                  width={20}
+                  height={20}
+                />
+                {eventData.data.location}
               </div>
-              <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
-              <br />
-              <div className="flex justify-between pb-8">
-                <div className="flex justify-start">
-                  <Image
-                    src="/locationIcon.svg"
-                    alt="location icon"
-                    width={20}
-                    height={20}
-                  />
-                  {eventData.data.location}
-                </div>
-                <div className="flex justify-start">
-                  <Image
-                    src="/avatarIcon.svg"
-                    alt="avatar icon"
-                    width={20}
-                    height={20}
-                  />
-                  {eventData.data.max_users}
-                </div>
+              <div className="flex justify-start">
+                <Image
+                  src="/avatarIcon.svg"
+                  alt="avatar icon"
+                  width={20}
+                  height={20}
+                />
+                {eventData.data.max_users}
               </div>
-              <div className="font-bold">EVENT DESCRIPTION</div>
-              <div className="pb-8">{eventData.data.description}</div>
-              <div className="text-end">
+            </div>
+            <div className="font-bold">EVENT DESCRIPTION</div>
+            <div className="pb-8">{eventData.data.description}</div>
+            <div className="text-end">
+              {Object.keys(value).length > 0 ? (
+                <button
+                  type="button"
+                  className="blue text-white h-12 w-20 rounded-xl"
+                  onClick={bookUser}
+                >
+                  Book
+                </button>
+              ) : (
                 <button
                   type="button"
                   className="blue text-white h-12 w-20 rounded-xl"
@@ -102,11 +136,11 @@ export default function Event({ params }: Props) {
                 >
                   Back
                 </button>
-              </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   )
 }
