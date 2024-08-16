@@ -4,19 +4,39 @@ import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import Image from 'next/image'
 import Link from 'next/link'
-import { userSignout } from '@/lib/user'
+import { firebaseUserSignout, userSignout } from '@/lib/user'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
+  const [token, firebaseSignout] = useFirebaseAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
 
+  const signOutFirebase = async () => {
+    const response = await firebaseUserSignout()
+    if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      signout()
+      firebaseSignout()
+    }
+  }
+
   const signout = async () => {
+    if (value.type === 'Google User') {
+      signOutFirebase()
+      return
+    }
     const response = await userSignout()
     if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
@@ -47,7 +67,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
               <Image
-                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`}
+                src={
+                  value.avatar.startsWith('https')
+                    ? value.avatar
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`
+                }
                 alt="Avatar"
                 className="navbarAvatar"
                 width={40}

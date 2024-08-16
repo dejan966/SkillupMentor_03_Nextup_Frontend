@@ -10,8 +10,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { login } from '@/lib/user'
+import { firebaseLogin, login } from '@/lib/user'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import { auth, provider } from '@/config/firebase-config'
+import { signInWithPopup } from 'firebase/auth'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
@@ -21,6 +23,13 @@ export default function LoginForm() {
 
   const router = useRouter()
 
+  const googleFirebaseSignIn = () => {
+    signInWithPopup(auth, provider).then(async (data) => {
+      const response = await firebaseLogin(data.user)
+      setValue(response.data)
+      router.push('/')
+    })
+  }
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await login(data)
     if (response.status === StatusCode.BAD_REQUEST) {
@@ -110,7 +119,11 @@ export default function LoginForm() {
               Sign up
             </Link>
           </div>
+          <div></div>
         </form>
+        <button className="blueButton" onClick={googleFirebaseSignIn}>
+          Sign in with Google
+        </button>
       </div>
     </div>
   )

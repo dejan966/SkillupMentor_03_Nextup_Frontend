@@ -16,6 +16,7 @@ import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
 import { useQuery } from '@tanstack/react-query'
+import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 type Props = {
   defaultValues?: EventType
@@ -23,13 +24,22 @@ type Props = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
+  const [token] = useFirebaseAuth()
   const {
     data: currUser,
     isError,
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
+    queryFn: async () => {
+      let data
+      if (token !== '')
+        data = await fetchCurrUser({
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      else data = await fetchCurrUser()
+      return data
+    },
   })
 
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
@@ -65,7 +75,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateEventFields) => {
-    const response = await updateEvent(data, defaultValues!._id)
+    let response
+    if (token !== '')
+      response = await updateEvent(data, defaultValues!._id, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    else response = await updateEvent(data, defaultValues!._id)
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)
@@ -93,7 +108,13 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }
 
   const handleCreate = async (data: CreateEventFields) => {
-    const response = await createEvent(data)
+    let response
+    if (token !== '')
+      response = await createEvent(data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    else response = await createEvent(data)
+
     if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
       setApiError(response.data.message)
       setShowError(true)

@@ -1,7 +1,9 @@
 export enum apiRoutes {
   LOGIN = '/auth/login',
+  FIREBASE_LOGIN = '/auth/firebaseLogin',
   REGISTER = '/auth/register',
   SIGNOUT = '/auth/signout',
+  FIREBASE_SIGNOUT = '/auth/firebaseSignout',
   ME = '/users/me',
   REFRESH_TOKENS = '/auth/refresh',
   FETCH_USERS = '/users',

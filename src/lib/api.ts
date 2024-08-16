@@ -1,11 +1,17 @@
-import Axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
+import Axios, { AxiosHeaderValue, AxiosRequestConfig } from 'axios'
 
 export async function apiRequest<D = Record<string, unknown>, R = unknown>(
   method: 'get' | 'delete' | 'head' | 'options' | 'post' | 'put' | 'patch',
   path: string,
   input?: D,
   options?: {
-    headers?: AxiosRequestHeaders
+    headers?: {
+      Accept?: AxiosHeaderValue
+      'Content-Length'?: AxiosHeaderValue
+      'User-Agent'?: AxiosHeaderValue
+      'Content-Encoding'?: AxiosHeaderValue
+      Authorization?: AxiosHeaderValue
+    }
   } & AxiosRequestConfig,
 ) {
   try {
