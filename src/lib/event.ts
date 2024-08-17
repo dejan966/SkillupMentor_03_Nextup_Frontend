@@ -9,8 +9,13 @@ import { EventType } from '@/models/event'
 export const fetchEvent = async (_id: string) =>
   apiRequest<undefined, EventType>('get', `${apiRoutes.FETCH_EVENTS}/${_id}`)
 
-export const fetchEvents = async () =>
-  apiRequest<undefined, EventType>('get', apiRoutes.FETCH_EVENTS)
+export const fetchEvents = async (headers?: {}) =>
+  apiRequest<undefined, EventType>(
+    'get',
+    apiRoutes.FETCH_EVENTS,
+    undefined,
+    headers,
+  )
 
 export const createEvent = async (data: CreateEventFields, headers?: {}) =>
   apiRequest<CreateEventFields, void>(
@@ -68,3 +73,6 @@ export const getUserUpcomingEvents = () =>
 
 export const getRecentEvents = () =>
   apiRequest<undefined, EventType>('get', `${apiRoutes.RECENT_EVENTS}`)
+
+export const deleteEvent = async (id: string) =>
+  apiRequest<string, EventType>('delete', `${apiRoutes.EVENTS_PREFIX}/${id}`)

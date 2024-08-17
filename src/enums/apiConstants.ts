@@ -15,4 +15,6 @@ export enum apiRoutes {
   UPCOMING_EVENTS = '/events/upcomingEvents',
   RECENT_EVENTS = '/events/recentEvents',
   UPLOAD_EVENT_IMAGE = '/events/upload',
+  FETCH_ROLES = '/roles',
+  ROLES_PREFIX = '/roles',
 }
