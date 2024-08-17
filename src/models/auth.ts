@@ -1,4 +1,5 @@
 import { EventType } from './event'
+import { RoleType } from './role'
 
 export type UserType = {
   _id: string
@@ -8,6 +9,7 @@ export type UserType = {
   current_password: string
   password: string
   confirm_password: string
+  role: RoleType
   avatar: string
   type: string
   created_events: EventType
