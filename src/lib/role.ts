@@ -9,10 +9,10 @@ import {
 export const fetchRole = async (_id: string) =>
   apiRequest<undefined, RoleType>('get', `${apiRoutes.FETCH_ROLES}/${_id}`)
 
-export const fetchRoles = async (headers?: {}) =>
+export const fetchRoles = async (pageNumber: number, headers?: {}) =>
   apiRequest<undefined, RoleType>(
     'get',
-    apiRoutes.FETCH_ROLES,
+    `${apiRoutes.FETCH_ROLES}?page=${pageNumber}`,
     undefined,
     headers,
   )

@@ -1,44 +1,44 @@
-import { EventType } from "@/models/event"
+import { UserType } from "@/models/auth"
 import Link from "next/link"
 
 interface Props {
-    events: EventType[]
+    users: UserType[]
     setPageNumber: React.Dispatch<React.SetStateAction<number>>
     meta: any
 }
-export default function EventTable({events, setPageNumber, meta}: Props) {
+export default function UserTable({users, setPageNumber, meta}: Props) {
     const handleDelete = (_id: string) => {}
     return (
-        <div className="relative w-full flex flex-col shadow-lg mb-6 mt-4">
+      <div className="relative w-full flex flex-col shadow-lg mb-6 mt-4">
 
       
         <div className="block bg-transparent m-4 p-4 w-full overflow-x-auto">
             <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Description</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Role</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {events?.map((event: EventType) => {
+          {users?.map((user: UserType) => {
             return (
-              <tr key={event._id}>
-                <td>{event.name}</td>
-                <td>{event.location}</td>
-                <td>{event.date}</td>
-                <td>{event.description}</td>
+              <tr key={user._id}>
+                <td>{user.first_name}</td>
+                <td>{user.last_name}</td>
+                <td>{user.email}</td>
+                <td>{user.role.name}</td>
                 <td>
-                  <Link href={`events/${event._id}/edit`}>Edit</Link>
+                  <Link href={`${user._id}/edit`}>Edit</Link>
                 </td>
                 <td>
                   <button
                     onClick={() => {
-                      handleDelete(event._id)
+                      handleDelete(user._id)
                     }}
                   >
                     Delete
