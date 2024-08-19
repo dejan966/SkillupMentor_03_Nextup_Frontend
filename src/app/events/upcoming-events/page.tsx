@@ -2,7 +2,7 @@
 
 import EventBlock from '@/components/events/EventBlock'
 import LoadingCircle from '@/components/ui/LoadingCircle'
-import { fetchEvents } from '@/lib/event'
+import { getAllUpcomingEvents } from '@/lib/event'
 import { EventType } from '@/models/event'
 import { useQuery } from '@tanstack/react-query'
 
@@ -13,8 +13,8 @@ export default function AllUpcomingEvents() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ['fetchEvent'],
-    queryFn: fetchEvents,
+    queryKey: ['getAllUpcomingEvents'],
+    queryFn: getAllUpcomingEvents,
   })
 
   if (isError) {

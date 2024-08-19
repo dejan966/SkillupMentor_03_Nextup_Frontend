@@ -9,10 +9,10 @@ import { EventType } from '@/models/event'
 export const fetchEvent = async (_id: string) =>
   apiRequest<undefined, EventType>('get', `${apiRoutes.FETCH_EVENTS}/${_id}`)
 
-export const fetchEvents = async (headers?: {}) =>
+export const fetchEvents = async (pageNumber: number, headers?: {}) =>
   apiRequest<undefined, EventType>(
     'get',
-    apiRoutes.FETCH_EVENTS,
+    `${apiRoutes.FETCH_EVENTS}?page=${pageNumber}`,
     undefined,
     headers,
   )
