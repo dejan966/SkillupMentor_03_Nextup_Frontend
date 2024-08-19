@@ -42,8 +42,10 @@ export default function AdminPanel() {
 
   const handleDelete = (_id: string) => {}
 
-  if (currUser?.data.role?.name !== 'ADMIN') {
-    notFound()
+  if (currUser) {
+    if (currUser?.data.role.name !== 'ADMIN') {
+      notFound()
+    }
   }
 
   if (isError) {

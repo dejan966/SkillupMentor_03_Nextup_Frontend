@@ -92,41 +92,45 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
   }
 
   return (
-    <div className="centered">
-      <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
-      <form method="POST" onSubmit={onSubmit}>
-        <Controller
-          control={control}
-          name="name"
-          render={({ field }) => (
-            <div className="mb-4">
-              <label className="inputText">Role</label>
-              <input
-                {...field}
-                type="text"
-                aria-label="name"
-                aria-describedby="name"
-                className={
-                  errors.name
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
-              />
-              {errors.name && (
-                <div className="validation-feedback">{errors.name.message}</div>
-              )}
-            </div>
-          )}
-        />
-        <div>
-          <button
-            className="blue text-white h-10 w-full rounded-full mb-4"
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+    <div className="centeredRoles">
+      <div>
+        <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
+        <form method="POST" onSubmit={onSubmit}>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => (
+              <div className="mb-4">
+                <label className="inputText">Role</label>
+                <input
+                  {...field}
+                  type="text"
+                  aria-label="name"
+                  aria-describedby="name"
+                  className={
+                    errors.name
+                      ? 'tailwind-form-control-errors'
+                      : 'tailwind-form-control'
+                  }
+                />
+                {errors.name && (
+                  <div className="validation-feedback">
+                    {errors.name.message}
+                  </div>
+                )}
+              </div>
+            )}
+          />
+          <div>
+            <button
+              className="blue text-white h-10 w-full rounded-full mb-4"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

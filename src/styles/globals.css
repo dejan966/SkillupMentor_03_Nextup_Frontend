@@ -47,10 +47,6 @@ body {
   @apply grid grid-cols-3;
 }
 
-.centered {
-  @apply flex justify-center items-center;
-}
-
 .inputText {
   @apply block text-gray-700 text-sm font-bold mb-2;
 }
@@ -69,6 +65,20 @@ body {
 
 .pinkButton {
   @apply bg-pink-500 hover:bg-pink-300 text-white h-10 w-full rounded-full mb-4;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centeredRoles {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .userAvatar {
