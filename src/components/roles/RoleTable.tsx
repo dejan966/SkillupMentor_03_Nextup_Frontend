@@ -9,36 +9,39 @@ interface Props {
 export default function RoleTable({roles, setPageNumber, meta}: Props) {
     const handleDelete = (_id: string) => {}
     return (
-        <div className="relative w-full flex flex-col shadow-lg mb-6 mt-4">
-            <div className="block bg-transparent m-4 p-4 w-full overflow-x-auto">
+        <div className="mt-10 flex flex-col">
+            <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-auto">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 
-            <table className="w-auto">
-          <thead>
+            <table  className="min-w-full divide-y divide-gray-300">
+          <thead className="bg-gray-50">
             <tr>
-              <th>Role</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th scope="col" className="tableHeader">Role</th>
+              <th scope="col" className="tableHeader">Edit</th>
+              <th scope="col" className="tableHeader">Delete</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-gray-50">
             {roles?.map((role: RoleType) => {
               return (
                 <tr
                   key={role._id}
                   className="border border-solid border-l-0 border-r-0"
                 >
-                  <td>{role.name}</td>
-                  <td>
-                    <Link href={`/roles/${role._id}/edit`}>Edit</Link>
+                  <td className="tableTD">{role.name}</td>
+                  <td className="tableTD">
+                    <Link href={`/roles/${role._id}/edit`} className="text-indigo-600 hover:text-indigo-900">Edit</Link>
                   </td>
-                  <td>
-                    <button
+                  <td className="tableTD">
+                    <a
+                    className="text-indigo-600 hover:text-indigo-900"
                       onClick={() => {
                         handleDelete(role._id)
                       }}
                     >
                       Delete
-                    </button>
+                    </a>
                   </td>
                 </tr>
               )
@@ -46,6 +49,8 @@ export default function RoleTable({roles, setPageNumber, meta}: Props) {
           </tbody>
         </table>
             </div>
+</div>
+    </div>
       <div className="flex justify-end">
         {meta?.page > 1 && 
         <button className="bg-blue-800 hover:bg-blue-500 text-white rounded-full h-10 w-28" onClick={()=>setPageNumber(prev => prev - 1)}>Prev</button>
@@ -53,8 +58,7 @@ export default function RoleTable({roles, setPageNumber, meta}: Props) {
         {meta?.page < meta?.last_page &&
         <button className="bg-blue-800 hover:bg-blue-500 text-white rounded-full h-10 w-28" onClick={()=>setPageNumber(prev => prev + 1)}>Next</button>        
         }
-
-    </div>
+</div>
         </div>
     )
 }

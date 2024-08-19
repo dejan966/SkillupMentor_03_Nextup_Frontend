@@ -67,6 +67,14 @@ body {
   @apply bg-pink-500 hover:bg-pink-300 text-white h-10 w-full rounded-full mb-4;
 }
 
+.tableHeader {
+  @apply py-3.5 pl-5 pr-3 text-left text-sm font-semibold text-gray-900;
+}
+
+.tableTD {
+  @apply whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900;
+}
+
 .centered {
   display: flex;
   justify-content: center;

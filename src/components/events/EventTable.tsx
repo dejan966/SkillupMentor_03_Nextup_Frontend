@@ -9,47 +9,53 @@ interface Props {
 export default function EventTable({events, setPageNumber, meta}: Props) {
     const handleDelete = (_id: string) => {}
     return (
-        <div className="relative w-full flex flex-col shadow-lg mb-6 mt-4">
+        <div className="mt-10 flex flex-col">
+            <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-auto">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 
-      
-        <div className="block bg-transparent m-4 p-4 w-full overflow-x-auto">
-            <table>
-        <thead>
+            <table className="min-w-full divide-y divide-gray-300">
+        <thead className="bg-gray-50">
           <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th scope="col" className="tableHeader">Name</th>
+            <th scope="col" className="tableHeader">Location</th>
+            <th scope="col" className="tableHeader">Date</th>
+            <th scope="col" className="tableHeader">Description</th>
+            <th scope="col" className="tableHeader">Edit</th>
+            <th scope="col" className="tableHeader">Delete</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-gray-50">
           {events?.map((event: EventType) => {
             return (
               <tr key={event._id}>
-                <td>{event.name}</td>
-                <td>{event.location}</td>
-                <td>{event.date}</td>
-                <td>{event.description}</td>
-                <td>
-                  <Link href={`events/${event._id}/edit`}>Edit</Link>
+                <td className="tableTD">{event.name}</td>
+                <td className="tableTD">{event.location}</td>
+                <td className="tableTD">{event.date}</td>
+                <td className="tableTD">{event.description}</td>
+                <td className="tableTD">
+                  <Link href={`events/${event._id}/edit`} className="text-indigo-600 hover:text-indigo-900">Edit</Link>
                 </td>
-                <td>
-                  <button
+                <td className="tableTD">
+                  <a
+                    className="text-indigo-600 hover:text-indigo-900"
                     onClick={() => {
                       handleDelete(event._id)
                     }}
                   >
                     Delete
-                  </button>
+                  </a>
                 </td>
               </tr>
             )
           })}
         </tbody>
       </table>
-      <div className="flex justify-end">
+                    </div>
+                </div>
+      
+            </div>
+            <div className="flex justify-end mt-6">
         {meta?.page > 1 && 
         <button className="bg-blue-800 hover:bg-blue-500 text-white rounded-full h-10 w-28" onClick={()=>setPageNumber(prev => prev - 1)}>Prev</button>
         }
@@ -58,7 +64,6 @@ export default function EventTable({events, setPageNumber, meta}: Props) {
         }
 
     </div>
-        </div>
         </div>
     )
 }
