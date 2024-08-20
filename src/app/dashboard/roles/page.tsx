@@ -2,19 +2,36 @@
 
 import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import { useQuery } from '@tanstack/react-query'
-import Link from 'next/link'
-import { fetchRoles } from '@/lib/role'
+import { deleteRole, fetchRoles } from '@/lib/role'
 import { notFound } from 'next/navigation'
-import { RoleType } from '@/models/role'
 import { fetchCurrUser } from '@/lib/user'
 import RoleTable from '@/components/roles/RoleTable'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { StatusCode } from '@/enums/errorConstants'
 
 export default function AdminPanel() {
   const [token] = useFirebaseAuth()
   const [pageNumber, setPageNumber] = useState(1)
-  const [allRoles, setAllRoles] = useState<any>([])
-  
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+
+  const {
+    data: allRoles,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['fetchRoles'],
+    queryFn: async () => {
+      let data
+      if (token !== '')
+        data = await fetchRoles(pageNumber, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      else data = await fetchRoles(pageNumber)
+      return data
+    },
+  })
+
   const { data: currUser } = useQuery({
     queryKey: ['currUser'],
     queryFn: async () => {
@@ -28,29 +45,46 @@ export default function AdminPanel() {
     },
   })
 
-  const fetchAllRoles = async () => {
-    let res
-      if (token !== '')
-        res = await fetchRoles(pageNumber, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else res = await fetchRoles(pageNumber)
-      setAllRoles(res.data)
+  const handleDelete = async (_id: string) => {
+    const response = await deleteRole(_id)
+    if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      refetch()
+    }
   }
-
-  useEffect(()=>{
-    fetchAllRoles()
-  }, [pageNumber])
-
-
+  
   if (currUser) {
     if (currUser?.data.role.name !== 'ADMIN') {
       notFound()
     }
   }
 
+  if (isError) {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
+        <button
+          type="button"
+          className="blue text-white h-12 w-20 rounded-xl"
+          onClick={() => refetch()}
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
+
   return (
-      <RoleTable roles={allRoles?.data} setPageNumber={setPageNumber} meta={allRoles?.meta} />
-    
+    <RoleTable
+      roles={allRoles?.data.data}
+      setPageNumber={setPageNumber}
+      meta={allRoles?.data.meta}
+      handleDelete={handleDelete}
+    />
   )
 }
