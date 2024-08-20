@@ -2,6 +2,7 @@ import { EventType } from '@/models/event'
 import EventBlock from './EventBlock'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import EventCard from './EventCard'
+import Link from 'next/link'
 
 interface Props {
   events: EventType[]
@@ -83,7 +84,7 @@ export default function EventList({
                 className="bg-blue-800 hover:bg-blue-500 text-white rounded-full h-10 w-28"
                 type="button"
               >
-                Load more
+                <Link href={'/events/upcoming-events'}>Load more</Link>
               </button>
             </div>
           )}

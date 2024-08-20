@@ -24,7 +24,7 @@ export function SearchEvent({
 
   const fetchEvents = async () => {
     const res = await searchEvents(location!, date!, pageNumber!)
-    setSearchEvent(res.data)
+    setSearchEvent(res?.data)
   }
 
   useEffect(() => {

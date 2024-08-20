@@ -1,22 +1,23 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+  withCredentials: true,
+})
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = null;
+    const token = null
 
     if (token) {
-      if (config.headers) config.headers.Authorization = `Bearer ${token}`;
+      if (config.headers) config.headers.Authorization = `Bearer ${token}`
     }
-    return config;
+    return config
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
+    return Promise.reject(error)
+  },
+)
 
-export default axiosInstance;
+export default axiosInstance

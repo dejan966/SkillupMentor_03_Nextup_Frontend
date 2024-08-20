@@ -20,15 +20,9 @@ export default function AdminPanel() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ['fetchEvents'],
+    queryKey: ['fetchEvents', pageNumber],
     queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchEvents(pageNumber, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchEvents(pageNumber)
-      return data
+      return await fetchEvents(pageNumber)
     },
   })
 
@@ -47,11 +41,11 @@ export default function AdminPanel() {
 
   const handleDelete = async (_id: string) => {
     const response = await deleteEvent(_id)
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       refetch()

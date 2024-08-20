@@ -57,7 +57,7 @@ export default function AdminPanel() {
       refetch()
     }
   }
-  
+
   if (currUser) {
     if (currUser?.data.role.name !== 'ADMIN') {
       notFound()
