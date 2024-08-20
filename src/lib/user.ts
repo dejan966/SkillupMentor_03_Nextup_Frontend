@@ -39,6 +39,14 @@ export const uploadAvatar = async (
 export const fetchCurrUser = async (headers?: {}) =>
   apiRequest<never, UserType>('get', apiRoutes.ME, undefined, headers)
 
+export const fetchUsers = async (pageNumber: number, headers?: {}) =>
+  apiRequest<never, UserType[]>(
+    'get',
+    `${apiRoutes.FETCH_USERS}?page=${pageNumber}`,
+    undefined,
+    headers,
+  )
+
 export const fetchUser = async (_id: string) =>
   apiRequest<undefined, UserType>('get', `${apiRoutes.FETCH_USERS}/${_id}`)
 

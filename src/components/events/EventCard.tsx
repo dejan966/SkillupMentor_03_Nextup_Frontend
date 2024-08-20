@@ -12,7 +12,7 @@ export default function EventCard({ event, typeIcon }: Props) {
     <div className="divGrid rounded-xl bg-white h-20 mr-4 mb-4">
       <div className="flex justify-center items-center">
         <div className="text-lg text-black font-bold">
-          {event.date.substring(0, 10) + event.hour}
+          {event.date.substring(0, 10) + ' ' + event.hour}
         </div>
       </div>
       <div className="text-lg text-black font-bold centered">
