@@ -7,11 +7,12 @@ interface Props {
 }
 
 export default function EventBlock({ event }: Props) {
+  console.log(event)
   return (
     <div>
       <Link href={`/events/${event._id}`}>
         <Image
-          src={`/${event.image}`}
+          src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${event.image}`}
           alt="Event image"
           width={322}
           height={100}

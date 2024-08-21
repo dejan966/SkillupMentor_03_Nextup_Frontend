@@ -20,11 +20,11 @@ const Navbar = () => {
 
   const signOutFirebase = async () => {
     const response = await firebaseUserSignout()
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       signout()
@@ -38,11 +38,11 @@ const Navbar = () => {
       return
     }
     const response = await userSignout()
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       logout()

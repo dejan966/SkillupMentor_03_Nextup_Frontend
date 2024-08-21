@@ -9,7 +9,6 @@ import useLocalStorage from '@/hooks/useLocalStorage'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useState } from 'react'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 type Props = {
   params: {
@@ -22,7 +21,6 @@ export default function Event({ params }: Props) {
   const [showError, setShowError] = useState(false)
   const router = useRouter()
   const [value] = useLocalStorage()
-  const [token] = useFirebaseAuth()
   const {
     data: eventData,
     isSuccess,
@@ -62,17 +60,12 @@ export default function Event({ params }: Props) {
   }
 
   const bookUser = async () => {
-    let response
-    if (token !== '')
-      response = await bookUserD(eventData.data._id, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else response = await bookUserD(eventData.data._id)
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    const response = await bookUserD(eventData?.data._id)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       router.push(routes.HOME)
@@ -85,17 +78,17 @@ export default function Event({ params }: Props) {
         <div className="relative">
           <div className="images pl-4">
             <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData.data.image}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData?.data.image}`}
               alt="Event image"
               className="img"
             />
           </div>
           <div>
             <div className="flex justify-between">
-              <div>{new Date(eventData.data.date).toLocaleDateString()}</div>
-              <div>{eventData.data.hour}</div>
+              <div>{new Date(eventData?.data.date).toLocaleDateString()}</div>
+              <div>{eventData?.data.hour}</div>
             </div>
-            <h1 className="text-7xl font-bold">{eventData.data.name}</h1>
+            <h1 className="text-7xl font-bold">{eventData?.data.name}</h1>
             <br />
             <div className="flex justify-between pb-8">
               <div className="flex justify-start">
@@ -105,7 +98,7 @@ export default function Event({ params }: Props) {
                   width={20}
                   height={20}
                 />
-                {eventData.data.location}
+                {eventData?.data.location}
               </div>
               <div className="flex justify-start">
                 <Image
@@ -114,11 +107,11 @@ export default function Event({ params }: Props) {
                   width={20}
                   height={20}
                 />
-                {eventData.data.max_users}
+                {eventData?.data.max_users}
               </div>
             </div>
             <div className="font-bold">EVENT DESCRIPTION</div>
-            <div className="pb-8">{eventData.data.description}</div>
+            <div className="pb-8">{eventData?.data.description}</div>
             <div className="text-end">
               {Object.keys(value).length > 0 ? (
                 <button

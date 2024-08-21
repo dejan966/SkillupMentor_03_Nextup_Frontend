@@ -31,15 +31,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
-      return data
-    },
+    queryFn: fetchCurrUser,
   })
 
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({
@@ -75,17 +67,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateEventFields) => {
-    let response
-    if (token !== '')
-      response = await updateEvent(data, defaultValues!._id, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else response = await updateEvent(data, defaultValues!._id)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    const response = await updateEvent(data, defaultValues!._id)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       const formData = new FormData()
@@ -94,12 +81,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         setShowError(true)
       }
       formData.append('image', file!, file!.name)
-      const fileResponse = await uploadEventImage(formData, response.data._id)
-      if (fileResponse.status === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse.data.message)
+      const fileResponse = await uploadEventImage(formData, response?.data._id)
+      if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+        setApiError(fileResponse?.statusText)
         setShowError(true)
-      } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(fileResponse.data.message)
+      } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(fileResponse?.statusText)
         setShowError(true)
       } else {
         router.push(routes.HOME)
@@ -108,18 +95,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }
 
   const handleCreate = async (data: CreateEventFields) => {
-    let response
-    if (token !== '')
-      response = await createEvent(data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else response = await createEvent(data)
-
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    const response = await createEvent(data)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       const formData = new FormData()
@@ -128,12 +109,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         setShowError(true)
       }
       formData.append('image', file!, file!.name)
-      const fileResponse = await uploadEventImage(formData, response.data._id)
-      if (fileResponse.status === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse.data.message)
+      const fileResponse = await uploadEventImage(formData, response?.data._id)
+      if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+        setApiError(fileResponse?.statusText)
         setShowError(true)
-      } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(fileResponse.data.message)
+      } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(fileResponse?.statusText)
         setShowError(true)
       } else {
         router.push(routes.HOME)

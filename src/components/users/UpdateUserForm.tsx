@@ -14,6 +14,7 @@ import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
+import LoadingCircle from '../ui/LoadingCircle'
 
 export default function UpdateUserForm() {
   const {
@@ -23,15 +24,7 @@ export default function UpdateUserForm() {
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
-      return data
-    },
+    queryFn: fetchCurrUser,
   })
 
   const [token] = useFirebaseAuth()
@@ -43,37 +36,52 @@ export default function UpdateUserForm() {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
+  const router = useRouter()
+
   const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
     handleUpdate(data as UpdateUserFields)
   })
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const { first_name, last_name, email } = data
-    let response
-    if (token !== '')
-      response = await updateUser(
-        { first_name, last_name, email },
-        defaultValues._id,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-    else
-      response = await updateUser(
-        { first_name, last_name, email },
-        defaultValues._id,
-      )
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    const response = await updateUser(
+      { first_name, last_name, email },
+      defaultValues._id,
+    )
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       router.push(routes.USERINFO)
     }
   }
-  const router = useRouter()
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingCircle />
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
+        <button
+          type="button"
+          className="blue text-white h-12 w-20 rounded-xl"
+          onClick={() => refetch()}
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
