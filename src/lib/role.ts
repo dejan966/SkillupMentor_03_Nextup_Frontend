@@ -5,37 +5,56 @@ import {
   CreateRoleFields,
   UpdateRoleFields,
 } from '@/hooks/react-hook-forms/useCreateUpdateRole'
+import axiosInstance from './axiosInstance'
 
-export const fetchRole = async (_id: string) =>
-  apiRequest<undefined, RoleType>('get', `${apiRoutes.FETCH_ROLES}/${_id}`)
+export const fetchRole = async (_id: string) => {
+  try {
+    const response = await axiosInstance.get(`${apiRoutes.FETCH_ROLES}/${_id}`)
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-export const fetchRoles = async (pageNumber: number, headers?: {}) =>
-  apiRequest<undefined, RoleType>(
-    'get',
-    `${apiRoutes.FETCH_ROLES}?page=${pageNumber}`,
-    undefined,
-    headers,
-  )
+export const fetchRoles = async (pageNumber: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `${apiRoutes.FETCH_ROLES}?page=${pageNumber}`,
+    )
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-export const createRole = async (data: CreateRoleFields, headers?: {}) =>
-  apiRequest<CreateRoleFields, void>(
-    'post',
-    apiRoutes.ROLES_PREFIX,
-    data,
-    headers,
-  )
+export const createRole = async (data: CreateRoleFields) => {
+  try {
+    const response = await axiosInstance.post(apiRoutes.ROLES_PREFIX, data)
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-export const updateRole = async (
-  data: UpdateRoleFields,
-  _id: string,
-  headers?: {},
-) =>
-  apiRequest<UpdateRoleFields, RoleType>(
-    'patch',
-    `${apiRoutes.ROLES_PREFIX}/${_id}`,
-    data,
-    headers,
-  )
+export const updateRole = async (data: UpdateRoleFields, _id: string) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${apiRoutes.ROLES_PREFIX}/${_id}`,
+      data,
+    )
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-export const deleteRole = async (id: string) =>
-  apiRequest<string, RoleType>('delete', `${apiRoutes.ROLES_PREFIX}/${id}`)
+export const deleteRole = async (_id: string) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${apiRoutes.ROLES_PREFIX}/${_id}`,
+    )
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}

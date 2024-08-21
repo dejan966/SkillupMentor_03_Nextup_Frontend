@@ -38,51 +38,54 @@ export default function RegisterForm() {
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
     const response = await register(data)
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       const loginResponse = await login({
         email: data.email,
         password: data.password,
       })
-      if (loginResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-        setApiError(loginResponse.data.message)
+      if (loginResponse?.data?.statusCode === StatusCode.BAD_REQUEST) {
+        setApiError(loginResponse?.statusText)
         setShowError(true)
       } else if (
-        loginResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+        loginResponse?.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
       ) {
-        setApiError(loginResponse.data.message)
+        setApiError(loginResponse?.statusText)
         setShowError(true)
       } else {
         if (file) {
           const formData = new FormData()
           formData.append('avatar', file, file.name)
-          const fileResponse = await uploadAvatar(formData, response.data._id)
-          if (fileResponse.status === StatusCode.BAD_REQUEST) {
-            setApiError(fileResponse.data.message)
+          const fileResponse = await uploadAvatar(formData, response?.data._id)
+          if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+            setApiError(fileResponse?.statusText)
             setShowError(true)
-          } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
-            setApiError(fileResponse.data.message)
+          } else if (
+            fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
+          ) {
+            setApiError(fileResponse?.statusText)
             setShowError(true)
           } else {
             const userResponse = await fetchCurrUser()
             if (
-              userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+              userResponse?.data?.statusCode ===
+              StatusCode.INTERNAL_SERVER_ERROR
             ) {
-              setApiError(fileResponse.data.message)
+              setApiError(fileResponse?.data.message)
               setShowError(true)
             } else {
-              setValue(userResponse.data)
+              setValue(userResponse?.data)
               router.push(routes.HOME)
               return
             }
           }
         }
-        setValue(loginResponse.data)
+        setValue(loginResponse?.data)
         router.push(routes.HOME)
       }
     }

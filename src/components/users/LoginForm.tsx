@@ -26,20 +26,20 @@ export default function LoginForm() {
   const googleFirebaseSignIn = () => {
     signInWithPopup(auth, provider).then(async (data) => {
       const response = await firebaseLogin(data.user)
-      setValue(response.data)
+      setValue(response?.data)
       router.push('/')
     })
   }
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await login(data)
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
-      setValue(response.data)
+      setValue(response?.data)
       router.push(routes.HOME)
     }
   })

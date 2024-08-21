@@ -31,15 +31,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     refetch,
   } = useQuery({
     queryKey: ['currUser'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
-      return data
-    },
+    queryFn: fetchCurrUser,
   })
 
   const { handleSubmit, errors, control } = useCreateUpdateEventForm({

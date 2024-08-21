@@ -29,12 +29,7 @@ export default function AdminPanel() {
   const { data: currUser } = useQuery({
     queryKey: ['currUser'],
     queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
+      const data = await fetchCurrUser()
       return data
     },
   })

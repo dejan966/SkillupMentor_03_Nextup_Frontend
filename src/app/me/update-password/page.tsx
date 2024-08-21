@@ -16,5 +16,13 @@ export default function UpdatePassword() {
     queryFn: () => fetchTokenInfo(value._id, token),
   })
 
-  return <div>{tokenInfo.data && <UpdatePasswordForm />}</div>
+  return (
+    <div>
+      {tokenInfo?.data === false ? (
+        <div>Token expired</div>
+      ) : (
+        <UpdatePasswordForm />
+      )}
+    </div>
+  )
 }

@@ -29,19 +29,12 @@ export default function UpdateAvatarForm() {
   const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
     formData.append('avatar', file!, file?.name!)
-    let fileResponse
-    if (token !== '')
-      fileResponse = await uploadAvatar(formData, defaultValues._id, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else fileResponse = await uploadAvatar(formData, defaultValues._id)
-    if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(fileResponse.data.message)
+    const fileResponse = await uploadAvatar(formData, defaultValues._id)
+    if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+      setApiError(fileResponse?.statusText)
       setShowError(true)
-    } else if (
-      fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-    ) {
-      setApiError(fileResponse.data.message)
+    } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(fileResponse?.statusText)
       setShowError(true)
     } else {
       router.push(routes.USERINFO)

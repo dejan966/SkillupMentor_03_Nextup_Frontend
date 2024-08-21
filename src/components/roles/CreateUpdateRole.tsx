@@ -9,9 +9,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { StatusCode } from '@/enums/errorConstants'
-import { fetchCurrUser } from '@/lib/user'
-import { useQuery } from '@tanstack/react-query'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import { createRole, updateRole } from '@/lib/role'
 import { RoleType } from '@/models/role'
 
@@ -21,20 +18,6 @@ type Props = {
 }
 
 export default function CreateUpdateRole({ defaultValues, title }: Props) {
-  const [token] = useFirebaseAuth()
-  const { data: currUser } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
-      return data
-    },
-  })
-
   const { handleSubmit, errors, control } = useCreateUpdateRoleForm({
     defaultValues,
   })
@@ -55,17 +38,12 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateRoleFields) => {
-    let response
-    if (token !== '')
-      response = await updateRole(data, defaultValues!._id, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else response = await updateRole(data, defaultValues!._id)
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    const response = await updateRole(data, defaultValues!._id)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       router.back()
@@ -73,18 +51,13 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
   }
 
   const handleCreate = async (data: CreateRoleFields) => {
-    let response
-    if (token !== '')
-      response = await createRole(data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    else response = await createRole(data)
+    const response = await createRole(data)
 
-    if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       router.back()
