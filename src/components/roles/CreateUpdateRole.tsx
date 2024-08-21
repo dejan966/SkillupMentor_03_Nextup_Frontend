@@ -5,12 +5,14 @@ import {
   UpdateRoleFields,
   useCreateUpdateRoleForm,
 } from '@/hooks/react-hook-forms/useCreateUpdateRole'
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { StatusCode } from '@/enums/errorConstants'
 import { createRole, updateRole } from '@/lib/role'
 import { RoleType } from '@/models/role'
+import { fetchCurrUser } from '@/lib/user'
+import { useQuery } from '@tanstack/react-query'
 
 type Props = {
   defaultValues?: RoleType
@@ -26,6 +28,11 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
+
+  const { data: currUser } = useQuery({
+    queryKey: ['currUser'],
+    queryFn: fetchCurrUser,
+  })
 
   const onSubmit = handleSubmit(
     async (data: CreateRoleFields | UpdateRoleFields) => {
@@ -61,6 +68,12 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
       setShowError(true)
     } else {
       router.back()
+    }
+  }
+
+  if (currUser) {
+    if (currUser?.data.role.name !== 'ADMIN') {
+      notFound()
     }
   }
 

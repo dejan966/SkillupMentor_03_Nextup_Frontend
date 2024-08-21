@@ -25,6 +25,7 @@ export default function UpdateAvatarForm() {
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const [fileError, setFileError] = useState(false)
 
   const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
@@ -50,6 +51,11 @@ export default function UpdateAvatarForm() {
       const myfile = target.files[0]
       setFile(myfile)
     }
+  }
+
+  const handleFileError = () => {
+    if (!file) setFileError(true)
+    else setFileError(false)
   }
 
   useEffect(() => {
@@ -110,7 +116,11 @@ export default function UpdateAvatarForm() {
                 </div>
               )}
             />
-            <button className="pinkButton" onClick={uploadFile}>
+            <button
+              className="pinkButton"
+              onMouseUp={handleFileError}
+              onClick={uploadFile}
+            >
               Upload new image
             </button>
             {showError && (

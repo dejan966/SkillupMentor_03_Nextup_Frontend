@@ -54,7 +54,7 @@ export default function EventTable({
                           <td className="tableTD">{event.description}</td>
                           <td className="tableTD">
                             <Link
-                              href={`events/${event._id}/edit`}
+                              href={`/events/${event._id}/edit`}
                               className="text-indigo-600 hover:text-indigo-900"
                             >
                               Edit

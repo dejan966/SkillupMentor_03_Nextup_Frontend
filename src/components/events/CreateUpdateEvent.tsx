@@ -209,8 +209,8 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                       max="2031-12-31"
                       className={
                         errors.date
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
+                          ? 'tailwind-form-control-errors eventInputDate'
+                          : 'tailwind-form-control eventInputDate'
                       }
                     />
                     {errors.date && (
