@@ -1,6 +1,4 @@
 import { apiRoutes } from '@/enums/apiConstants'
-import { apiRequest } from './api'
-import { RoleType } from '@/models/role'
 import {
   CreateRoleFields,
   UpdateRoleFields,

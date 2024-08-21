@@ -21,37 +21,21 @@ export default function AdminPanel() {
     refetch,
   } = useQuery({
     queryKey: ['fetchRoles'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchRoles(pageNumber, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchRoles(pageNumber)
-      return data
-    },
+    queryFn: async () => fetchRoles(pageNumber),
   })
 
   const { data: currUser } = useQuery({
     queryKey: ['currUser'],
-    queryFn: async () => {
-      let data
-      if (token !== '')
-        data = await fetchCurrUser({
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      else data = await fetchCurrUser()
-      return data
-    },
+    queryFn: fetchCurrUser,
   })
 
   const handleDelete = async (_id: string) => {
     const response = await deleteRole(_id)
-    if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
+    if (response?.status === StatusCode.BAD_REQUEST) {
+      setApiError(response?.statusText)
       setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
+    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response?.statusText)
       setShowError(true)
     } else {
       refetch()
