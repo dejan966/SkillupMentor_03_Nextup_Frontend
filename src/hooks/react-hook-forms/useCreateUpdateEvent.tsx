@@ -67,7 +67,7 @@ const updateEventSchema = z.object({
   location: z.string().optional(),
   date: z.string().transform((str) => new Date(str)),
   hour: z.string().optional(),
-  max_users: z.string().transform((max_users) => Number(max_users)),
+  max_users: z.number(),
   description: z.string().optional(),
   eventImage: z
     .any()
