@@ -47,7 +47,6 @@ const createEventSchema = z.object({
     .string()
     .optional()
     .transform((desc) => {
-      if (desc === '') return null
       return desc
     }),
   eventImage: z

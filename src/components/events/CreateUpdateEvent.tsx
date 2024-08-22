@@ -75,12 +75,12 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setApiError(response?.statusText)
       setShowError(true)
     } else {
-      const formData = new FormData()
       if (!file) {
-        setApiError('Photo is required')
-        setShowError(true)
+        router.push(routes.HOME)
+        return
       }
-      formData.append('image', file!, file!.name)
+      const formData = new FormData()
+      formData.append('image', file, file.name)
       const fileResponse = await uploadEventImage(formData, response?.data._id)
       if (fileResponse?.status === StatusCode.BAD_REQUEST) {
         setApiError(fileResponse?.statusText)
@@ -321,20 +321,13 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               </div>
             ) : (
               defaultValues && (
-                <div className="flex justify-between mb-4">
+                <div className="mb-4">
                   <Image
                     src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${defaultValues?.image}`}
                     alt="event img"
                     width={123}
                     height={123}
                   />
-                  <button
-                    type="button"
-                    className="rounded-lg h-10 w-14 text-white bg-red-600 hover:bg-red-800"
-                    onClick={clearImg}
-                  >
-                    x
-                  </button>
                 </div>
               )
             )}

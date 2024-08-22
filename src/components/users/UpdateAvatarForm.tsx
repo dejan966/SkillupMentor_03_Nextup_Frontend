@@ -53,11 +53,6 @@ export default function UpdateAvatarForm() {
     }
   }
 
-  const handleFileError = () => {
-    if (!file) setFileError(true)
-    else setFileError(false)
-  }
-
   useEffect(() => {
     if (file) {
       const reader = new FileReader()
@@ -116,11 +111,7 @@ export default function UpdateAvatarForm() {
                 </div>
               )}
             />
-            <button
-              className="pinkButton"
-              onMouseUp={handleFileError}
-              onClick={uploadFile}
-            >
+            <button className="pinkButton" onClick={uploadFile}>
               Upload new image
             </button>
             {showError && (
