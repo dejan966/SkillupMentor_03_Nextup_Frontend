@@ -25,10 +25,10 @@ export default function PasswordResetForm() {
   const handleChange = async (data: UpdateUserFields) => {
     const response = await passwordResetEmail(data)
     if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else {
       router.push('/')

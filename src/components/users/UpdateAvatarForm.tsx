@@ -25,17 +25,16 @@ export default function UpdateAvatarForm() {
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [fileError, setFileError] = useState(false)
 
   const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
     formData.append('avatar', file!, file?.name!)
     const fileResponse = await uploadAvatar(formData, defaultValues._id)
     if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-      setApiError(fileResponse?.statusText)
+      setApiError(fileResponse?.data.message)
       setShowError(true)
     } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(fileResponse?.statusText)
+      setApiError(fileResponse?.data.message)
       setShowError(true)
     } else {
       router.push(routes.USERINFO)

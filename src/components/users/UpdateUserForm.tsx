@@ -49,10 +49,10 @@ export default function UpdateUserForm() {
       defaultValues._id,
     )
     if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else {
       router.push(routes.USERINFO)

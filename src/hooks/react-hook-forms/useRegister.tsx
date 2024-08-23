@@ -17,20 +17,8 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 const registerSchema = z
   .object({
-    first_name: z
-      .string()
-      .optional()
-      .transform((name) => {
-        if (name === '') return null
-        return name
-      }),
-    last_name: z
-      .string()
-      .optional()
-      .transform((surname) => {
-        if (surname === '') return null
-        return surname
-      }),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
     email: z
       .string()
       .min(1, { message: 'Email is required' })

@@ -9,8 +9,8 @@ export const fetchRole = async (_id: string) => {
   try {
     const response = await axiosInstance.get(`${apiRoutes.FETCH_ROLES}/${_id}`)
     return response
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return error.response
   }
 }
 
@@ -20,8 +20,8 @@ export const fetchRoles = async (pageNumber: number) => {
       `${apiRoutes.FETCH_ROLES}?page=${pageNumber}`,
     )
     return response
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return error.response
   }
 }
 
@@ -29,8 +29,8 @@ export const createRole = async (data: CreateRoleFields) => {
   try {
     const response = await axiosInstance.post(apiRoutes.ROLES_PREFIX, data)
     return response
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return error.response
   }
 }
 
@@ -41,8 +41,8 @@ export const updateRole = async (data: UpdateRoleFields, _id: string) => {
       data,
     )
     return response
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return error.response
   }
 }
 
@@ -52,7 +52,7 @@ export const deleteRole = async (_id: string) => {
       `${apiRoutes.ROLES_PREFIX}/${_id}`,
     )
     return response
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return error.response
   }
 }

@@ -39,23 +39,21 @@ export default function RegisterForm() {
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
     const response = await register(data)
     if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else {
       const loginResponse = await login({
         email: data.email,
         password: data.password,
       })
-      if (loginResponse?.data?.statusCode === StatusCode.BAD_REQUEST) {
-        setApiError(loginResponse?.statusText)
+      if (loginResponse?.status === StatusCode.BAD_REQUEST) {
+        setApiError(loginResponse?.data.message)
         setShowError(true)
-      } else if (
-        loginResponse?.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
-      ) {
-        setApiError(loginResponse?.statusText)
+      } else if (loginResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(loginResponse?.data.message)
         setShowError(true)
       } else {
         if (file) {
@@ -63,19 +61,16 @@ export default function RegisterForm() {
           formData.append('avatar', file, file.name)
           const fileResponse = await uploadAvatar(formData, response?.data._id)
           if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-            setApiError(fileResponse?.statusText)
+            setApiError(fileResponse?.data.message)
             setShowError(true)
           } else if (
             fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
           ) {
-            setApiError(fileResponse?.statusText)
+            setApiError(fileResponse?.data.message)
             setShowError(true)
           } else {
             const userResponse = await fetchCurrUser()
-            if (
-              userResponse?.data?.statusCode ===
-              StatusCode.INTERNAL_SERVER_ERROR
-            ) {
+            if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
               setApiError(fileResponse?.data.message)
               setShowError(true)
             } else {
@@ -85,9 +80,8 @@ export default function RegisterForm() {
             }
           }
         }
-        setValue(loginResponse?.data)
-        router.push(routes.HOME)
       }
+      router.push(routes.HOME)
     }
   })
 

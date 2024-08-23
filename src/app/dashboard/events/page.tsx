@@ -37,10 +37,10 @@ export default function AdminPanel() {
   const handleDelete = async (_id: string) => {
     const response = await deleteEvent(_id)
     if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else {
       refetch()

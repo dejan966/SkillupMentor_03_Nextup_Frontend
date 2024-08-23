@@ -16,7 +16,6 @@ import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
 import { useQuery } from '@tanstack/react-query'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 type Props = {
   defaultValues?: EventType
@@ -24,7 +23,6 @@ type Props = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
-  const [token] = useFirebaseAuth()
   const {
     data: currUser,
     isError,
@@ -69,27 +67,28 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   const handleUpdate = async (data: UpdateEventFields) => {
     const response = await updateEvent(data, defaultValues!._id)
     if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
+      setApiError(response?.data.message)
       setShowError(true)
     } else {
-      if (!file) {
-        router.push(routes.HOME)
-        return
-      }
-      const formData = new FormData()
-      formData.append('image', file, file.name)
-      const fileResponse = await uploadEventImage(formData, response?.data._id)
-      if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse?.statusText)
-        setShowError(true)
-      } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(fileResponse?.statusText)
-        setShowError(true)
-      } else {
-        router.push(routes.HOME)
+      if (file) {
+        const formData = new FormData()
+        formData.append('image', file, file.name)
+        const fileResponse = await uploadEventImage(
+          formData,
+          response?.data._id,
+        )
+        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else {
+          router.push(routes.HOME)
+        }
       }
     }
   }

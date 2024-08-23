@@ -43,12 +43,7 @@ const createEventSchema = z.object({
       message: 'Max users is required',
     })
     .transform((max_users) => Number(max_users)),
-  description: z
-    .string()
-    .optional()
-    .transform((desc) => {
-      return desc
-    }),
+  description: z.string().optional(),
   eventImage: z
     .any()
     .refine((files) => files?.length >= 1, { message: 'Photo is required.' })
