@@ -86,7 +86,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
           setApiError(fileResponse?.data.message)
           setShowError(true)
-        } 
+        }
       }
       router.push(routes.HOME)
     }

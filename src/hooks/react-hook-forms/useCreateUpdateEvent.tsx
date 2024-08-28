@@ -35,7 +35,9 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 const createEventSchema = z.object({
   name: z.string().min(1, { message: 'Event name is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
-  date: z.string().transform((str) => new Date(str).toISOString().substring(0, 10)),
+  date: z
+    .string()
+    .transform((str) => new Date(str).toISOString().substring(0, 10)),
   hour: z.string().min(1, { message: 'Hour is required' }),
   max_users: z
     .string()
@@ -60,7 +62,9 @@ const createEventSchema = z.object({
 const updateEventSchema = z.object({
   name: z.string().optional(),
   location: z.string().optional(),
-  date: z.string().transform((str) => new Date(str).toISOString().substring(0, 10)),
+  date: z
+    .string()
+    .transform((str) => new Date(str).toISOString().substring(0, 10)),
   hour: z.string().optional(),
   max_users: z.number(),
   description: z.string().optional(),

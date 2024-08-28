@@ -26,7 +26,7 @@ export default function UpdateAvatarForm() {
 
   const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
-    if(!file){
+    if (!file) {
       return
     }
     formData.append('avatar', file, file.name)
