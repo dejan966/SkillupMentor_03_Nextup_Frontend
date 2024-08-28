@@ -9,11 +9,9 @@ import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import { Controller } from 'react-hook-form'
 import Image from 'next/image'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 export default function UpdateAvatarForm() {
   const [value] = useLocalStorage()
-  const [token] = useFirebaseAuth()
   const defaultValues = value!
   const router = useRouter()
   const { handleSubmit, errors, control } = useUpdateUserForm({
@@ -28,7 +26,10 @@ export default function UpdateAvatarForm() {
 
   const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
-    formData.append('avatar', file!, file?.name!)
+    if(!file){
+      return
+    }
+    formData.append('avatar', file, file.name)
     const fileResponse = await uploadAvatar(formData, defaultValues._id)
     if (fileResponse?.status === StatusCode.BAD_REQUEST) {
       setApiError(fileResponse?.data.message)

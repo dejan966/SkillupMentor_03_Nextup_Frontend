@@ -7,7 +7,6 @@ interface Props {
 }
 
 export default function EventBlock({ event }: Props) {
-  console.log(event)
   return (
     <div>
       <Link href={`/events/${event._id}`}>
