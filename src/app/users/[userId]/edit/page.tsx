@@ -1,23 +1,34 @@
 'use client'
 
-import CreateUpdateUser from '@/components/users/CreateUpdateUserForm'
+import LoadingCircle from '@/components/ui/LoadingCircle'
+import CreateUpdateUser from '@/components/users/CreateUpdateUser'
 import { fetchUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 
 type Props = {
   params: {
-    user_id: string
+    userId: string
   }
 }
 
 export default function UsersEdit({ params }: Props) {
-  const { data: user } = useQuery({
+  const { data: userData, isSuccess, isLoading } = useQuery({
     queryKey: ['fetchUser'],
-    queryFn: async () => {
-      return await fetchUser(params.user_id)
-    },
+    queryFn: () => fetchUser(params.userId),
   })
+  
+  if (isSuccess === true && (userData?.data.message === 'Unauthorized' || !userData?.data._id)) {
+    notFound()
+  }
 
-  return <CreateUpdateUser defaultValues={user} title="Update User" />
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingCircle />
+      </div>
+    )
+  }
+
+  return <CreateUpdateUser title="Update User" defaultValues={userData?.data} />
 }

@@ -4,16 +4,16 @@ import { updateUserPass } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import {
-  useUpdateUserForm,
+  useCreateUpdateUser,
   UpdateUserFields,
-} from '@/hooks/react-hook-forms/useUpdateUserForm'
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 export default function UpdatePasswordForm() {
   const router = useRouter()
-  const { handleSubmit, errors, control } = useUpdateUserForm({})
+  const { handleSubmit, errors, control } = useCreateUpdateUser({})
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)

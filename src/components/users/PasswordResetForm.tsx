@@ -4,14 +4,19 @@ import { passwordResetEmail } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import {
   UpdateUserFields,
-  useUpdateUserForm,
-} from '@/hooks/react-hook-forms/useUpdateUserForm'
+  useCreateUpdateUser,
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
+import { UserType } from '@/models/auth'
 
-export default function PasswordResetForm() {
-  const { handleSubmit, errors, control } = useUpdateUserForm({})
+type Props = {
+  defaultValues?: UserType
+}
+
+export default function PasswordResetForm({defaultValues}: Props) {
+  const { handleSubmit, errors, control } = useCreateUpdateUser({defaultValues})
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)

@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react'
 import { uploadAvatar } from '@/lib/user'
-import { useUpdateUserForm } from '@/hooks/react-hook-forms/useUpdateUserForm'
+import { useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
@@ -14,7 +14,7 @@ export default function UpdateAvatarForm() {
   const [value] = useLocalStorage()
   const defaultValues = value!
   const router = useRouter()
-  const { handleSubmit, errors, control } = useUpdateUserForm({
+  const { handleSubmit, errors, control } = useCreateUpdateUser({
     defaultValues,
   })
 

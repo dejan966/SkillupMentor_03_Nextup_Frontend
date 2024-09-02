@@ -1,7 +1,7 @@
 import { apiRoutes } from '@/enums/apiConstants'
 import { LoginUserFields } from '@/hooks/react-hook-forms/useLogin'
 import { RegisterUserFields } from '@/hooks/react-hook-forms/useRegister'
-import { UpdateUserFields } from '@/hooks/react-hook-forms/useUpdateUserForm'
+import { CreateUserFields, UpdateUserFields } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { User } from 'firebase/auth'
 import axiosInstance from './axiosInstance'
 
@@ -65,6 +65,15 @@ export const uploadAvatar = async (formData: FormData, _id: string) => {
       `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${_id}`,
       formData,
     )
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
+export const createUser = async (data: CreateUserFields) => {
+  try {
+    const response = await axiosInstance.post(apiRoutes.USERS_PREFIX, data)
     return response
   } catch (error: any) {
     return error.response

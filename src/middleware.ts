@@ -16,6 +16,7 @@ export const config = {
     '/me/:path*',
     '/dashboard/:path*',
     '/roles/:path*',
+    '/users/:path*',
     '/events/add',
     '/events/:id/edit',
   ],

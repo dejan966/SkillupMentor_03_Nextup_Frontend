@@ -56,8 +56,6 @@ export default function RoleEdit({ params }: Props) {
   }
 
   return (
-    <div>
       <CreateUpdateRole title="Manage role" defaultValues={roleData?.data} />
-    </div>
   )
 }

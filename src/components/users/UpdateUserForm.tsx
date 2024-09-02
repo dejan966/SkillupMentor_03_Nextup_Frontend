@@ -4,16 +4,15 @@ import { useRouter } from 'next/navigation'
 import { updateUser } from '@/lib/user'
 import { StatusCode } from '@/enums/errorConstants'
 import {
-  useUpdateUserForm,
+  useCreateUpdateUser,
   UpdateUserFields,
-} from '@/hooks/react-hook-forms/useUpdateUserForm'
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useState } from 'react'
 import { routes } from '@/enums/routesConstants'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import LoadingCircle from '../ui/LoadingCircle'
 
 export default function UpdateUserForm() {
@@ -27,9 +26,8 @@ export default function UpdateUserForm() {
     queryFn: fetchCurrUser,
   })
 
-  const [token] = useFirebaseAuth()
   const defaultValues = currUser?.data
-  const { handleSubmit, errors, control } = useUpdateUserForm({
+  const { handleSubmit, errors, control } = useCreateUpdateUser({
     defaultValues,
   })
 
