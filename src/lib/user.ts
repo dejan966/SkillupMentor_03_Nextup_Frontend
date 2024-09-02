@@ -1,7 +1,10 @@
 import { apiRoutes } from '@/enums/apiConstants'
 import { LoginUserFields } from '@/hooks/react-hook-forms/useLogin'
 import { RegisterUserFields } from '@/hooks/react-hook-forms/useRegister'
-import { CreateUserFields, UpdateUserFields } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import {
+  CreateUserFields,
+  UpdateUserFields,
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { User } from 'firebase/auth'
 import axiosInstance from './axiosInstance'
 

@@ -1,15 +1,16 @@
+'use client'
+
 import CreateUpdateUser from '@/components/users/CreateUpdateUser'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 
 export default function UsersAdd() {
-
-  const { data: currUser, isSuccess } = useQuery({
+  const { data: currUser } = useQuery({
     queryKey: ['fetchCurrUser'],
     queryFn: fetchCurrUser,
   })
-  
+
   if (currUser) {
     if (currUser?.data.role.name !== 'ADMIN') {
       notFound()

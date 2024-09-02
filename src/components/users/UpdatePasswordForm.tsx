@@ -102,6 +102,7 @@ export default function UpdatePasswordForm() {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="Confirm new password"
                   aria-describedby="confirm_new_password"
                   className={

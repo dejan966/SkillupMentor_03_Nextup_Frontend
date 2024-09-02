@@ -114,7 +114,9 @@ export const useCreateUpdateUser = ({ defaultValues }: Props) => {
       ...defaultValues,
     },
     mode: 'onSubmit',
-    resolver: defaultValues ? zodResolver(updateUserSchema) : zodResolver(createUserSchema),
+    resolver: defaultValues
+      ? zodResolver(updateUserSchema)
+      : zodResolver(createUserSchema),
   })
 
   return {

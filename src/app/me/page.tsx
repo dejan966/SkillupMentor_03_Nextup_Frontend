@@ -6,11 +6,9 @@ import { routes } from '@/enums/routesConstants'
 import { useQuery } from '@tanstack/react-query'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import Image from 'next/image'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 
 export default function UserInfo() {
   const [value] = useLocalStorage()
-  const [token] = useFirebaseAuth()
   const {
     data: currUser,
     isError,

@@ -2,9 +2,19 @@
 
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
-import { CreateUserFields, UpdateUserFields, useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import {
+  CreateUserFields,
+  UpdateUserFields,
+  useCreateUpdateUser,
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import { login, uploadAvatar, fetchCurrUser, createUser, updateUser } from '@/lib/user'
+import {
+  login,
+  uploadAvatar,
+  fetchCurrUser,
+  createUser,
+  updateUser,
+} from '@/lib/user'
 import { UserType } from '@/models/auth'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -41,10 +51,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
 
   const handleUpdate = async (data: UpdateUserFields) => {
     //const { first_name, last_name, email } = data
-    const response = await updateUser(
-      data,
-      defaultValues!._id,
-    )
+    const response = await updateUser(data, defaultValues!._id)
     if (response?.status === StatusCode.BAD_REQUEST) {
       setApiError(response?.data.message)
       setShowError(true)
@@ -65,39 +72,27 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
       setApiError(response?.data.message)
       setShowError(true)
     } else {
-      const loginResponse = await login({
-        email: data.email,
-        password: data.password,
-      })
-      if (loginResponse?.status === StatusCode.BAD_REQUEST) {
-        setApiError(loginResponse?.data.message)
-        setShowError(true)
-      } else if (loginResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(loginResponse?.data.message)
-        setShowError(true)
-      } else {
-        if (file) {
-          const formData = new FormData()
-          formData.append('avatar', file, file.name)
-          const fileResponse = await uploadAvatar(formData, response?.data._id)
-          if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          } else if (
-            fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
+      if (file) {
+        const formData = new FormData()
+        formData.append('avatar', file, file.name)
+        const fileResponse = await uploadAvatar(formData, response?.data._id)
+        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else if (
+          fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
+        ) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else {
+          const userResponse = await fetchCurrUser()
+          if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
             setApiError(fileResponse?.data.message)
             setShowError(true)
           } else {
-            const userResponse = await fetchCurrUser()
-            if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-              setApiError(fileResponse?.data.message)
-              setShowError(true)
-            } else {
-              setValue(userResponse?.data)
-              router.push(routes.HOME)
-              return
-            }
+            setValue(userResponse?.data)
+            router.push(routes.HOME)
+            return
           }
         }
       }
@@ -115,10 +110,10 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
   const uploadFile = () => {
     document.getElementById('avatarUpload')?.click()
   }
-  
+
   return (
-      <div className="centered">
-        <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <div className="centered">
+      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-center">
@@ -251,6 +246,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="Password"
                   aria-describedby="password"
                   className={
@@ -302,6 +298,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="confirm_password"
                   aria-describedby="confirm_password"
                   className={
@@ -321,12 +318,11 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
               </div>
             )}
           />
-            <button className="blueButton" type="submit">
-              {title}
-            </button>
+          <button className="blueButton" type="submit">
+            {title}
+          </button>
         </form>
-        </div>
-
       </div>
+    </div>
   )
 }

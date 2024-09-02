@@ -86,6 +86,7 @@ export default function LoginForm() {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="Password"
                   aria-describedby="password"
                   className={

@@ -234,6 +234,7 @@ export default function RegisterForm() {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="Password"
                   aria-describedby="password"
                   className={
@@ -259,6 +260,7 @@ export default function RegisterForm() {
                 <input
                   {...field}
                   type="password"
+                  placeholder="******"
                   aria-label="confirm_password"
                   aria-describedby="confirm_password"
                   className={

@@ -15,8 +15,10 @@ type Props = {
   defaultValues?: UserType
 }
 
-export default function PasswordResetForm({defaultValues}: Props) {
-  const { handleSubmit, errors, control } = useCreateUpdateUser({defaultValues})
+export default function PasswordResetForm({ defaultValues }: Props) {
+  const { handleSubmit, errors, control } = useCreateUpdateUser({
+    defaultValues,
+  })
 
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)

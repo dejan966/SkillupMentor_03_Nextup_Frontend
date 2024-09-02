@@ -23,7 +23,7 @@ type Props = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
-  console.log(defaultValues);
+  console.log(defaultValues)
   const {
     data: currUser,
     isError,

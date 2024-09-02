@@ -13,12 +13,19 @@ type Props = {
 }
 
 export default function UsersEdit({ params }: Props) {
-  const { data: userData, isSuccess, isLoading } = useQuery({
+  const {
+    data: userData,
+    isSuccess,
+    isLoading,
+  } = useQuery({
     queryKey: ['fetchUser'],
     queryFn: () => fetchUser(params.userId),
   })
-  
-  if (isSuccess === true && (userData?.data.message === 'Unauthorized' || !userData?.data._id)) {
+
+  if (
+    isSuccess === true &&
+    (userData?.data.message === 'Unauthorized' || !userData?.data._id)
+  ) {
     notFound()
   }
 
