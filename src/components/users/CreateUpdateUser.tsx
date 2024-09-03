@@ -50,9 +50,9 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateUserFields) => {
-    //const { first_name, last_name, email } = data
     const response = await updateUser(data, defaultValues!._id)
     if (response?.status === StatusCode.BAD_REQUEST) {
+      console.log(response?.data.message)
       setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
@@ -79,9 +79,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
         if (fileResponse?.status === StatusCode.BAD_REQUEST) {
           setApiError(fileResponse?.data.message)
           setShowError(true)
-        } else if (
-          fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
-        ) {
+        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
           setApiError(fileResponse?.data.message)
           setShowError(true)
         } else {
@@ -121,7 +119,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
               src={
                 preview
                   ? (preview as string)
-                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`
+                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${defaultValues?.avatar}`
               }
               alt="Avatar"
               className="userAvatar"
@@ -263,32 +261,34 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
               </div>
             )}
           />
-          <Controller
-            control={control}
-            name="new_password"
-            render={({ field }) => (
-              <div className="mb-3">
-                <label className="inputText">New password</label>
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="newPassword"
-                  aria-describedby="newPassword"
-                  className={
-                    errors.new_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.new_password && (
-                  <div className="validation-feedback">
-                    {errors.new_password.message}
-                  </div>
-                )}
-              </div>
-            )}
-          />
+          {defaultValues && (
+            <Controller
+              control={control}
+              name="new_password"
+              render={({ field }) => (
+                <div className="mb-3">
+                  <label className="inputText">New password</label>
+                  <input
+                    {...field}
+                    type="password"
+                    placeholder="******"
+                    aria-label="newPassword"
+                    aria-describedby="newPassword"
+                    className={
+                      errors.new_password
+                        ? 'tailwind-form-control-errors'
+                        : 'tailwind-form-control'
+                    }
+                  />
+                  {errors.new_password && (
+                    <div className="validation-feedback">
+                      {errors.new_password.message}
+                    </div>
+                  )}
+                </div>
+              )}
+            />
+          )}
           <Controller
             control={control}
             name="confirm_password"

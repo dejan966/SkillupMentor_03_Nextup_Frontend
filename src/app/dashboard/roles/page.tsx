@@ -1,6 +1,5 @@
 'use client'
 
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import { useQuery } from '@tanstack/react-query'
 import { deleteRole, fetchRoles } from '@/lib/role'
 import { notFound } from 'next/navigation'
@@ -10,7 +9,6 @@ import { useState } from 'react'
 import { StatusCode } from '@/enums/errorConstants'
 
 export default function AdminPanel() {
-  const [token] = useFirebaseAuth()
   const [pageNumber, setPageNumber] = useState(1)
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)

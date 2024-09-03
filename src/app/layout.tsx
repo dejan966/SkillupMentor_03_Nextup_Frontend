@@ -19,8 +19,10 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body className={poppins.className}>
         <main className="holder">
-          <Navbar />
-          <Provider>{children}</Provider>
+          <Provider>
+            <Navbar />
+            {children}
+          </Provider>
         </main>
       </body>
     </html>

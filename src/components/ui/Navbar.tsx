@@ -17,7 +17,6 @@ const Navbar = () => {
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
-
   const signOutFirebase = async () => {
     const response = await firebaseUserSignout()
     if (response?.status === StatusCode.BAD_REQUEST) {
