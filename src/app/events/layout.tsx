@@ -1,6 +1,6 @@
 import Footer from '@/components/ui/Footer'
 
-export default function EventAdd({
+export default function EventLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

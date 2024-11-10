@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useEffect, useState } from 'react'
-import { uploadAvatar } from '@/lib/user'
+import { fetchCurrUser, uploadAvatar } from '@/lib/user'
 import { useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
@@ -11,7 +11,7 @@ import { Controller } from 'react-hook-form'
 import Image from 'next/image'
 
 export default function UpdateAvatarForm() {
-  const [value] = useLocalStorage()
+  const [value, setValue] = useLocalStorage()
   const defaultValues = value!
   const router = useRouter()
   const { handleSubmit, errors, control } = useCreateUpdateUser({
@@ -38,7 +38,14 @@ export default function UpdateAvatarForm() {
       setApiError(fileResponse?.data.message)
       setShowError(true)
     } else {
-      router.push(routes.USERINFO)
+      const userResponse = await fetchCurrUser()
+      if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+        setApiError(fileResponse?.data.message)
+        setShowError(true)
+      } else {
+        setValue(userResponse?.data)
+        router.push(routes.USERINFO)
+      }
     }
   })
 

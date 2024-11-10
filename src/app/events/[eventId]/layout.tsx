@@ -1,7 +1,6 @@
 import Provider from '@/components/providers/Provider'
-import Footer from '@/components/ui/Footer'
 
-export default function EventsLayout({
+export default function EventLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -9,10 +8,8 @@ export default function EventsLayout({
   return (
     <>
       <Provider>
-        <div className="">{children}</div>
-      </Provider>{' '}
-      {/**body */}
-      {/* <Footer options={'footer'} /> */}
+        <div>{children}</div>
+      </Provider>
     </>
   )
 }

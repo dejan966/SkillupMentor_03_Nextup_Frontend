@@ -18,7 +18,7 @@ import {
 import { UserType } from '@/models/auth'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 type Props = {
@@ -52,13 +52,26 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
   const handleUpdate = async (data: UpdateUserFields) => {
     const response = await updateUser(data, defaultValues!._id)
     if (response?.status === StatusCode.BAD_REQUEST) {
-      console.log(response?.data.message)
       setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
       setApiError(response?.data.message)
       setShowError(true)
     } else {
+      if(file) {
+        const formData = new FormData()
+          formData.append('avatar', file, file.name)
+          const fileResponse = await uploadAvatar(formData, response?.data._id)
+          if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+            setApiError(fileResponse?.data.message)
+            setShowError(true)
+          } else if (
+            fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
+          ) {
+            setApiError(fileResponse?.data.message)
+            setShowError(true)
+          }
+      }
       router.back()
     }
   }
@@ -108,6 +121,18 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
   const uploadFile = () => {
     document.getElementById('avatarUpload')?.click()
   }
+
+  useEffect(() => {
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setPreview(null)
+    }
+  }, [file])
 
   return (
     <div className="centered">
