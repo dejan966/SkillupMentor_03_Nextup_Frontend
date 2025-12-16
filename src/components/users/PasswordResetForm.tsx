@@ -31,7 +31,10 @@ export default function PasswordResetForm({ defaultValues }: Props) {
 
   const handleChange = async (data: UpdateUserFields) => {
     const response = await passwordResetEmail(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
+    if (!response) {
+      setApiError('Unable to establish connection with server')
+      setShowError(true)
+    } else if (response?.status === StatusCode.BAD_REQUEST) {
       setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {

@@ -38,7 +38,10 @@ export default function RegisterForm() {
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
     const response = await register(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
+    if (!response) {
+      setApiError('Unable to establish connection with server')
+      setShowError(true)
+    } else if (response?.status === StatusCode.BAD_REQUEST) {
       setApiError(response?.data.message)
       setShowError(true)
     } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {

@@ -46,11 +46,14 @@ export default function UpdateUserForm() {
       { first_name, last_name, email },
       defaultValues._id,
     )
-    if (response?.status === StatusCode.BAD_REQUEST) {
+    if (!response) {
+      setApiError('Unable to establish connection with server')
+      setShowError(true)
+    } else if (response.status === StatusCode.BAD_REQUEST) {
       setApiError(response?.data.message)
       setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
       setShowError(true)
     } else {
       router.push(routes.USERINFO)

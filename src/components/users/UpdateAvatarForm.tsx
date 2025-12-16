@@ -31,11 +31,14 @@ export default function UpdateAvatarForm() {
     }
     formData.append('avatar', file, file.name)
     const fileResponse = await uploadAvatar(formData, defaultValues._id)
-    if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-      setApiError(fileResponse?.data.message)
+    if (!fileResponse) {
+      setApiError('Unable to establish connection with server')
       setShowError(true)
-    } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(fileResponse?.data.message)
+    } else if (fileResponse.status === StatusCode.BAD_REQUEST) {
+      setApiError(fileResponse.data.message)
+      setShowError(true)
+    } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(fileResponse.data.message)
       setShowError(true)
     } else {
       const userResponse = await fetchCurrUser()

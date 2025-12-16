@@ -32,14 +32,17 @@ export default function LoginForm() {
   }
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await login(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
+    if (!response) {
+      setApiError('Unable to establish connection with server')
       setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
+    } else if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
       setShowError(true)
     } else {
-      setValue(response?.data)
+      setValue(response.data)
       router.push(routes.HOME)
     }
   })

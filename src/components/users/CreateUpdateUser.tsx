@@ -51,26 +51,27 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
 
   const handleUpdate = async (data: UpdateUserFields) => {
     const response = await updateUser(data, defaultValues!._id)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
+    if (!response) {
+      setApiError('Unable to establish connection with server')
       setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
+    } else if (response.status === StatusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
       setShowError(true)
     } else {
-      if(file) {
+      if (file) {
         const formData = new FormData()
-          formData.append('avatar', file, file.name)
-          const fileResponse = await uploadAvatar(formData, response?.data._id)
-          if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          } else if (
-            fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          }
+        formData.append('avatar', file, file.name)
+        const fileResponse = await uploadAvatar(formData, response?.data._id)
+        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        }
       }
       router.back()
     }
