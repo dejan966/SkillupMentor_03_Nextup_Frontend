@@ -2,7 +2,7 @@ import { EventType } from '@/models/event'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import moment from 'moment';
+import moment from 'moment'
 
 export interface CreateEventFields {
   name: string
@@ -36,9 +36,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 const createEventSchema = z.object({
   name: z.string().min(1, { message: 'Event name is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
-  date: z
-    .string()
-    .transform((str) => moment(str).format("YYYY-M-D")),
+  date: z.string().transform((str) => moment(str).format('YYYY-M-D')),
   hour: z.string().min(1, { message: 'Hour is required' }),
   max_users: z
     .string()
@@ -63,9 +61,7 @@ const createEventSchema = z.object({
 const updateEventSchema = z.object({
   name: z.string().optional(),
   location: z.string().optional(),
-  date: z
-    .string()
-    .transform((str) => moment(str).format("YYYY-M-D")),
+  date: z.string().transform((str) => moment(str).format('YYYY-M-D')),
   hour: z.string().optional(),
   max_users: z.number(),
   description: z.string().optional(),
@@ -94,7 +90,7 @@ export const useCreateUpdateEventForm = ({ defaultValues }: Props) => {
       location: '',
       hour: '',
       max_users: 0,
-      date: moment().format("YYYY-M-D"),
+      date: moment().format('YYYY-M-D'),
       description: '',
       eventImage: undefined,
       ...defaultValues,

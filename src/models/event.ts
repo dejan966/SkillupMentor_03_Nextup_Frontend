@@ -1,3 +1,4 @@
+import { Types, ObjectId } from 'mongoose'
 import { UserType } from './auth'
 
 export type EventType = {

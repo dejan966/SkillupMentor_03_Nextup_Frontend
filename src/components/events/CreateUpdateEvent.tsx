@@ -65,7 +65,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   )
 
   const handleUpdate = async (data: UpdateEventFields) => {
-    const response = await updateEvent(data, defaultValues!._id)
+    const response = await updateEvent(data, defaultValues!._id.toString())
     if (response?.status === StatusCode.BAD_REQUEST) {
       setApiError(response?.data.message)
       setShowError(true)

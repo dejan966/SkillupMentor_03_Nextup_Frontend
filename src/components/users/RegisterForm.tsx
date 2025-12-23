@@ -48,43 +48,19 @@ export default function RegisterForm() {
       setApiError(response?.data.message)
       setShowError(true)
     } else {
-      const loginResponse = await login({
-        email: data.email,
-        password: data.password,
-      })
-      if (loginResponse?.status === StatusCode.BAD_REQUEST) {
-        setApiError(loginResponse?.data.message)
-        setShowError(true)
-      } else if (loginResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(loginResponse?.data.message)
-        setShowError(true)
-      } else {
-        if (file) {
-          const formData = new FormData()
-          formData.append('avatar', file, file.name)
-          const fileResponse = await uploadAvatar(formData, response?.data._id)
-          if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          } else if (
-            fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
-          ) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          } else {
-            const userResponse = await fetchCurrUser()
-            if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-              setApiError(fileResponse?.data.message)
-              setShowError(true)
-            } else {
-              setValue(userResponse?.data)
-              router.push(routes.HOME)
-              return
-            }
-          }
+      if (file) {
+        const formData = new FormData()
+        formData.append('avatar', file, file.name)
+        const fileResponse = await uploadAvatar(formData, response?.data._id)
+        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
+        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
+          setApiError(fileResponse?.data.message)
+          setShowError(true)
         }
       }
-      router.push(routes.HOME)
+      router.push(routes.LOGIN)
     }
   })
 

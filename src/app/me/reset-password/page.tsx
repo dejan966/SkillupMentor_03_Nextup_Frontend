@@ -5,9 +5,7 @@ import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 
 export default function ResetPassword() {
-  const {
-    data: currUser
-  } = useQuery({
+  const { data: currUser } = useQuery({
     queryKey: ['currUser'],
     queryFn: fetchCurrUser,
   })
