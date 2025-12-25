@@ -1,4 +1,4 @@
-import { apiRoutes } from '@/enums/apiConstants'
+import { apiRoutes } from '@/constants/apiConstants'
 import { LoginUserFields } from '@/hooks/react-hook-forms/useLogin'
 import { RegisterUserFields } from '@/hooks/react-hook-forms/useRegister'
 import {

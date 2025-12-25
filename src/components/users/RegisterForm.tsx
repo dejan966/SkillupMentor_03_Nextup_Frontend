@@ -1,8 +1,8 @@
 'use client'
 
 import { fetchCurrUser, login, register, uploadAvatar } from '@/lib/user'
-import { StatusCode } from '@/enums/errorConstants'
-import { routes } from '@/enums/routesConstants'
+import { StatusCode } from '@/constants/errorConstants'
+import { routes } from '@/constants/routesConstants'
 import {
   useRegisterForm,
   RegisterUserFields,

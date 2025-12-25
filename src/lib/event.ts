@@ -1,4 +1,4 @@
-import { apiRoutes } from '@/enums/apiConstants'
+import { apiRoutes } from '@/constants/apiConstants'
 import {
   CreateEventFields,
   UpdateEventFields,

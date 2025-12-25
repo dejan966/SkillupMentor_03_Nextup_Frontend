@@ -1,7 +1,7 @@
 'use client'
 
-import { StatusCode } from '@/enums/errorConstants'
-import { routes } from '@/enums/routesConstants'
+import { StatusCode } from '@/constants/errorConstants'
+import { routes } from '@/constants/routesConstants'
 import {
   useLoginForm,
   LoginUserFields,

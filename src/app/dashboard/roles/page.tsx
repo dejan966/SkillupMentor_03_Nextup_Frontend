@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { fetchCurrUser } from '@/lib/user'
 import RoleTable from '@/components/roles/RoleTable'
 import { useState } from 'react'
-import { StatusCode } from '@/enums/errorConstants'
+import { StatusCode } from '@/constants/errorConstants'
 
 export default function AdminPanel() {
   const [pageNumber, setPageNumber] = useState(1)

@@ -6,8 +6,8 @@ import {
   useCreateUpdateUser,
   UserFormData,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import { StatusCode } from '@/enums/errorConstants'
-import { routes } from '@/enums/routesConstants'
+import { StatusCode } from '@/constants/errorConstants'
+import { routes } from '@/constants/routesConstants'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import { Controller } from 'react-hook-form'

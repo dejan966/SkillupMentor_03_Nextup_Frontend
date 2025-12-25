@@ -2,13 +2,13 @@
 
 import { useRouter } from 'next/navigation'
 import { updateUser } from '@/lib/user'
-import { StatusCode } from '@/enums/errorConstants'
+import { StatusCode } from '@/constants/errorConstants'
 import {
   useCreateUpdateUser,
   UpdateUserFields,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useState } from 'react'
-import { routes } from '@/enums/routesConstants'
+import { routes } from '@/constants/routesConstants'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'

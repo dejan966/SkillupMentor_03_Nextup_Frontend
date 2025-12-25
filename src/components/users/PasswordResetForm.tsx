@@ -1,7 +1,7 @@
 'use client'
 
 import { passwordResetEmail } from '@/lib/user'
-import { StatusCode } from '@/enums/errorConstants'
+import { StatusCode } from '@/constants/errorConstants'
 import {
   UpdateUserFields,
   useCreateUpdateUser,

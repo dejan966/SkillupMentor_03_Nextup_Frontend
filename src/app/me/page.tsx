@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { fetchCurrUser } from '@/lib/user'
-import { routes } from '@/enums/routesConstants'
+import { routes } from '@/constants/routesConstants'
 import { useQuery } from '@tanstack/react-query'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import Image from 'next/image'

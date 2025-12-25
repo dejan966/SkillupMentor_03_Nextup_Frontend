@@ -8,7 +8,7 @@ import {
 import { notFound, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { StatusCode } from '@/enums/errorConstants'
+import { StatusCode } from '@/constants/errorConstants'
 import { createRole, updateRole } from '@/lib/role'
 import { RoleType } from '@/models/role'
 import { fetchCurrUser } from '@/lib/user'

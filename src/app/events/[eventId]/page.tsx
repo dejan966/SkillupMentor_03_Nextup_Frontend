@@ -6,8 +6,8 @@ import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import { StatusCode } from '@/enums/errorConstants'
-import { routes } from '@/enums/routesConstants'
+import { StatusCode } from '@/constants/errorConstants'
+import { routes } from '@/constants/routesConstants'
 import { useState } from 'react'
 
 type Props = {

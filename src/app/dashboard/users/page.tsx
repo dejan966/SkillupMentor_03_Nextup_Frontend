@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 import { useState } from 'react'
 import UserTable from '@/components/users/UserTable'
-import { StatusCode } from '@/enums/errorConstants'
+import { StatusCode } from '@/constants/errorConstants'
 
 export default function AdminPanel() {
   const [pageNumber, setPageNumber] = useState(1)
