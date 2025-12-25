@@ -55,11 +55,11 @@ const createUserSchema = z
       .email({ message: 'Must be a valid email' }),
     password: z
       .string()
-      .regex(new RegExp('.*[A-Z].*'), 'One uppercase character')
-      .regex(new RegExp('.*[a-z].*'), 'One lowercase character')
-      .regex(new RegExp('.*\\d.*'), 'One number')
+      .regex(/.*[A-Z].*/, 'One uppercase character')
+      .regex(/.*[a-z].*/, 'One lowercase character')
+      .regex(/.*\d.*/, 'One number')
       .regex(
-        new RegExp('.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*'),
+        /.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*/,
         'One special character',
       )
       .min(6, { message: 'Password must be at least 6 characters.' }),
