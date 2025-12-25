@@ -5,14 +5,14 @@ import { StatusCode } from '@/enums/errorConstants'
 import {
   UpdateUserFields,
   useCreateUpdateUser,
+  UserFormData,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { UserType } from '@/models/auth'
 
 type Props = {
-  defaultValues?: UserType
+  defaultValues?: UserFormData
 }
 
 export default function PasswordResetForm({ defaultValues }: Props) {

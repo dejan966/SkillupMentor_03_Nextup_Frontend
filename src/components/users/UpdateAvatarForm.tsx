@@ -2,7 +2,10 @@
 
 import { ChangeEvent, useEffect, useState } from 'react'
 import { fetchCurrUser, uploadAvatar } from '@/lib/user'
-import { useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import {
+  useCreateUpdateUser,
+  UserFormData,
+} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { StatusCode } from '@/enums/errorConstants'
 import { routes } from '@/enums/routesConstants'
 import { useRouter } from 'next/navigation'
@@ -10,9 +13,12 @@ import useLocalStorage from '@/hooks/useLocalStorage'
 import { Controller } from 'react-hook-form'
 import Image from 'next/image'
 
-export default function UpdateAvatarForm() {
+type Props = {
+  defaultValues?: UserFormData
+}
+
+export default function UpdateAvatarForm({ defaultValues }: Props) {
   const [value, setValue] = useLocalStorage()
-  const defaultValues = value!
   const router = useRouter()
   const { handleSubmit, errors, control } = useCreateUpdateUser({
     defaultValues,
@@ -30,7 +36,7 @@ export default function UpdateAvatarForm() {
       return
     }
     formData.append('avatar', file, file.name)
-    const fileResponse = await uploadAvatar(formData, defaultValues._id)
+    const fileResponse = await uploadAvatar(formData, defaultValues!._id)
     if (!fileResponse) {
       setApiError('Unable to establish connection with server')
       setShowError(true)

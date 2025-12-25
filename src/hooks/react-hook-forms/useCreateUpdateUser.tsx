@@ -1,7 +1,18 @@
-import { UserType } from '@/models/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+
+export type UserFormData = {
+  _id: string
+  first_name: string
+  last_name: string
+  email: string
+  current_password: string
+  password: string
+  confirm_password: string
+  role: string
+  avatar: string
+}
 
 export interface CreateUserFields {
   first_name?: string
@@ -11,6 +22,7 @@ export interface CreateUserFields {
   new_password: string
   confirm_password: string
   avatar?: string
+  role: string
   userImage?: any
 }
 
@@ -22,6 +34,7 @@ export interface UpdateUserFields {
   new_password?: string
   confirm_password?: string
   avatar?: string
+  role?: string
   userImage?: any
 }
 
@@ -29,7 +42,7 @@ const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 interface Props {
-  defaultValues?: UserType
+  defaultValues?: UserFormData
 }
 
 const createUserSchema = z
@@ -53,6 +66,7 @@ const createUserSchema = z
     confirm_password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters.' }),
+    role: z.string({ required_error: 'A role must be selected.' }),
     userImage: z
       .any()
       .refine(
@@ -79,6 +93,7 @@ const updateUserSchema = z
     password: z.string().optional(),
     new_password: z.string().optional(),
     confirm_password: z.string().optional(),
+    role: z.string().optional(),
     userImage: z
       .any()
       .refine(
@@ -107,6 +122,7 @@ export const useCreateUpdateUser = ({ defaultValues }: Props) => {
       first_name: '',
       last_name: '',
       email: '',
+      role: '',
       password: '',
       new_password: '',
       confirm_password: '',

@@ -6,23 +6,20 @@ import {
   CreateUserFields,
   UpdateUserFields,
   useCreateUpdateUser,
+  UserFormData,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import {
-  login,
-  uploadAvatar,
-  fetchCurrUser,
-  createUser,
-  updateUser,
-} from '@/lib/user'
-import { UserType } from '@/models/auth'
+import { fetchRoles } from '@/lib/role'
+import { uploadAvatar, fetchCurrUser, createUser, updateUser } from '@/lib/user'
+import { RoleType } from '@/models/role'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 type Props = {
-  defaultValues?: UserType
+  defaultValues?: UserFormData
   title: string
 }
 
@@ -38,6 +35,16 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
 
   const [value, setValue] = useLocalStorage()
   const router = useRouter()
+
+  const {
+    data: roles,
+    isSuccess,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['fetchRoles'],
+    queryFn: () => fetchRoles(1),
+  })
 
   const onSubmit = handleSubmit(
     async (data: CreateUserFields | UpdateUserFields) => {
@@ -336,6 +343,38 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
                 {errors.confirm_password && (
                   <div className="validation-feedback">
                     {errors.confirm_password.message}
+                  </div>
+                )}
+                {showError && (
+                  <div className="text-red-500 text-md">{apiError}</div>
+                )}
+              </div>
+            )}
+          />
+          <Controller
+            control={control}
+            name="role"
+            render={({ field }) => (
+              <div className="mb-4">
+                <label className="inputText">Role</label>
+                <select
+                  {...field}
+                  className={
+                    errors.role
+                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
+                  }
+                >
+                  <option value="">Select role</option>
+                  {roles?.data.data.map((role: RoleType) => (
+                    <option key={role._id} value={role._id}>
+                      {role.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.role && (
+                  <div className="validation-feedback">
+                    {errors.role.message}
                   </div>
                 )}
                 {showError && (
