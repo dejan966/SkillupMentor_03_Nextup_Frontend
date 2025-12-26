@@ -1,6 +1,7 @@
 'use client'
 
 import CreateUpdateEvent from '@/components/events/CreateUpdateEvent'
+import Button from '@/components/ui/Button'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { fetchEvent } from '@/lib/event'
 import { useQuery } from '@tanstack/react-query'
@@ -36,13 +37,9 @@ export default function EventEdit({ params }: Props) {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
-          type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
-          onClick={() => refetch()}
-        >
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }

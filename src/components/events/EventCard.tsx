@@ -1,6 +1,7 @@
 import { EventType } from '@/models/event'
 import Image from 'next/image'
 import Link from 'next/link'
+import Button from '../ui/Button'
 
 interface Props {
   event: EventType
@@ -20,20 +21,20 @@ export default function EventCard({ event, typeIcon }: Props) {
       </div>
       {typeIcon ? (
         <div className="centered">
-          <button
-            type="button"
-            className="blue centered rounded-xl h-12 w-14 row-span-2"
+          <Button
+            variant="error"
+            className="flex justify-center items-center h-12 w-14 row-span-2"
           >
             <Link href={`/events/${event._id}/edit`}>
               <Image src={typeIcon} alt="Icon" height={20} width={20} />
             </Link>
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="centered">
-          <button type="button" className="blueButton">
+          <Button variant="default" className="mb-4" type="button">
             <Link href={`/events/${event._id}`}>Check</Link>
-          </button>
+          </Button>
         </div>
       )}
     </div>

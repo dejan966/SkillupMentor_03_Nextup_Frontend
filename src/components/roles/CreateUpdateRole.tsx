@@ -13,6 +13,7 @@ import { createRole, updateRole } from '@/lib/role'
 import { RoleType } from '@/models/role'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
+import Button from '../ui/Button'
 
 type Props = {
   defaultValues?: RoleType
@@ -107,12 +108,9 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
             )}
           />
           <div>
-            <button
-              className="blue text-white h-10 w-full rounded-full mb-4"
-              type="submit"
-            >
+            <Button variant="default" className="mb-4" type="submit">
               Submit
-            </button>
+            </Button>
           </div>
         </form>
       </div>

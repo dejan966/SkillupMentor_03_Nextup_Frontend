@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import { Controller } from 'react-hook-form'
 import Image from 'next/image'
+import Button from '../ui/Button'
 
 type Props = {
   defaultValues?: UserFormData
@@ -127,20 +128,21 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
                 </div>
               )}
             />
-            <button className="pinkButton" onClick={uploadFile}>
+            <Button
+              variant="default"
+              className="bg-pink-500 hover:bg-pink-300 mb-4"
+              onClick={uploadFile}
+            >
               Upload new image
-            </button>
+            </Button>
             {showError && (
               <div className="text-red-500 text-md">{apiError}</div>
             )}
           </div>
           <div className="flex items-center justify-between">
-            <button
-              className="blue text-white rounded-full h-10 w-28 submit"
-              type="submit"
-            >
+            <Button variant="default" className="w-28 uppercase" type="submit">
               Submit
-            </button>
+            </Button>
             <button type="button" onClick={() => router.back()}>
               Back
             </button>

@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import useLocalStorage from '@/hooks/useLocalStorage'
+import Button from '../ui/Button'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
@@ -260,9 +261,9 @@ export default function RegisterForm() {
             )}
           />
           <div>
-            <button className="blueButton" type="submit">
+            <Button variant="default" className="mb-4" type="submit">
               Sign up
-            </button>
+            </Button>
           </div>
           <div className="flex justify-between">
             <p className="text-black text-start">Already have an account?</p>

@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
+import Button from '../ui/Button'
 
 type Props = {
   defaultValues?: UserFormData
@@ -81,9 +82,9 @@ export default function PasswordResetForm({ defaultValues }: Props) {
               </div>
             )}
           />
-          <button className="blueButton" type="submit">
+          <Button variant="default" className="mb-4" type="submit">
             Send password reset email
-          </button>
+          </Button>
         </form>
       </div>
     </div>

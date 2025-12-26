@@ -3,6 +3,7 @@ import EventBlock from './EventBlock'
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import EventCard from './EventCard'
 import Link from 'next/link'
+import Button from '../ui/Button'
 
 interface Props {
   events: EventType[]
@@ -80,12 +81,9 @@ export default function EventList({
           })}
           {loadmore !== undefined && loadmore && (
             <div className="centered">
-              <button
-                className="bg-blue-800 hover:bg-blue-500 text-white rounded-full h-10 w-28"
-                type="button"
-              >
+              <Button variant="default" className="w-28" type="button">
                 <Link href={'/events/upcoming-events'}>Load more</Link>
-              </button>
+              </Button>
             </div>
           )}
         </div>

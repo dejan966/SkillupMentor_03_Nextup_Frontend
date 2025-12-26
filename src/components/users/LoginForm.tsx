@@ -14,6 +14,7 @@ import { firebaseLogin, login } from '@/lib/user'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import { auth, provider } from '@/config/firebase-config'
 import { signInWithPopup } from 'firebase/auth'
+import Button from '../ui/Button'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
@@ -110,9 +111,9 @@ export default function LoginForm() {
             )}
           />
           <div>
-            <button className="blueButton" type="submit">
+            <Button variant="default" className="mb-4" type="submit">
               Login
-            </button>
+            </Button>
           </div>
           <div className="flex justify-between">
             <p className="text-black text-start">Dont have an account yet?</p>
@@ -125,9 +126,13 @@ export default function LoginForm() {
           </div>
           <div></div>
         </form>
-        <button className="blueButton" onClick={googleFirebaseSignIn}>
+        <Button
+          variant="default"
+          className="mb-4"
+          onClick={googleFirebaseSignIn}
+        >
           Sign in with Google
-        </button>
+        </Button>
       </div>
     </div>
   )

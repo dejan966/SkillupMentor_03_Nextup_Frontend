@@ -1,6 +1,7 @@
 'use client'
 
 import EventBlock from '@/components/events/EventBlock'
+import Button from '@/components/ui/Button'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { getAllUpcomingEvents } from '@/lib/event'
 import { EventType } from '@/models/event'
@@ -21,13 +22,9 @@ export default function AllUpcomingEvents() {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
-          type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
-          onClick={() => refetch()}
-        >
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }

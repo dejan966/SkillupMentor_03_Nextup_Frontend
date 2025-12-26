@@ -7,6 +7,7 @@ import { fetchCurrUser } from '@/lib/user'
 import RoleTable from '@/components/roles/RoleTable'
 import { useState } from 'react'
 import { StatusCode } from '@/constants/errorConstants'
+import Button from '@/components/ui/Button'
 
 export default function AdminPanel() {
   const [pageNumber, setPageNumber] = useState(1)
@@ -50,13 +51,9 @@ export default function AdminPanel() {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
-          type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
-          onClick={() => refetch()}
-        >
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }

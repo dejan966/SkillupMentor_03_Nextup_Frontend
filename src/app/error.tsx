@@ -1,5 +1,6 @@
 'use client'
 
+import Button from '@/components/ui/Button'
 import { useEffect } from 'react'
 
 const ErrorPage = ({
@@ -16,9 +17,9 @@ const ErrorPage = ({
   return (
     <div>
       <h2>Something went wrong!</h2>
-      <button className="blueButton" onClick={reset}>
+      <Button variant="error" className="mb-4" onClick={reset}>
         Try again
-      </button>
+      </Button>
     </div>
   )
 }

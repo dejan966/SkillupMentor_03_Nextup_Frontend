@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
+import Button from './Button'
 
 const Navbar = () => {
   const [value, setValue, logout] = useLocalStorage()
@@ -85,12 +86,9 @@ const Navbar = () => {
         ) : (
           <div className="space-x-8">
             <Link href={routes.LOGIN}>Login</Link>
-            <button
-              type="button"
-              className="blue text-white h-10 w-28 rounded-full"
-            >
+            <Button variant="default" className="w-28">
               <Link href={routes.SIGNUP}>Sign up</Link>
-            </button>
+            </Button>
           </div>
         )}
       </nav>

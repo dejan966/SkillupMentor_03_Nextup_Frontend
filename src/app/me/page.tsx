@@ -6,6 +6,7 @@ import { routes } from '@/constants/routesConstants'
 import { useQuery } from '@tanstack/react-query'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import Image from 'next/image'
+import Button from '@/components/ui/Button'
 
 export default function UserInfo() {
   const [value] = useLocalStorage()
@@ -22,13 +23,9 @@ export default function UserInfo() {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
-          type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
-          onClick={() => refetch()}
-        >
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }
@@ -91,14 +88,11 @@ export default function UserInfo() {
           </div>
           <div className="flex justify-between">
             <Link href={routes.USEREDIT}>
-              <button
-                type="button"
-                className="blue text-white rounded-full h-10 w-28"
-              >
+              <Button variant="default" className="w-28">
                 Edit
-              </button>
+              </Button>
             </Link>
-            <button type="button">Delete account</button>
+            <button>Delete account</button>
           </div>
         </div>
       </div>

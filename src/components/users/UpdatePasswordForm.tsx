@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
+import Button from '../ui/Button'
 
 export default function UpdatePasswordForm() {
   const router = useRouter()
@@ -126,15 +127,10 @@ export default function UpdatePasswordForm() {
             )}
           />
           <div className="flex items-center justify-between">
-            <button
-              className="blue text-white rounded-full h-10 w-28 submit"
-              type="submit"
-            >
+            <Button variant="default" className="w-28 uppercase" type="submit">
               Submit
-            </button>
-            <button type="button" onClick={() => router.back()}>
-              Back
-            </button>
+            </Button>
+            <button onClick={() => router.back()}>Back</button>
           </div>
         </form>
       </div>

@@ -9,6 +9,7 @@ import useLocalStorage from '@/hooks/useLocalStorage'
 import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import { useState } from 'react'
+import Button from '@/components/ui/Button'
 
 type Props = {
   params: {
@@ -40,13 +41,13 @@ export default function Event({ params }: Props) {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
+        <Button
           type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
+          className="h-12 w-20 rounded-none rounded-xl"
           onClick={() => refetch()}
         >
           Try again
-        </button>
+        </Button>
       </div>
     )
   }
@@ -114,21 +115,21 @@ export default function Event({ params }: Props) {
             <div className="pb-8">{eventData?.data.description}</div>
             <div className="text-end">
               {Object.keys(value).length > 0 ? (
-                <button
-                  type="button"
-                  className="blue text-white h-12 w-20 rounded-xl"
+                <Button
+                  variant="error"
+                  className="h-12 w-20"
                   onClick={bookUser}
                 >
                   Book
-                </button>
+                </Button>
               ) : (
-                <button
-                  type="button"
-                  className="blue text-white h-12 w-20 rounded-xl"
+                <Button
+                  variant="error"
+                  className="h-12 w-20"
                   onClick={() => router.back()}
                 >
                   Back
-                </button>
+                </Button>
               )}
             </div>
           </div>

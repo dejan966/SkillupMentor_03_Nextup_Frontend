@@ -14,6 +14,7 @@ import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '../ui/LoadingCircle'
+import Button from '../ui/Button'
 
 export default function UpdateUserForm() {
   const {
@@ -72,13 +73,9 @@ export default function UpdateUserForm() {
     return (
       <div>
         <h2>Something went wrong!</h2>
-        <button
-          type="button"
-          className="blue text-white h-12 w-20 rounded-xl"
-          onClick={() => refetch()}
-        >
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }
@@ -173,19 +170,16 @@ export default function UpdateUserForm() {
               </div>
             )}
           />
-          <button className="pinkButton" type="button">
+          <Button className="bg-pink-500 hover:bg-pink-300 mb-4">
             <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
-          </button>
-          <button className="blueButton" type="button">
+          </Button>
+          <Button className="mb-4">
             <Link href={routes.USERPASSWORDRESET}>Change your password</Link>
-          </button>
+          </Button>
           <div className="flex items-center justify-between">
-            <button
-              className="blue text-white rounded-full h-10 w-28 submit"
-              type="submit"
-            >
+            <Button variant="default" className="w-28 uppercase" type="submit">
               Submit
-            </button>
+            </Button>
             <a href={routes.USERINFO}>Cancel</a>
           </div>
         </form>

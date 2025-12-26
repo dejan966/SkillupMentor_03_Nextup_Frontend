@@ -16,6 +16,7 @@ import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
 import { useQuery } from '@tanstack/react-query'
+import Button from '../ui/Button'
 
 type Props = {
   defaultValues?: EventType
@@ -309,13 +310,13 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                   width={123}
                   height={123}
                 />
-                <button
-                  type="button"
-                  className="rounded-lg h-10 w-14 text-white bg-red-600 hover:bg-red-800"
+                <Button
+                  variant="error"
+                  className="bg-red-600 hover:bg-red-800 w-14"
                   onClick={clearImg}
                 >
                   x
-                </button>
+                </Button>
               </div>
             ) : (
               defaultValues && (
@@ -329,13 +330,13 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 </div>
               )
             )}
-            <button
-              className="bg-black text-white h-10 w-full rounded-full hover:bg-stone-700"
-              type="button"
+            <Button
+              variant="default"
+              className="bg-black hover:bg-stone-700"
               onClick={uploadFile}
             >
               Add image
-            </button>
+            </Button>
             <Controller
               control={control}
               name="eventImage"
@@ -367,12 +368,9 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             )}
           </div>
           <div>
-            <button
-              className="blue text-white h-10 w-full rounded-full mb-4"
-              type="submit"
-            >
+            <Button variant="default" className="mb-4" type="submit">
               Submit
-            </button>
+            </Button>
           </div>
         </form>
       </div>
@@ -381,13 +379,9 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         {isError ? (
           <div>
             <h2>Something went wrong!</h2>
-            <button
-              type="button"
-              className="blueButton"
-              onClick={() => refetch()}
-            >
+            <Button variant="error" onClick={() => refetch()}>
               Try again
-            </button>
+            </Button>
           </div>
         ) : (
           <EventList

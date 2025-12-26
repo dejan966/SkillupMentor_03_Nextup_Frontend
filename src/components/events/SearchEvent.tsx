@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { searchEvents } from '@/lib/event'
 import { useEffect, useState } from 'react'
 import EventList from './EventList'
+import Button from '../ui/Button'
 
 interface Props {
   location?: string | null
@@ -72,9 +73,10 @@ export function SearchEvent({
               className="searchInputDate block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-e-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
             />
-            <button
+            <Button
+              variant="search"
               type="submit"
-              className="blue absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white rounded-e-lg border border-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
+              className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full w-10"
             >
               <svg
                 className="w-4 h-4"
@@ -92,7 +94,7 @@ export function SearchEvent({
                 />
               </svg>
               <span className="sr-only">Search</span>
-            </button>
+            </Button>
           </div>
         </div>
       </form>
