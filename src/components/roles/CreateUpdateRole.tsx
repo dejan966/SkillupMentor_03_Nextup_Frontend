@@ -1,32 +1,37 @@
 'use client'
 
-import {
-  CreateRoleFields,
-  UpdateRoleFields,
-  useCreateUpdateRoleForm,
-} from '@/hooks/react-hook-forms/useCreateUpdateRole'
 import { notFound, useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Controller } from 'react-hook-form'
-import { StatusCode } from '@/constants/errorConstants'
-import { createRole, updateRole } from '@/lib/role'
+import { useEffect } from 'react'
 import { RoleType } from '@/models/role'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import Button from '../ui/Button'
+import { createRoleAction, updateRoleAction } from '@/actions/createUpdateRole'
+import { useFormState } from 'react-dom'
+import { FormState } from '@/models/formState'
 
 type Props = {
   defaultValues?: RoleType
   title: string
 }
 
-export default function CreateUpdateRole({ defaultValues, title }: Props) {
-  const { handleSubmit, errors, control } = useCreateUpdateRoleForm({
-    defaultValues,
-  })
+const initialState = {
+  success: '',
+  errors: {
+    name: '',
+    apiError: '',
+  },
+}
 
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
+export default function CreateUpdateRole({ defaultValues, title }: Props) {
+  const actionWithId = async (prevState: FormState, formData: FormData) => {
+    if (defaultValues) {
+      return updateRoleAction(prevState, formData, defaultValues._id)
+    }
+    return createRoleAction(prevState, formData)
+  }
+
+  const [state, formAction] = useFormState(actionWithId, initialState)
 
   const router = useRouter()
 
@@ -35,41 +40,11 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
     queryFn: fetchCurrUser,
   })
 
-  const onSubmit = handleSubmit(
-    async (data: CreateRoleFields | UpdateRoleFields) => {
-      if (defaultValues) {
-        handleUpdate(data as UpdateRoleFields)
-      } else if (!defaultValues) {
-        handleCreate(data as CreateRoleFields)
-      }
-    },
-  )
-
-  const handleUpdate = async (data: UpdateRoleFields) => {
-    const response = await updateRole(data, defaultValues!._id)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else {
+  useEffect(() => {
+    if (state.success) {
       router.back()
     }
-  }
-
-  const handleCreate = async (data: CreateRoleFields) => {
-    const response = await createRole(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
-      router.back()
-    }
-  }
+  }, [state.success])
 
   if (currUser) {
     if (currUser?.data.role.name !== 'ADMIN') {
@@ -81,32 +56,29 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
     <div className="centeredRoles">
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
-        <form method="POST" onSubmit={onSubmit}>
-          <Controller
-            control={control}
+        <form action={formAction}>
+          <label className="inputText">Role</label>
+          <input
+            defaultValue={defaultValues?.name}
             name="name"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Role</label>
-                <input
-                  {...field}
-                  type="text"
-                  aria-label="name"
-                  aria-describedby="name"
-                  className={
-                    errors.name
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.name && (
-                  <div className="validation-feedback">
-                    {errors.name.message}
-                  </div>
-                )}
-              </div>
-            )}
+            type="text"
+            aria-label="name"
+            aria-describedby="name"
+            className={
+              state?.errors?.name
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
+          {state?.errors?.name && (
+            <div className="validation-feedback">{state.errors.name}</div>
+          )}
+          {state?.errors?.apiError && (
+            <div className="text-red-600 mb-4">{state.errors.apiError}</div>
+          )}
+          {state?.success && (
+            <div className="text-green-600 mb-4">{state.success}</div>
+          )}
           <div>
             <Button variant="default" className="mb-4" type="submit">
               Submit
