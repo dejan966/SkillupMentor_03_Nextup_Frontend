@@ -11,8 +11,7 @@ export interface CreateEventFields {
   hour: string
   max_users: number
   description?: string
-  image: string
-  eventImage: any
+  eventImage?: File
 }
 
 export interface UpdateEventFields {
@@ -22,7 +21,6 @@ export interface UpdateEventFields {
   hour?: string
   max_users?: number
   description?: string
-  image?: string
   eventImage?: any
 }
 

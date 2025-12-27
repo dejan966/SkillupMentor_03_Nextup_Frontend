@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import Button from '../ui/Button'
 import { createRoleAction, updateRoleAction } from '@/actions/createUpdateRole'
 import { useFormState } from 'react-dom'
-import { FormState } from '@/models/formState'
+import { RoleFormState } from '@/models/roleFormState'
 
 type Props = {
   defaultValues?: RoleType
@@ -24,7 +24,7 @@ const initialState = {
 }
 
 export default function CreateUpdateRole({ defaultValues, title }: Props) {
-  const actionWithId = async (prevState: FormState, formData: FormData) => {
+  const actionWithId = async (prevState: RoleFormState, formData: FormData) => {
     if (defaultValues) {
       return updateRoleAction(prevState, formData, defaultValues._id)
     }

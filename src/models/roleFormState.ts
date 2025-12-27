@@ -1,4 +1,4 @@
-export type FormState = {
+export type RoleFormState = {
   success: string
   errors: {
     name: string

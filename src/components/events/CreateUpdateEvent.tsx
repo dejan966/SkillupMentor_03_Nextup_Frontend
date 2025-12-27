@@ -1,26 +1,38 @@
 'use client'
 
-import {
-  CreateEventFields,
-  UpdateEventFields,
-  useCreateUpdateEventForm,
-} from '@/hooks/react-hook-forms/useCreateUpdateEvent'
 import { EventType } from '@/models/event'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Controller } from 'react-hook-form'
-import { createEvent, updateEvent, uploadEventImage } from '@/lib/event'
-import { StatusCode } from '@/constants/errorConstants'
-import { routes } from '@/constants/routesConstants'
 import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
 import { useQuery } from '@tanstack/react-query'
 import Button from '../ui/Button'
+import { EventFormState } from '@/models/eventFormState'
+import {
+  createEventAction,
+  updateEventAction,
+} from '@/actions/createUpdateEvent'
+import { useFormState } from 'react-dom'
+import moment from 'moment'
 
 type Props = {
   defaultValues?: EventType
   title: string
+}
+
+const initialState = {
+  success: '',
+  errors: {
+    name: '',
+    eventImage: [],
+    description: '',
+    location: '',
+    date: '',
+    hour: '',
+    max_users: '',
+    apiError: '',
+  },
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
@@ -33,16 +45,27 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     queryFn: fetchCurrUser,
   })
 
-  const { handleSubmit, errors, control } = useCreateUpdateEventForm({
-    defaultValues,
-  })
-
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
+  const actionWithId = async (
+    prevState: EventFormState,
+    formData: FormData,
+  ) => {
+    if (defaultValues) {
+      return updateEventAction(prevState, formData, defaultValues._id)
+    }
+    return createEventAction(prevState, formData)
+  }
+
+  const [state, formAction] = useFormState(actionWithId, initialState)
   const router = useRouter()
+
+  useEffect(() => {
+    if (state.success) {
+      router.back()
+    }
+  }, [state.success])
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.files) {
@@ -53,72 +76,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
 
   const uploadFile = () => {
     document.getElementById('eventUpload')?.click()
-  }
-
-  const onSubmit = handleSubmit(
-    async (data: CreateEventFields | UpdateEventFields) => {
-      if (defaultValues) {
-        handleUpdate(data as UpdateEventFields)
-      } else if (!defaultValues) {
-        handleCreate(data as CreateEventFields)
-      }
-    },
-  )
-
-  const handleUpdate = async (data: UpdateEventFields) => {
-    const response = await updateEvent(data, defaultValues!._id.toString())
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
-      if (file) {
-        const formData = new FormData()
-        formData.append('image', file, file.name)
-        const fileResponse = await uploadEventImage(
-          formData,
-          response?.data._id,
-        )
-        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        }
-      }
-      router.push(routes.HOME)
-    }
-  }
-
-  const handleCreate = async (data: CreateEventFields) => {
-    const response = await createEvent(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else {
-      const formData = new FormData()
-      if (!file) {
-        setApiError('Photo is required')
-        setShowError(true)
-      }
-      formData.append('image', file!, file!.name)
-      const fileResponse = await uploadEventImage(formData, response?.data._id)
-      if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-        setApiError(fileResponse?.statusText)
-        setShowError(true)
-      } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(fileResponse?.statusText)
-        setShowError(true)
-      } else {
-        router.push(routes.HOME)
-      }
-    }
   }
 
   const clearImg = () => {
@@ -141,166 +98,120 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     <div className="grid grid-cols-2 pl-24 pr-24 space-x-8">
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
-        <form method="POST" onSubmit={onSubmit}>
-          <Controller
-            control={control}
+        <form action={formAction}>
+          <label className="inputText">Event name</label>
+          <input
+            defaultValue={defaultValues?.name}
             name="name"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Event name</label>
-                <input
-                  {...field}
-                  type="text"
-                  aria-label="name"
-                  aria-describedby="name"
-                  className={
-                    errors.name
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.name && (
-                  <div className="validation-feedback">
-                    {errors.name.message}
-                  </div>
-                )}
-              </div>
-            )}
+            type="text"
+            aria-label="name"
+            aria-describedby="name"
+            className={
+              state?.errors?.name
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
-          <Controller
-            control={control}
+          {state?.errors?.name && (
+            <div className="validation-feedback">{state.errors.name}</div>
+          )}
+          <label className="inputText">Location</label>
+          <input
+            defaultValue={defaultValues?.location}
             name="location"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Location</label>
-                <input
-                  {...field}
-                  type="text"
-                  aria-label="location"
-                  aria-describedby="location"
-                  className={
-                    errors.location
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.location && (
-                  <div className="validation-feedback">
-                    {errors.location.message}
-                  </div>
-                )}
-              </div>
-            )}
+            type="text"
+            aria-label="location"
+            aria-describedby="location"
+            className={
+              state?.errors?.location
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
+          {state?.errors?.location && (
+            <div className="validation-feedback">{state.errors.location}</div>
+          )}
           <div className="divGrid">
-            <div className="w-6/7 mb-4">
-              <Controller
-                control={control}
+            <div className="w-6/7">
+              <label className="inputText">Date</label>
+              <input
+                defaultValue={
+                  defaultValues
+                    ? defaultValues.date
+                    : moment().format('YYYY-M-D')
+                }
                 name="date"
-                render={({ field }) => (
-                  <div>
-                    <label className="inputText">Date</label>
-                    <input
-                      {...field}
-                      type="date"
-                      id="date"
-                      min="2023-01-01"
-                      max="2031-12-31"
-                      className={
-                        errors.date
-                          ? 'tailwind-form-control-errors eventInputDate'
-                          : 'tailwind-form-control eventInputDate'
-                      }
-                    />
-                    {errors.date && (
-                      <div className="validation-feedback">
-                        {errors.date.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="date"
+                id="date"
+                min="2023-01-01"
+                max="2031-12-31"
+                className={
+                  state?.errors.date
+                    ? 'tailwind-form-control-errors eventInputDate'
+                    : 'tailwind-form-control eventInputDate'
+                }
               />
+              {state?.errors?.date && (
+                <div className="validation-feedback">{state.errors.date}</div>
+              )}
             </div>
             <div className="w-6/7">
-              <Controller
-                control={control}
+              <label className="inputText">Hour</label>
+              <input
+                defaultValue={defaultValues?.hour}
                 name="hour"
-                render={({ field }) => (
-                  <div>
-                    <label className="inputText">Hour</label>
-                    <input
-                      {...field}
-                      type="text"
-                      aria-label="hour"
-                      aria-describedby="hour"
-                      className={
-                        errors.hour
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.hour && (
-                      <div className="validation-feedback">
-                        {errors.hour.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="text"
+                aria-label="hour"
+                aria-describedby="hour"
+                className={
+                  state?.errors?.hour
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
               />
+              {state?.errors?.hour && (
+                <div className="validation-feedback">{state.errors.hour}</div>
+              )}
             </div>
             <div className="w-6/7">
-              <Controller
-                control={control}
+              <label className="inputText">Max users</label>
+              <input
+                defaultValue={defaultValues?.max_users}
                 name="max_users"
-                render={({ field }) => (
-                  <div>
-                    <label className="inputText">Max users</label>
-                    <input
-                      {...field}
-                      type="number"
-                      aria-label="max_users"
-                      aria-describedby="max_users"
-                      className={
-                        errors.max_users
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.max_users && (
-                      <div className="validation-feedback">
-                        {errors.max_users.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="number"
+                aria-label="max_users"
+                aria-describedby="max_users"
+                className={
+                  state?.errors?.max_users
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
               />
+              {state?.errors?.max_users && (
+                <div className="validation-feedback">
+                  {state.errors.max_users}
+                </div>
+              )}
             </div>
           </div>
-          <Controller
-            control={control}
+          <label className="inputText">Description</label>
+          <input
+            defaultValue={defaultValues?.description}
             name="description"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Description</label>
-                <input
-                  {...field}
-                  type="text"
-                  aria-label="description"
-                  aria-describedby="description"
-                  className={
-                    errors.description
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.description && (
-                  <div className="validation-feedback">
-                    {errors.description.message}
-                  </div>
-                )}
-              </div>
-            )}
+            type="text"
+            aria-label="description"
+            aria-describedby="description"
+            className={
+              state?.errors?.description
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
+          {state?.errors?.description && (
+            <div className="validation-feedback">
+              {state.errors.description}
+            </div>
+          )}
           <div className="mb-4">
             {preview ? (
               <div className="flex justify-between mb-4">
@@ -337,36 +248,28 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             >
               Add image
             </Button>
-            <Controller
-              control={control}
+            <input
+              onChange={handleFileChange}
+              id="eventUpload"
               name="eventImage"
-              render={({ field }) => (
-                <div>
-                  <input
-                    onChange={(e) => {
-                      handleFileChange(e)
-                      field.onChange(e.target.files)
-                    }}
-                    id="eventUpload"
-                    name={field.name}
-                    type="file"
-                    aria-label="image"
-                    aria-describedby="image"
-                    className="hidden"
-                    accept="image/png, 'image/jpg', image/jpeg"
-                  />
-                  {errors.eventImage && (
-                    <div className="validation-feedback">
-                      {errors.eventImage.message}
-                    </div>
-                  )}
-                </div>
-              )}
+              type="file"
+              aria-label="image"
+              aria-describedby="image"
+              className="hidden"
+              accept="image/png, 'image/jpg', image/jpeg"
             />
-            {showError && (
-              <div className="text-red-500 text-md">{apiError}</div>
+            {state?.errors?.eventImage && (
+              <div className="validation-feedback">
+                {state.errors.eventImage}
+              </div>
             )}
           </div>
+          {state?.errors?.apiError && (
+            <div className="text-red-600 mb-4">{state.errors.apiError}</div>
+          )}
+          {state?.success && (
+            <div className="text-green-600 mb-4">{state.success}</div>
+          )}
           <div>
             <Button variant="default" className="mb-4" type="submit">
               Submit

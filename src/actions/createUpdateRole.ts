@@ -1,6 +1,6 @@
 import { StatusCode } from '@/constants/errorConstants'
 import { createRole, updateRole } from '@/lib/role'
-import { FormState } from '@/models/formState'
+import { RoleFormState } from '@/models/roleFormState'
 import { z } from 'zod'
 
 const createRoleSchema = z.object({
@@ -12,9 +12,9 @@ const updateRoleSchema = z.object({
 })
 
 export async function createRoleAction(
-  prevState: FormState,
+  prevState: RoleFormState,
   formData: FormData,
-): Promise<FormState> {
+): Promise<RoleFormState> {
   const validatedRoleFormData = createRoleSchema.safeParse({
     name: formData.get('name'),
   })
@@ -53,10 +53,10 @@ export async function createRoleAction(
 }
 
 export async function updateRoleAction(
-  prevState: FormState,
+  prevState: RoleFormState,
   formData: FormData,
   _id: string,
-): Promise<FormState> {
+): Promise<RoleFormState> {
   const validatedRoleFormData = updateRoleSchema.safeParse({
     name: formData.get('name'),
   })
