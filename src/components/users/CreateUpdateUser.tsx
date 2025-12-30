@@ -110,9 +110,7 @@ export default function CreateUpdateUser({
             className="hidden"
             accept="image/png, 'image/jpg', image/jpeg"
           />
-          {state?.errors?.userImage && (
-            <div className="validation-feedback">{state.errors.userImage}</div>
-          )}
+          <FormControl message={state?.errors?.userImage} />
           <div className="flex justify-between">
             <div>
               <Label content="First name" />

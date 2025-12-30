@@ -118,11 +118,7 @@ export default function RegisterForm() {
                   className="hidden"
                   accept="image/png, 'image/jpg', image/jpeg"
                 />
-                {errors.userImage && (
-                  <div className="validation-feedback">
-                    {errors.userImage.message}
-                  </div>
-                )}
+                <FormControl message={errors?.userImage?.message} />
               </div>
             )}
           />

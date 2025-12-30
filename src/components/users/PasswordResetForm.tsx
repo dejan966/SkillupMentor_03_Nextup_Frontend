@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import Button from '../ui/Button'
+import Label from '../ui/Label'
+import FormControl from '../ui/FormControl'
 
 type Props = {
   defaultValues?: UserFormData
@@ -59,7 +61,7 @@ export default function PasswordResetForm({ defaultValues }: Props) {
             name="email"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Email</label>
+                <Label content="Email" />
                 <input
                   {...field}
                   type="email"
@@ -71,14 +73,8 @@ export default function PasswordResetForm({ defaultValues }: Props) {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.email && (
-                  <div className="validation-feedback">
-                    {errors.email.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
+                <FormControl message={errors?.email?.message} />
+                <FormControl message={apiError} />
               </div>
             )}
           />

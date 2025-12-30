@@ -13,6 +13,7 @@ import useLocalStorage from '@/hooks/useLocalStorage'
 import { Controller } from 'react-hook-form'
 import Image from 'next/image'
 import Button from '../ui/Button'
+import FormControl from '../ui/FormControl'
 
 type Props = {
   defaultValues?: UserFormData
@@ -120,11 +121,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
                     className="hidden"
                     accept="image/png, 'image/jpg', image/jpeg"
                   />
-                  {errors.userImage && (
-                    <div className="validation-feedback">
-                      {errors.userImage.message}
-                    </div>
-                  )}
+                  <FormControl message={errors?.userImage?.message} />
                 </div>
               )}
             />
@@ -135,9 +132,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
             >
               Upload new image
             </Button>
-            {showError && (
-              <div className="text-red-500 text-md">{apiError}</div>
-            )}
+            <FormControl message={apiError} />
           </div>
           <div className="flex items-center justify-between">
             <Button variant="default" className="w-28 uppercase" type="submit">
