@@ -228,7 +228,7 @@ export default function CreateUpdateUser({
           <select
             name="role"
             key={defaultValues?.role}
-            defaultValue={defaultValues?.role}
+            defaultValue={defaultValues?.role || ''}
             className={
               state?.errors?.role
                 ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'

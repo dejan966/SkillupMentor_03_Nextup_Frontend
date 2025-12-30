@@ -1,6 +1,8 @@
 'use client'
 
+import LoadingCircle from '@/components/ui/LoadingCircle'
 import CreateUpdateUser from '@/components/users/CreateUpdateUser'
+import { fetchRoles } from '@/lib/role'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
@@ -16,5 +18,19 @@ export default function UsersAdd() {
       notFound()
     }
   }
-  return <CreateUpdateUser title="Create User" />
+
+  const { data: roles, isLoading: roleDataLoading } = useQuery({
+    queryKey: ['fetchRoles'],
+    queryFn: () => fetchRoles(1),
+  })
+
+  if (roleDataLoading) {
+    return (
+      <div>
+        <LoadingCircle />
+      </div>
+    )
+  }
+
+  return <CreateUpdateUser title="Create User" roles={roles.data.data} />
 }
