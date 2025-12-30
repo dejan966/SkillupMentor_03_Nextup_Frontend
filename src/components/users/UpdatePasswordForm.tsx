@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import Button from '../ui/Button'
+import Label from '../ui/Label'
+import FormControl from '../ui/FormControl'
 
 export default function UpdatePasswordForm() {
   const router = useRouter()
@@ -50,7 +52,7 @@ export default function UpdatePasswordForm() {
             name="password"
             render={({ field }) => (
               <div className="mb-3">
-                <label className="inputText">Current password</label>
+                <Label content="Current password" />
                 <input
                   {...field}
                   type="password"
@@ -63,11 +65,7 @@ export default function UpdatePasswordForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.password && (
-                  <div className="validation-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
+                <FormControl message={errors?.password?.message} />
               </div>
             )}
           />
@@ -76,7 +74,7 @@ export default function UpdatePasswordForm() {
             name="new_password"
             render={({ field }) => (
               <div className="mb-3">
-                <label className="inputText">New password</label>
+                <Label content="New password" />
                 <input
                   {...field}
                   type="password"
@@ -89,11 +87,7 @@ export default function UpdatePasswordForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.new_password && (
-                  <div className="validation-feedback">
-                    {errors.new_password.message}
-                  </div>
-                )}
+                <FormControl message={errors?.new_password?.message} />
               </div>
             )}
           />
@@ -102,7 +96,7 @@ export default function UpdatePasswordForm() {
             name="confirm_password"
             render={({ field }) => (
               <div className="mb-3">
-                <label className="inputText">Confirm new password</label>
+                <Label content="Confirm new password" />
                 <input
                   {...field}
                   type="password"
@@ -115,14 +109,8 @@ export default function UpdatePasswordForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.confirm_password && (
-                  <div className="validation-feedback">
-                    {errors.confirm_password.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
+                <FormControl message={errors?.confirm_password?.message} />
+                <FormControl message={apiError} />
               </div>
             )}
           />

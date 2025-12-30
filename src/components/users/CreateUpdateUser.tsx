@@ -9,6 +9,9 @@ import Button from '../ui/Button'
 import { useFormState } from 'react-dom'
 import { createUserAction, updateUserAction } from '@/actions/createUpdateUser'
 import { UserFormState } from '@/models/userFormState'
+import Input from '../ui/Input'
+import FormControl from '../ui/FormControl'
+import Label from '../ui/Label'
 
 type Props = {
   defaultValues?: UserFormData
@@ -111,128 +114,84 @@ export default function CreateUpdateUser({
             <div className="validation-feedback">{state.errors.userImage}</div>
           )}
           <div className="flex justify-between">
-            <div className="mb-4">
-              <label className="inputText">First name</label>
-              <input
+            <div>
+              <Label content="First name" />
+              <Input
                 defaultValue={defaultValues?.first_name || ''}
                 name="first_name"
                 type="text"
                 aria-label="First name"
                 aria-describedby="first_name"
-                className={
-                  state?.errors?.first_name
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.first_name && (
-                <div className="validation-feedback">
-                  {state.errors.first_name}
-                </div>
-              )}
+              <FormControl message={state?.errors?.first_name} />
             </div>
             <div className="col-md-5">
-              <label className="inputText">Last name</label>
-              <input
+              <Label content="Last name" />
+              <Input
                 defaultValue={defaultValues?.last_name || ''}
                 name="last_name"
                 type="text"
                 aria-label="Last name"
                 aria-describedby="last_name"
-                className={
-                  state?.errors?.first_name
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.last_name && (
-                <div className="validation-feedback">
-                  {state.errors.last_name}
-                </div>
-              )}
+              <FormControl message={state?.errors?.last_name} />
             </div>
           </div>
-          <label className="inputText">Email</label>
-          <input
-            defaultValue={defaultValues?.email}
+          <Label content="Email" />
+          <Input
+            defaultValue={defaultValues?.email || ''}
             name="email"
             type="email"
             aria-label="Email"
             aria-describedby="email"
-            className={
-              state?.errors?.email
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.email && (
-            <div className="validation-feedback">{state.errors.email}</div>
-          )}
-          <label className="inputText">Password</label>
-          <input
+          <FormControl message={state?.errors?.email} />
+          <Label content="Password" />
+          <Input
             name="password"
             type="password"
             placeholder="******"
             aria-label="Password"
             aria-describedby="password"
-            className={
-              state?.errors?.password
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.password && (
-            <div className="validation-feedback">{state.errors.password}</div>
-          )}
+          <FormControl message={state?.errors?.password} />
           {defaultValues && (
             <>
-              <label className="inputText">New password</label>
-              <input
+              <Label content="New password" />
+              <Input
                 name="new_password"
                 type="password"
                 placeholder="******"
                 aria-label="newPassword"
                 aria-describedby="newPassword"
-                className={
-                  state?.errors.new_password
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.new_password && (
-                <div className="validation-feedback">
-                  {state.errors.new_password}
-                </div>
-              )}
+              <FormControl message={state?.errors?.new_password} />
             </>
           )}
-          <label className="inputText">Confirm password</label>
-          <input
+          <Label content="Confirm password" />
+          <Input
             name="confirm_password"
             type="password"
             placeholder="******"
             aria-label="confirm_password"
             aria-describedby="confirm_password"
-            className={
-              state?.errors?.confirm_password
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.confirm_password && (
-            <div className="validation-feedback">
-              {state.errors.confirm_password}
-            </div>
-          )}
-          <label className="inputText">Role</label>
+          <FormControl message={state?.errors?.confirm_password} />
+          <Label content="Role" />
           <select
             name="role"
             key={defaultValues?.role}
             defaultValue={defaultValues?.role || ''}
             className={
               state?.errors?.role
-                ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
-                : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
+                ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md mb-4'
+                : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md mb-4'
             }
           >
             <option value="">Select role</option>
@@ -242,12 +201,9 @@ export default function CreateUpdateUser({
               </option>
             ))}
           </select>
-          {state?.errors.role && (
-            <div className="validation-feedback">{state?.errors?.role}</div>
-          )}
-          {state?.errors?.apiError && (
-            <div className="text-red-500 text-md">{state.errors.apiError}</div>
-          )}
+          <FormControl message={state?.errors?.role} />
+          <FormControl message={state?.errors?.apiError} />
+          <FormControl classname="text-green-600" message={state?.success} />
           <Button variant="default" className="mb-4" type="submit">
             {title}
           </Button>

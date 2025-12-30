@@ -7,6 +7,8 @@ import { useQuery } from '@tanstack/react-query'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
+import Label from '@/components/ui/Label'
+import Input from '@/components/ui/Input'
 
 export default function UserInfo() {
   const [value] = useLocalStorage()
@@ -47,42 +49,39 @@ export default function UserInfo() {
           <div className="flex justify-between">
             <div className="mb-4">
               <div className="w-[16.5rem]">
-                <label className="inputText">First name</label>
-                <input
+                <Label content="First name" />
+                <Input
+                  value={currUser?.data.first_name}
                   name="first_name"
                   type="text"
-                  value={currUser?.data.first_name}
                   aria-label="First name"
                   aria-describedby="first_name"
-                  className="tailwind-form-control"
                   readOnly
                 />
               </div>
             </div>
             <div className="col-md-5">
               <div className="w-[16.5rem]">
-                <label className="inputText">Last name</label>
-                <input
+                <Label content="Last name" />
+                <Input
+                  value={currUser?.data.last_name}
                   name="last_name"
                   type="text"
-                  value={currUser?.data.last_name}
                   aria-label="Last name"
                   aria-describedby="last_name"
-                  className="tailwind-form-control"
                   readOnly
                 />
               </div>
             </div>
           </div>
           <div className="mb-4">
-            <label className="inputText">Email</label>
-            <input
+            <Label content="Email" />
+            <Input
+              value={currUser?.data.email}
               name="email"
               type="email"
-              value={currUser?.data.email}
               aria-label="Email"
               aria-describedby="email"
-              className="tailwind-form-control"
               readOnly
             />
           </div>

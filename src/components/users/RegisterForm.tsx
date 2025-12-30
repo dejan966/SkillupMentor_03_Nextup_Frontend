@@ -14,6 +14,8 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import useLocalStorage from '@/hooks/useLocalStorage'
 import Button from '../ui/Button'
+import Label from '../ui/Label'
+import FormControl from '../ui/FormControl'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
@@ -131,7 +133,7 @@ export default function RegisterForm() {
                 name="first_name"
                 render={({ field }) => (
                   <div className="">
-                    <label className="inputText">First name</label>
+                    <Label content="First name" />
                     <input
                       {...field}
                       type="text"
@@ -143,11 +145,7 @@ export default function RegisterForm() {
                           : 'tailwind-form-control'
                       }
                     />
-                    {errors.first_name && (
-                      <div className="validation-feedback">
-                        {errors.first_name.message}
-                      </div>
-                    )}
+                    <FormControl message={errors?.first_name?.message} />
                   </div>
                 )}
               />
@@ -158,7 +156,7 @@ export default function RegisterForm() {
                 name="last_name"
                 render={({ field }) => (
                   <div className="">
-                    <label className="inputText">Last name</label>
+                    <Label content="Last name" />
                     <input
                       {...field}
                       type="text"
@@ -170,11 +168,7 @@ export default function RegisterForm() {
                           : 'tailwind-form-control'
                       }
                     />
-                    {errors.last_name && (
-                      <div className="validation-feedback">
-                        {errors.last_name.message}
-                      </div>
-                    )}
+                    <FormControl message={errors?.last_name?.message} />
                   </div>
                 )}
               />
@@ -185,7 +179,7 @@ export default function RegisterForm() {
             name="email"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Email</label>
+                <Label content="Email" />
                 <input
                   {...field}
                   type="email"
@@ -197,11 +191,7 @@ export default function RegisterForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.email && (
-                  <div className="validation-feedback">
-                    {errors.email.message}
-                  </div>
-                )}
+                <FormControl message={errors?.email?.message} />
               </div>
             )}
           />
@@ -210,7 +200,7 @@ export default function RegisterForm() {
             name="password"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Password</label>
+                <Label content="Password" />
                 <input
                   {...field}
                   type="password"
@@ -223,11 +213,7 @@ export default function RegisterForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.password && (
-                  <div className="validation-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
+                <FormControl message={errors?.password?.message} />
               </div>
             )}
           />
@@ -236,7 +222,7 @@ export default function RegisterForm() {
             name="confirm_password"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Confirm password</label>
+                <Label content="Confirm password" />
                 <input
                   {...field}
                   type="password"
@@ -249,14 +235,8 @@ export default function RegisterForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.confirm_password && (
-                  <div className="validation-feedback">
-                    {errors.confirm_password.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
+                <FormControl message={errors?.confirm_password?.message} />
+                <FormControl message={apiError} />
               </div>
             )}
           />

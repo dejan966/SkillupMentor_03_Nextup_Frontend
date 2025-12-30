@@ -6,6 +6,7 @@ import { searchEvents } from '@/lib/event'
 import { useEffect, useState } from 'react'
 import EventList from './EventList'
 import Button from '../ui/Button'
+import moment from 'moment'
 
 interface Props {
   location?: string | null
@@ -67,7 +68,7 @@ export function SearchEvent({
               type="date"
               name="dateValue"
               id="dateValue"
-              defaultValue={new Date().toISOString().substring(0, 10)}
+              defaultValue={moment().format('YYYY-M-D')}
               min="2018-01-01"
               max="2031-12-31"
               className="searchInputDate block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-e-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

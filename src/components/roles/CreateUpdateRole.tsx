@@ -9,6 +9,9 @@ import Button from '../ui/Button'
 import { createRoleAction, updateRoleAction } from '@/actions/createUpdateRole'
 import { useFormState } from 'react-dom'
 import { RoleFormState } from '@/models/roleFormState'
+import FormControl from '../ui/FormControl'
+import Input from '../ui/Input'
+import Label from '../ui/Label'
 
 type Props = {
   defaultValues?: RoleType
@@ -57,28 +60,18 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form action={formAction}>
-          <label className="inputText">Role</label>
-          <input
-            defaultValue={defaultValues?.name}
+          <Label content="Role" />
+          <Input
+            defaultValue={defaultValues?.name || ''}
             name="name"
             type="text"
             aria-label="name"
             aria-describedby="name"
-            className={
-              state?.errors?.name
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.name && (
-            <div className="validation-feedback">{state.errors.name}</div>
-          )}
-          {state?.errors?.apiError && (
-            <div className="text-red-600 mb-4">{state.errors.apiError}</div>
-          )}
-          {state?.success && (
-            <div className="text-green-600 mb-4">{state.success}</div>
-          )}
+          <FormControl message={state?.errors?.name} />
+          <FormControl message={state?.errors?.apiError} />
+          <FormControl classname="text-green-600" message={state?.success} />
           <div>
             <Button variant="default" className="mb-4" type="submit">
               Submit

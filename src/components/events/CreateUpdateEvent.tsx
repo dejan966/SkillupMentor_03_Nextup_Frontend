@@ -15,6 +15,9 @@ import {
 } from '@/actions/createUpdateEvent'
 import { useFormState } from 'react-dom'
 import moment from 'moment'
+import Input from '../ui/Input'
+import FormControl from '../ui/FormControl'
+import Label from '../ui/Label'
 
 type Props = {
   defaultValues?: EventType
@@ -99,42 +102,30 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form action={formAction}>
-          <label className="inputText">Event name</label>
-          <input
-            defaultValue={defaultValues?.name}
+          <Label content="Event name" />
+          <Input
+            defaultValue={defaultValues?.name || ''}
             name="name"
             type="text"
             aria-label="name"
             aria-describedby="name"
-            className={
-              state?.errors?.name
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.name && (
-            <div className="validation-feedback">{state.errors.name}</div>
-          )}
-          <label className="inputText">Location</label>
-          <input
-            defaultValue={defaultValues?.location}
+          <FormControl message={state?.errors?.name} />
+          <Label content="Location" />
+          <Input
+            defaultValue={defaultValues?.location || ''}
             name="location"
             type="text"
             aria-label="location"
             aria-describedby="location"
-            className={
-              state?.errors?.location
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.location && (
-            <div className="validation-feedback">{state.errors.location}</div>
-          )}
+          <FormControl message={state?.errors?.location} />
           <div className="divGrid">
             <div className="w-6/7">
-              <label className="inputText">Date</label>
-              <input
+              <Label content="Date" />
+              <Input
                 defaultValue={
                   defaultValues
                     ? defaultValues.date
@@ -145,73 +136,45 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 id="date"
                 min="2023-01-01"
                 max="2031-12-31"
-                className={
-                  state?.errors.date
-                    ? 'tailwind-form-control-errors eventInputDate'
-                    : 'tailwind-form-control eventInputDate'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.date && (
-                <div className="validation-feedback">{state.errors.date}</div>
-              )}
+              <FormControl message={state?.errors?.date} />
             </div>
             <div className="w-6/7">
-              <label className="inputText">Hour</label>
-              <input
-                defaultValue={defaultValues?.hour}
+              <Label content="Hour" />
+              <Input
+                defaultValue={defaultValues?.hour || ''}
                 name="hour"
                 type="text"
                 aria-label="hour"
                 aria-describedby="hour"
-                className={
-                  state?.errors?.hour
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.hour && (
-                <div className="validation-feedback">{state.errors.hour}</div>
-              )}
+              <FormControl message={state?.errors?.hour} />
             </div>
             <div className="w-6/7">
-              <label className="inputText">Max users</label>
-              <input
-                defaultValue={defaultValues?.max_users}
+              <Label content="Max users" />
+              <Input
+                defaultValue={defaultValues?.max_users || ''}
                 name="max_users"
                 type="number"
                 aria-label="max_users"
                 aria-describedby="max_users"
-                className={
-                  state?.errors?.max_users
-                    ? 'tailwind-form-control-errors'
-                    : 'tailwind-form-control'
-                }
+                errors={state?.errors}
               />
-              {state?.errors?.max_users && (
-                <div className="validation-feedback">
-                  {state.errors.max_users}
-                </div>
-              )}
+              <FormControl message={state?.errors?.max_users} />
             </div>
           </div>
-          <label className="inputText">Description</label>
-          <input
-            defaultValue={defaultValues?.description}
+          <Label content="Description" />
+          <Input
+            defaultValue={defaultValues?.description || ''}
             name="description"
             type="text"
             aria-label="description"
             aria-describedby="description"
-            className={
-              state?.errors?.description
-                ? 'tailwind-form-control-errors'
-                : 'tailwind-form-control'
-            }
+            errors={state?.errors}
           />
-          {state?.errors?.description && (
-            <div className="validation-feedback">
-              {state.errors.description}
-            </div>
-          )}
+          <FormControl message={state?.errors?.description} />
           <div className="mb-4">
             {preview ? (
               <div className="flex justify-between mb-4">
@@ -258,18 +221,10 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               className="hidden"
               accept="image/png, 'image/jpg', image/jpeg"
             />
-            {state?.errors?.eventImage && (
-              <div className="validation-feedback">
-                {state.errors.eventImage}
-              </div>
-            )}
+            <FormControl message={state?.errors?.eventImage[0]} />
           </div>
-          {state?.errors?.apiError && (
-            <div className="text-red-600 mb-4">{state.errors.apiError}</div>
-          )}
-          {state?.success && (
-            <div className="text-green-600 mb-4">{state.success}</div>
-          )}
+          <FormControl message={state?.errors?.apiError} />
+          <FormControl classname="text-green-600" message={state?.success} />
           <div>
             <Button variant="default" className="mb-4" type="submit">
               Submit

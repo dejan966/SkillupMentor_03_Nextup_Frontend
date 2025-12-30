@@ -15,6 +15,8 @@ import useLocalStorage from '@/hooks/useLocalStorage'
 import { auth, provider } from '@/config/firebase-config'
 import { signInWithPopup } from 'firebase/auth'
 import Button from '../ui/Button'
+import Label from '../ui/Label'
+import FormControl from '../ui/FormControl'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
@@ -61,7 +63,7 @@ export default function LoginForm() {
             name="email"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Email</label>
+                <Label content="Email" />
                 <input
                   {...field}
                   type="email"
@@ -73,11 +75,7 @@ export default function LoginForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.email && (
-                  <div className="validation-feedback">
-                    {errors.email.message}
-                  </div>
-                )}
+                <FormControl message={errors?.email?.message} />
               </div>
             )}
           />
@@ -86,7 +84,7 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <div className="mb-4">
-                <label className="inputText">Password</label>
+                <Label content="Password" />
                 <input
                   {...field}
                   type="password"
@@ -99,14 +97,8 @@ export default function LoginForm() {
                       : 'tailwind-form-control'
                   }
                 />
-                {errors.password && (
-                  <div className="validation-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
+                <FormControl message={errors?.password?.message} />
+                <FormControl message={apiError} />
               </div>
             )}
           />
