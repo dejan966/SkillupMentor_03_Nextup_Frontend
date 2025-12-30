@@ -1,20 +1,32 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { updateUser } from '@/lib/user'
-import { StatusCode } from '@/constants/errorConstants'
-import {
-  useCreateUpdateUser,
-  UpdateUserFields,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import { useState } from 'react'
+import { useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+import { useEffect, useState } from 'react'
 import { routes } from '@/constants/routesConstants'
 import Link from 'next/link'
-import { Controller } from 'react-hook-form'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '../ui/LoadingCircle'
 import Button from '../ui/Button'
+import { useFormState } from 'react-dom'
+import { updateUserAction } from '@/actions/createUpdateUser'
+import { UserFormState } from '@/models/userFormState'
+
+const initialState = {
+  success: '',
+  errors: {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    new_password: '',
+    confirm_password: '',
+    role: '',
+    userImage: '',
+    apiError: '',
+  },
+}
 
 export default function UpdateUserForm() {
   const {
@@ -35,31 +47,18 @@ export default function UpdateUserForm() {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
+  const actionWithId = async (prevState: UserFormState, formData: FormData) => {
+    return updateUserAction(prevState, formData, defaultValues._id)
+  }
+
+  const [state, formAction] = useFormState(actionWithId, initialState)
   const router = useRouter()
 
-  const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
-    handleUpdate(data as UpdateUserFields)
-  })
-
-  const handleUpdate = async (data: UpdateUserFields) => {
-    const { first_name, last_name, email } = data
-    const response = await updateUser(
-      { first_name, last_name, email },
-      defaultValues._id,
-    )
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      router.push(routes.USERINFO)
+  useEffect(() => {
+    if (state.success) {
+      router.back()
     }
-  }
+  }, [state.success])
 
   if (isLoading) {
     return (
@@ -85,91 +84,68 @@ export default function UpdateUserForm() {
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-4">Change your profile settings</div>
-        <form method="POST" onSubmit={onSubmit}>
+        <form action={formAction}>
           <div className="flex justify-between">
-            <div className="col-md-6">
-              <Controller
-                control={control}
+            <div className="mb-4">
+              <label className="inputText">First name</label>
+              <input
+                defaultValue={defaultValues.first_name}
                 name="first_name"
-                render={({ field }) => (
-                  <div className="mb-4">
-                    <label className="inputText">First name</label>
-                    <input
-                      {...field}
-                      type="text"
-                      aria-label="First name"
-                      aria-describedby="first_name"
-                      className={
-                        errors.first_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.first_name && (
-                      <div className="validation-feedback">
-                        {errors.first_name.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="text"
+                aria-label="First name"
+                aria-describedby="first_name"
+                className={
+                  state?.errors?.first_name
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
               />
+              {state?.errors?.first_name && (
+                <div className="validation-feedback">
+                  {state.errors.first_name}
+                </div>
+              )}
             </div>
             <div className="col-md-5">
-              <Controller
-                control={control}
+              <label className="inputText">Last name</label>
+              <input
+                defaultValue={defaultValues.last_name}
                 name="last_name"
-                render={({ field }) => (
-                  <div className="mb-3">
-                    <label className="inputText">Last name</label>
-                    <input
-                      {...field}
-                      type="text"
-                      aria-label="Last name"
-                      aria-describedby="last_name"
-                      className={
-                        errors.last_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.last_name && (
-                      <div className="validation-feedback">
-                        {errors.last_name.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="text"
+                aria-label="Last name"
+                aria-describedby="last_name"
+                className={
+                  state?.errors?.first_name
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
               />
+              {state?.errors?.last_name && (
+                <div className="validation-feedback">
+                  {state.errors.last_name}
+                </div>
+              )}
             </div>
           </div>
-          <Controller
-            control={control}
+          <label className="inputText">Email</label>
+          <input
+            defaultValue={defaultValues.email}
             name="email"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Email</label>
-                <input
-                  {...field}
-                  type="email"
-                  aria-label="Email"
-                  aria-describedby="email"
-                  className={
-                    errors.email
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.email && (
-                  <div className="invalid-feedback text-danger">
-                    {errors.email.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
-              </div>
-            )}
+            type="email"
+            aria-label="Email"
+            aria-describedby="email"
+            className={
+              state?.errors?.email
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
+          {state?.errors?.email && (
+            <div className="validation-feedback">{state.errors.email}</div>
+          )}
+          {state?.errors?.apiError && (
+            <div className="text-red-500 text-md">{state.errors.apiError}</div>
+          )}
           <Button className="bg-pink-500 hover:bg-pink-300 mb-4">
             <Link href={routes.USERAVATAREDIT}>Change your avatar</Link>
           </Button>

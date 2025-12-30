@@ -1,124 +1,59 @@
 'use client'
 
-import { StatusCode } from '@/constants/errorConstants'
-import { routes } from '@/constants/routesConstants'
-import {
-  CreateUserFields,
-  UpdateUserFields,
-  useCreateUpdateUser,
-  UserFormData,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import useLocalStorage from '@/hooks/useLocalStorage'
-import { fetchRoles } from '@/lib/role'
-import { uploadAvatar, fetchCurrUser, createUser, updateUser } from '@/lib/user'
+import { UserFormData } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { RoleType } from '@/models/role'
-import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Controller } from 'react-hook-form'
 import Button from '../ui/Button'
+import { useFormState } from 'react-dom'
+import { createUserAction, updateUserAction } from '@/actions/createUpdateUser'
+import { UserFormState } from '@/models/userFormState'
 
 type Props = {
   defaultValues?: UserFormData
+  roles: RoleType[]
   title: string
 }
 
-export default function CreateUpdateUser({ defaultValues, title }: Props) {
-  const { handleSubmit, errors, control } = useCreateUpdateUser({
-    defaultValues,
-  })
+const initialState = {
+  success: '',
+  errors: {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    new_password: '',
+    confirm_password: '',
+    role: '',
+    userImage: '',
+    apiError: '',
+  },
+}
 
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
+export default function CreateUpdateUser({
+  defaultValues,
+  roles,
+  title,
+}: Props) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
-  const [value, setValue] = useLocalStorage()
+  const actionWithId = async (prevState: UserFormState, formData: FormData) => {
+    if (defaultValues) {
+      return updateUserAction(prevState, formData, defaultValues._id)
+    }
+    return createUserAction(prevState, formData)
+  }
+
+  const [state, formAction] = useFormState(actionWithId, initialState)
   const router = useRouter()
 
-  const {
-    data: roles,
-    isSuccess,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['fetchRoles'],
-    queryFn: () => fetchRoles(1),
-  })
-
-  const onSubmit = handleSubmit(
-    async (data: CreateUserFields | UpdateUserFields) => {
-      if (defaultValues) {
-        handleUpdate(data as UpdateUserFields)
-      } else if (!defaultValues) {
-        handleCreate(data as CreateUserFields)
-      }
-    },
-  )
-
-  const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await updateUser(data, defaultValues!._id)
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      if (file) {
-        const formData = new FormData()
-        formData.append('avatar', file, file.name)
-        const fileResponse = await uploadAvatar(formData, response?.data._id)
-        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        }
-      }
+  useEffect(() => {
+    if (state.success) {
       router.back()
     }
-  }
-
-  const handleCreate = async (data: CreateUserFields) => {
-    const response = await createUser(data)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
-      if (file) {
-        const formData = new FormData()
-        formData.append('avatar', file, file.name)
-        const fileResponse = await uploadAvatar(formData, response?.data._id)
-        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        } else {
-          const userResponse = await fetchCurrUser()
-          if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-            setApiError(fileResponse?.data.message)
-            setShowError(true)
-          } else {
-            setValue(userResponse?.data)
-            router.push(routes.HOME)
-            return
-          }
-        }
-      }
-      router.push(routes.HOME)
-    }
-  }
+  }, [state.success])
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.files) {
@@ -147,7 +82,7 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
-        <form method="POST" onSubmit={onSubmit}>
+        <form action={formAction}>
           <div className="flex justify-center">
             <Image
               src={
@@ -162,228 +97,157 @@ export default function CreateUpdateUser({ defaultValues, title }: Props) {
               onClick={uploadFile}
             />
           </div>
-          <Controller
-            control={control}
+          <input
+            onChange={handleFileChange}
+            id="avatarUpload"
             name="userImage"
-            render={({ field }) => (
-              <div>
-                <input
-                  onChange={(e) => {
-                    handleFileChange(e)
-                    field.onChange(e.target.files)
-                  }}
-                  id="avatarUpload"
-                  name={field.name}
-                  type="file"
-                  aria-label="avatar"
-                  aria-describedby="avatar"
-                  className="hidden"
-                  accept="image/png, 'image/jpg', image/jpeg"
-                />
-                {errors.userImage && (
-                  <div className="validation-feedback">
-                    {errors.userImage.message}
-                  </div>
-                )}
-              </div>
-            )}
+            type="file"
+            aria-label="avatar"
+            aria-describedby="avatar"
+            className="hidden"
+            accept="image/png, 'image/jpg', image/jpeg"
           />
+          {state?.errors?.userImage && (
+            <div className="validation-feedback">{state.errors.userImage}</div>
+          )}
           <div className="flex justify-between">
             <div className="mb-4">
-              <Controller
-                control={control}
+              <label className="inputText">First name</label>
+              <input
+                defaultValue={defaultValues?.first_name || ''}
                 name="first_name"
-                render={({ field }) => (
-                  <div className="">
-                    <label className="inputText">First name</label>
-                    <input
-                      {...field}
-                      type="text"
-                      aria-label="First name"
-                      aria-describedby="first_name"
-                      className={
-                        errors.first_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.first_name && (
-                      <div className="validation-feedback">
-                        {errors.first_name.message}
-                      </div>
-                    )}
-                  </div>
-                )}
+                type="text"
+                aria-label="First name"
+                aria-describedby="first_name"
+                className={
+                  state?.errors?.first_name
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
               />
-            </div>
-            <div className="col-md-5">
-              <Controller
-                control={control}
-                name="last_name"
-                render={({ field }) => (
-                  <div className="">
-                    <label className="inputText">Last name</label>
-                    <input
-                      {...field}
-                      type="text"
-                      aria-label="Last name"
-                      aria-describedby="last_name"
-                      className={
-                        errors.last_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
-                    />
-                    {errors.last_name && (
-                      <div className="validation-feedback">
-                        {errors.last_name.message}
-                      </div>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
-          </div>
-          <Controller
-            control={control}
-            name="email"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Email</label>
-                <input
-                  {...field}
-                  type="email"
-                  aria-label="Email"
-                  aria-describedby="email"
-                  className={
-                    errors.email
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.email && (
-                  <div className="validation-feedback">
-                    {errors.email.message}
-                  </div>
-                )}
-              </div>
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Password</label>
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="Password"
-                  aria-describedby="password"
-                  className={
-                    errors.password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.password && (
-                  <div className="validation-feedback">
-                    {errors.password.message}
-                  </div>
-                )}
-              </div>
-            )}
-          />
-          {defaultValues && (
-            <Controller
-              control={control}
-              name="new_password"
-              render={({ field }) => (
-                <div className="mb-3">
-                  <label className="inputText">New password</label>
-                  <input
-                    {...field}
-                    type="password"
-                    placeholder="******"
-                    aria-label="newPassword"
-                    aria-describedby="newPassword"
-                    className={
-                      errors.new_password
-                        ? 'tailwind-form-control-errors'
-                        : 'tailwind-form-control'
-                    }
-                  />
-                  {errors.new_password && (
-                    <div className="validation-feedback">
-                      {errors.new_password.message}
-                    </div>
-                  )}
+              {state?.errors?.first_name && (
+                <div className="validation-feedback">
+                  {state.errors.first_name}
                 </div>
               )}
-            />
+            </div>
+            <div className="col-md-5">
+              <label className="inputText">Last name</label>
+              <input
+                defaultValue={defaultValues?.last_name || ''}
+                name="last_name"
+                type="text"
+                aria-label="Last name"
+                aria-describedby="last_name"
+                className={
+                  state?.errors?.first_name
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
+              />
+              {state?.errors?.last_name && (
+                <div className="validation-feedback">
+                  {state.errors.last_name}
+                </div>
+              )}
+            </div>
+          </div>
+          <label className="inputText">Email</label>
+          <input
+            defaultValue={defaultValues?.email}
+            name="email"
+            type="email"
+            aria-label="Email"
+            aria-describedby="email"
+            className={
+              state?.errors?.email
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
+          />
+          {state?.errors?.email && (
+            <div className="validation-feedback">{state.errors.email}</div>
           )}
-          <Controller
-            control={control}
+          <label className="inputText">Password</label>
+          <input
+            name="password"
+            type="password"
+            placeholder="******"
+            aria-label="Password"
+            aria-describedby="password"
+            className={
+              state?.errors?.password
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
+          />
+          {state?.errors?.password && (
+            <div className="validation-feedback">{state.errors.password}</div>
+          )}
+          {defaultValues && (
+            <>
+              <label className="inputText">New password</label>
+              <input
+                name="new_password"
+                type="password"
+                placeholder="******"
+                aria-label="newPassword"
+                aria-describedby="newPassword"
+                className={
+                  state?.errors.new_password
+                    ? 'tailwind-form-control-errors'
+                    : 'tailwind-form-control'
+                }
+              />
+              {state?.errors?.new_password && (
+                <div className="validation-feedback">
+                  {state.errors.new_password}
+                </div>
+              )}
+            </>
+          )}
+          <label className="inputText">Confirm password</label>
+          <input
             name="confirm_password"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Confirm password</label>
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="confirm_password"
-                  aria-describedby="confirm_password"
-                  className={
-                    errors.confirm_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                {errors.confirm_password && (
-                  <div className="validation-feedback">
-                    {errors.confirm_password.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
-              </div>
-            )}
+            type="password"
+            placeholder="******"
+            aria-label="confirm_password"
+            aria-describedby="confirm_password"
+            className={
+              state?.errors?.confirm_password
+                ? 'tailwind-form-control-errors'
+                : 'tailwind-form-control'
+            }
           />
-          <Controller
-            control={control}
+          {state?.errors?.confirm_password && (
+            <div className="validation-feedback">
+              {state.errors.confirm_password}
+            </div>
+          )}
+          <label className="inputText">Role</label>
+          <select
             name="role"
-            render={({ field }) => (
-              <div className="mb-4">
-                <label className="inputText">Role</label>
-                <select
-                  {...field}
-                  className={
-                    errors.role
-                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
-                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
-                  }
-                >
-                  <option value="">Select role</option>
-                  {roles?.data.data.map((role: RoleType) => (
-                    <option key={role._id} value={role._id}>
-                      {role.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.role && (
-                  <div className="validation-feedback">
-                    {errors.role.message}
-                  </div>
-                )}
-                {showError && (
-                  <div className="text-red-500 text-md">{apiError}</div>
-                )}
-              </div>
-            )}
-          />
+            key={defaultValues?.role}
+            defaultValue={defaultValues?.role}
+            className={
+              state?.errors?.role
+                ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
+            }
+          >
+            <option value="">Select role</option>
+            {roles?.map((role: RoleType) => (
+              <option key={role._id} value={role._id}>
+                {role.name}
+              </option>
+            ))}
+          </select>
+          {state?.errors.role && (
+            <div className="validation-feedback">{state?.errors?.role}</div>
+          )}
+          {state?.errors?.apiError && (
+            <div className="text-red-500 text-md">{state.errors.apiError}</div>
+          )}
           <Button variant="default" className="mb-4" type="submit">
             {title}
           </Button>

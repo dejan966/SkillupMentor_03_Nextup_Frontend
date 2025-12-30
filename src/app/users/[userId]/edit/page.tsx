@@ -2,6 +2,7 @@
 
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import CreateUpdateUser from '@/components/users/CreateUpdateUser'
+import { fetchRoles } from '@/lib/role'
 import { fetchUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
@@ -15,11 +16,16 @@ type Props = {
 export default function UsersEdit({ params }: Props) {
   const {
     data: userData,
+    isLoading: userDataLoading,
     isSuccess,
-    isLoading,
   } = useQuery({
     queryKey: ['fetchUser'],
     queryFn: () => fetchUser(params.userId),
+  })
+
+  const { data: roles, isLoading: roleDataLoading } = useQuery({
+    queryKey: ['fetchRoles'],
+    queryFn: () => fetchRoles(1),
   })
 
   if (
@@ -29,7 +35,7 @@ export default function UsersEdit({ params }: Props) {
     notFound()
   }
 
-  if (isLoading) {
+  if (userDataLoading || roleDataLoading) {
     return (
       <div>
         <LoadingCircle />
@@ -37,5 +43,11 @@ export default function UsersEdit({ params }: Props) {
     )
   }
 
-  return <CreateUpdateUser title="Update User" defaultValues={userData?.data} />
+  return (
+    <CreateUpdateUser
+      title="Update User"
+      roles={roles?.data.data}
+      defaultValues={userData?.data}
+    />
+  )
 }

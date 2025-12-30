@@ -19,7 +19,7 @@ export interface CreateUserFields {
   last_name?: string
   email: string
   password: string
-  new_password: string
+  new_password?: string
   confirm_password: string
   avatar?: string
   role: string

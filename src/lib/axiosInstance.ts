@@ -20,4 +20,26 @@ axiosInstance.interceptors.request.use(
   },
 )
 
+// Create a helper for server-side requests
+export const createServerAxiosInstance = (cookieString?: string) => {
+  const instance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    withCredentials: true,
+  })
+
+  instance.interceptors.request.use(
+    (config) => {
+      if (cookieString && config.headers) {
+        config.headers.Cookie = cookieString
+      }
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    },
+  )
+
+  return instance
+}
+
 export default axiosInstance

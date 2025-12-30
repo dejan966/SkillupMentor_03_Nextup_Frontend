@@ -1,7 +1,19 @@
+'use server'
+
+import { apiRoutes } from '@/constants/apiConstants'
 import { StatusCode } from '@/constants/errorConstants'
-import { createRole, updateRole } from '@/lib/role'
+import { createServerAxiosInstance } from '@/lib/axiosInstance'
 import { RoleFormState } from '@/models/roleFormState'
+import { cookies } from 'next/headers'
 import { z } from 'zod'
+
+const cookieStore = cookies()
+const allCookies = cookieStore.getAll()
+const cookieString = allCookies
+  .map((cookie) => `${cookie.name}=${cookie.value}`)
+  .join('; ')
+
+const axiosServerInstance = createServerAxiosInstance(cookieString)
 
 const createRoleSchema = z.object({
   name: z.string().min(1, { message: 'Role is required' }),
@@ -29,7 +41,10 @@ export async function createRoleAction(
     }
   }
 
-  const response = await createRole(validatedRoleFormData.data)
+  const response = await axiosServerInstance.post(
+    apiRoutes.ROLES_PREFIX,
+    validatedRoleFormData.data,
+  )
   if (
     response?.status === StatusCode.BAD_REQUEST ||
     response?.status === StatusCode.INTERNAL_SERVER_ERROR
@@ -71,7 +86,10 @@ export async function updateRoleAction(
     }
   }
 
-  const response = await updateRole(validatedRoleFormData.data, _id)
+  const response = await axiosServerInstance.patch(
+    `${apiRoutes.ROLES_PREFIX}/${_id}`,
+    validatedRoleFormData.data,
+  )
   if (
     response?.status === StatusCode.BAD_REQUEST ||
     response?.status === StatusCode.INTERNAL_SERVER_ERROR
