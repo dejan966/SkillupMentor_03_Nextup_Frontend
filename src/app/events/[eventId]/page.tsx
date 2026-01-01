@@ -5,11 +5,11 @@ import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '@/components/ui/LoadingCircle'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
+import { useAuth } from '@/contexts/AuthContext'
 
 type Props = {
   params: {
@@ -21,7 +21,7 @@ export default function Event({ params }: Props) {
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
   const router = useRouter()
-  const [value] = useLocalStorage()
+  const { user } = useAuth()
   const {
     data: eventData,
     isSuccess,
@@ -114,7 +114,7 @@ export default function Event({ params }: Props) {
             <div className="font-bold">EVENT DESCRIPTION</div>
             <div className="pb-8">{eventData?.data.description}</div>
             <div className="text-end">
-              {Object.keys(value).length > 0 ? (
+              {user ? (
                 <Button
                   variant="error"
                   className="h-12 w-20"

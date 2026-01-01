@@ -1,19 +1,19 @@
 'use client'
 
+import { useAuth } from '@/contexts/AuthContext'
 import UpdatePasswordForm from '@/components/users/UpdatePasswordForm'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import { fetchTokenInfo } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 
 export default function UpdatePassword() {
-  const [value] = useLocalStorage()
+  const { user } = useAuth()
   const searchParams = useSearchParams()
 
   const token = searchParams.get('token') ?? '1'
   const { data: tokenInfo } = useQuery({
     queryKey: ['tokenInfo'],
-    queryFn: () => fetchTokenInfo(value._id, token),
+    queryFn: () => fetchTokenInfo(user!._id, token),
   })
 
   return (

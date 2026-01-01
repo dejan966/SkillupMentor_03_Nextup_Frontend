@@ -29,14 +29,6 @@ const initialState = {
 }
 
 export default function UpdateAvatarForm({ defaultValues }: Props) {
-  //const [value, setValue] = useLocalStorage()
-  /* const { handleSubmit, errors, control } = useCreateUpdateUser({
-    defaultValues,
-    })
-    
-    const [apiError, setApiError] = useState('')
-    const [showError, setShowError] = useState(false) */
-
   const [state, formAction] = useFormState(updateUserAvatar, initialState)
   const router = useRouter()
 
@@ -47,34 +39,6 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
   }, [state.success])
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-
-  /* const onSubmit = handleSubmit(async () => {
-    const formData = new FormData()
-    if (!file) {
-      return
-    }
-    formData.append('avatar', file, file.name)
-    const fileResponse = await uploadAvatar(formData, defaultValues!._id)
-    if (!fileResponse) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (fileResponse.status === StatusCode.BAD_REQUEST) {
-      setApiError(fileResponse.data.message)
-      setShowError(true)
-    } else if (fileResponse.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(fileResponse.data.message)
-      setShowError(true)
-    } else {
-      const userResponse = await fetchCurrUser()
-      if (userResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-        setApiError(fileResponse?.data.message)
-        setShowError(true)
-      } else {
-        setValue(userResponse?.data)
-        router.push(routes.USERINFO)
-      }
-    }
-  }) */
 
   const uploadFile = () => {
     document.getElementById('avatarUpload')?.click()
@@ -130,28 +94,6 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
               accept="image/png, 'image/jpg', image/jpeg"
             />
             <FormControl message={state?.errors?.avatar} />
-            {/* <Controller
-              control={control}
-              name="userImage"
-              render={({ field }) => (
-                <div>
-                  <input
-                    onChange={(e) => {
-                      handleFileChange(e)
-                      field.onChange(e.target.files)
-                    }}
-                    id="avatarUpload"
-                    name={field.name}
-                    type="file"
-                    aria-label="avatar"
-                    aria-describedby="avatar"
-                    className="hidden"
-                    accept="image/png, 'image/jpg', image/jpeg"
-                  />
-                  <FormControl message={errors?.userImage?.message} />
-                </div>
-              )}
-            /> */}
             <Button
               variant="default"
               className="bg-pink-500 hover:bg-pink-300 mb-4"

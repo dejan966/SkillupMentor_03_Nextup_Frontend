@@ -7,12 +7,12 @@ import Link from 'next/link'
 import { firebaseUserSignout, userSignout } from '@/lib/user'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import Button from './Button'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Navbar = () => {
-  const [value, setValue, logout] = useLocalStorage()
+  const { user, signOut } = useAuth()
   const [token, firebaseSignout] = useFirebaseAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -33,7 +33,7 @@ const Navbar = () => {
   }
 
   const signout = async () => {
-    if (value.type === 'Google User') {
+    if (user!.type === 'Google User') {
       signOutFirebase()
       return
     }
@@ -45,7 +45,7 @@ const Navbar = () => {
       setApiError(response?.data.message)
       setShowError(true)
     } else {
-      logout()
+      signOut()
       router.push(routes.HOME)
     }
   }
@@ -59,18 +59,16 @@ const Navbar = () => {
         <div className="space-x-8">
           <Link href={routes.HOME}>Home</Link>
           <Link href="/search">Search</Link>
-          {Object.keys(value).length > 0 && (
-            <Link href="/events/add">Event manager</Link>
-          )}
+          {user && <Link href="/events/add">Event manager</Link>}
         </div>
-        {Object.keys(value).length > 0 ? (
+        {user ? (
           <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
               <Image
                 src={
-                  value.avatar.startsWith('https')
-                    ? value.avatar
-                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`
+                  user.avatar.startsWith('https')
+                    ? user.avatar
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
                 }
                 alt="Avatar"
                 className="navbarAvatar"

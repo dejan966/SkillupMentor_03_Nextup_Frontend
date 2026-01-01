@@ -12,7 +12,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
@@ -24,7 +23,6 @@ export default function RegisterForm() {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
-  const [value, setValue] = useLocalStorage()
   const router = useRouter()
 
   useEffect(() => {

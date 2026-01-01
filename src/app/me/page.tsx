@@ -4,14 +4,14 @@ import Link from 'next/link'
 import { fetchCurrUser } from '@/lib/user'
 import { routes } from '@/constants/routesConstants'
 import { useQuery } from '@tanstack/react-query'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
 import Label from '@/components/ui/Label'
 import Input from '@/components/ui/Input'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function UserInfo() {
-  const [value] = useLocalStorage()
+  const { user } = useAuth()
   const {
     data: currUser,
     isError,
@@ -39,7 +39,7 @@ export default function UserInfo() {
         <div>
           <div className="flex justify-center">
             <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value.avatar}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user!.avatar}`}
               alt="Avatar"
               className="userAvatar"
               width={120}

@@ -1,6 +1,4 @@
-import Provider from '@/components/providers/Provider'
 import Footer from '@/components/ui/Footer'
-import Image from 'next/image'
 
 export default function ClientLayout({
   children,
@@ -9,7 +7,7 @@ export default function ClientLayout({
 }>) {
   return (
     <>
-      <Provider>{children}</Provider>
+      {children}
       <Footer />
     </>
   )

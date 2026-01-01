@@ -11,16 +11,16 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { firebaseLogin, login } from '@/lib/user'
-import useLocalStorage from '@/hooks/useLocalStorage'
 import { auth, provider } from '@/config/firebase-config'
 import { signInWithPopup } from 'firebase/auth'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
-  const [value, setValue] = useLocalStorage()
+  const { setUser } = useAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
@@ -29,7 +29,7 @@ export default function LoginForm() {
   const googleFirebaseSignIn = () => {
     signInWithPopup(auth, provider).then(async (data) => {
       const response = await firebaseLogin(data.user)
-      setValue(response?.data)
+      setUser(response?.data)
       router.push('/')
     })
   }
@@ -45,7 +45,7 @@ export default function LoginForm() {
       setApiError(response.data.message)
       setShowError(true)
     } else {
-      setValue(response.data)
+      setUser(response.data)
       router.push(routes.HOME)
     }
   })
