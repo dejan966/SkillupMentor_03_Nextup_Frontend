@@ -1,119 +1,71 @@
 'use client'
 
-import { updateUserPass } from '@/lib/user'
-import { StatusCode } from '@/constants/errorConstants'
-import { routes } from '@/constants/routesConstants'
-import {
-  useCreateUpdateUser,
-  UpdateUserFields,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Controller } from 'react-hook-form'
+import { useEffect } from 'react'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
+import { useFormState } from 'react-dom'
+import { updateUserPassword } from '@/actions/createUpdateUser'
+import Input from '../ui/Input'
+
+const initialState = {
+  success: '',
+  errors: {
+    password: '',
+    new_password: '',
+    confirm_password: '',
+    apiError: '',
+  },
+}
 
 export default function UpdatePasswordForm() {
+  const [state, formAction] = useFormState(updateUserPassword, initialState)
   const router = useRouter()
-  const { handleSubmit, errors, control } = useCreateUpdateUser({})
 
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
-
-  const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
-    handleUpdate(data as UpdateUserFields)
-  })
-
-  const handleUpdate = async (data: UpdateUserFields) => {
-    const response = await updateUserPass(data)
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      router.push(routes.USERINFO)
+  useEffect(() => {
+    if (state.success) {
+      router.back()
     }
-  }
+  }, [state.success])
 
   return (
     <div className="centered">
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your password</div>
-        <form method="POST" onSubmit={onSubmit}>
-          <Controller
-            control={control}
+        <form action={formAction}>
+          <Label content="Old password" />
+          <Input
             name="password"
-            render={({ field }) => (
-              <div className="mb-3">
-                <Label content="Current password" />
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="password"
-                  aria-describedby="password"
-                  className={
-                    errors.password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                <FormControl message={errors?.password?.message} />
-              </div>
-            )}
+            type="password"
+            placeholder="******"
+            aria-label="Password"
+            aria-describedby="password"
+            errors={state?.errors}
           />
-          <Controller
-            control={control}
+          <FormControl message={state?.errors?.password} />
+          <Label content="New password" />
+          <Input
             name="new_password"
-            render={({ field }) => (
-              <div className="mb-3">
-                <Label content="New password" />
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="newPassword"
-                  aria-describedby="newPassword"
-                  className={
-                    errors.new_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                <FormControl message={errors?.new_password?.message} />
-              </div>
-            )}
+            type="password"
+            placeholder="******"
+            aria-label="newPassword"
+            aria-describedby="newPassword"
+            errors={state?.errors}
           />
-          <Controller
-            control={control}
+          <FormControl message={state?.errors?.new_password} />
+          <Label content="Confirm new password" />
+          <Input
             name="confirm_password"
-            render={({ field }) => (
-              <div className="mb-3">
-                <Label content="Confirm new password" />
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="******"
-                  aria-label="Confirm new password"
-                  aria-describedby="confirm_new_password"
-                  className={
-                    errors.confirm_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
-                  }
-                />
-                <FormControl message={errors?.confirm_password?.message} />
-                <FormControl message={apiError} />
-              </div>
-            )}
+            type="password"
+            placeholder="******"
+            aria-label="confirm_password"
+            aria-describedby="confirm_password"
+            errors={state?.errors}
           />
+          <FormControl message={state?.errors?.confirm_password} />
+          <FormControl message={state?.errors?.apiError} />
           <div className="flex items-center justify-between">
             <Button variant="default" className="w-28 uppercase" type="submit">
               Submit

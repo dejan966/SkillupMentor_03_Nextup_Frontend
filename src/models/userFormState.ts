@@ -1,6 +1,7 @@
 export type UserFormState = {
   success: string
   errors: {
+    avatar: string
     first_name: string
     last_name: string
     email: string
@@ -8,7 +9,16 @@ export type UserFormState = {
     new_password: string
     confirm_password: string
     role: string
-    userImage: string
+    apiError: string
+  }
+}
+
+export type PasswordFormState = {
+  success: string
+  errors: {
+    password: string
+    new_password: string
+    confirm_password: string
     apiError: string
   }
 }

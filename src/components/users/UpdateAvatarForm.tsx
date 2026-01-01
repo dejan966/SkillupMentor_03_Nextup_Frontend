@@ -1,38 +1,54 @@
 'use client'
 
 import { ChangeEvent, useEffect, useState } from 'react'
-import { fetchCurrUser, uploadAvatar } from '@/lib/user'
-import {
-  useCreateUpdateUser,
-  UserFormData,
-} from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import { StatusCode } from '@/constants/errorConstants'
-import { routes } from '@/constants/routesConstants'
+import { UserFormData } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { useRouter } from 'next/navigation'
-import useLocalStorage from '@/hooks/useLocalStorage'
-import { Controller } from 'react-hook-form'
 import Image from 'next/image'
 import Button from '../ui/Button'
 import FormControl from '../ui/FormControl'
+import { useFormState } from 'react-dom'
+import { updateUserAvatar } from '@/actions/createUpdateUser'
 
 type Props = {
   defaultValues?: UserFormData
 }
 
+const initialState = {
+  success: '',
+  errors: {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    new_password: '',
+    confirm_password: '',
+    role: '',
+    avatar: '',
+    apiError: '',
+  },
+}
+
 export default function UpdateAvatarForm({ defaultValues }: Props) {
-  const [value, setValue] = useLocalStorage()
-  const router = useRouter()
-  const { handleSubmit, errors, control } = useCreateUpdateUser({
+  //const [value, setValue] = useLocalStorage()
+  /* const { handleSubmit, errors, control } = useCreateUpdateUser({
     defaultValues,
-  })
+    })
+    
+    const [apiError, setApiError] = useState('')
+    const [showError, setShowError] = useState(false) */
 
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
+  const [state, formAction] = useFormState(updateUserAvatar, initialState)
+  const router = useRouter()
 
+  useEffect(() => {
+    if (state.success) {
+      router.back()
+    }
+  }, [state.success])
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
-  const onSubmit = handleSubmit(async () => {
+  /* const onSubmit = handleSubmit(async () => {
     const formData = new FormData()
     if (!file) {
       return
@@ -58,7 +74,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
         router.push(routes.USERINFO)
       }
     }
-  })
+  }) */
 
   const uploadFile = () => {
     document.getElementById('avatarUpload')?.click()
@@ -88,14 +104,14 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
       <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-4">Change your profile photo</div>
-        <form method="POST" onSubmit={onSubmit}>
+        <form action={formAction}>
           <div>
             <div className="flex justify-center mb-4">
               <Image
                 src={
                   preview
                     ? (preview as string)
-                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${value?.avatar}`
+                    : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${defaultValues?.avatar}`
                 }
                 alt="Avatar"
                 className="userAvatar"
@@ -103,7 +119,18 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
                 height={110}
               />
             </div>
-            <Controller
+            <input
+              onChange={handleFileChange}
+              id="avatarUpload"
+              name="avatar"
+              type="file"
+              aria-label="avatar"
+              aria-describedby="avatar"
+              className="hidden"
+              accept="image/png, 'image/jpg', image/jpeg"
+            />
+            <FormControl message={state?.errors?.avatar} />
+            {/* <Controller
               control={control}
               name="userImage"
               render={({ field }) => (
@@ -124,7 +151,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
                   <FormControl message={errors?.userImage?.message} />
                 </div>
               )}
-            />
+            /> */}
             <Button
               variant="default"
               className="bg-pink-500 hover:bg-pink-300 mb-4"
@@ -132,7 +159,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
             >
               Upload new image
             </Button>
-            <FormControl message={apiError} />
+            <FormControl message={state?.errors?.apiError} />
           </div>
           <div className="flex items-center justify-between">
             <Button variant="default" className="w-28 uppercase" type="submit">

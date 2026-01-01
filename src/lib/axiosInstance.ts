@@ -38,6 +38,12 @@ export const createServerAxiosInstance = (cookieString?: string) => {
       return Promise.reject(error)
     },
   )
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      return Promise.resolve(error.response)
+    },
+  )
 
   return instance
 }

@@ -29,7 +29,7 @@ const initialState = {
     new_password: '',
     confirm_password: '',
     role: '',
-    userImage: '',
+    avatar: '',
     apiError: '',
   },
 }
@@ -103,14 +103,14 @@ export default function CreateUpdateUser({
           <input
             onChange={handleFileChange}
             id="avatarUpload"
-            name="userImage"
+            name="avatar"
             type="file"
             aria-label="avatar"
             aria-describedby="avatar"
             className="hidden"
             accept="image/png, 'image/jpg', image/jpeg"
           />
-          <FormControl message={state?.errors?.userImage} />
+          <FormControl message={state?.errors?.avatar} />
           <div className="flex justify-between">
             <div>
               <Label content="First name" />

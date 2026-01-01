@@ -1,5 +1,6 @@
 'use client'
 
+import LoadingCircle from '@/components/ui/LoadingCircle'
 import UpdateAvatarForm from '@/components/users/UpdateAvatarForm'
 import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +11,7 @@ export default function UpdateAvatar() {
     queryFn: fetchCurrUser,
   })
 
-  const defaultValues = currUser?.data
+  if (!currUser) return <LoadingCircle />
 
-  return <UpdateAvatarForm defaultValues={defaultValues} />
+  return <UpdateAvatarForm defaultValues={currUser.data} />
 }

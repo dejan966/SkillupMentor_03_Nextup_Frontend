@@ -1,8 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCreateUpdateUser } from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { routes } from '@/constants/routesConstants'
 import Link from 'next/link'
 import { fetchCurrUser } from '@/lib/user'
@@ -19,6 +18,7 @@ import Label from '../ui/Label'
 const initialState = {
   success: '',
   errors: {
+    avatar: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -26,7 +26,6 @@ const initialState = {
     new_password: '',
     confirm_password: '',
     role: '',
-    userImage: '',
     apiError: '',
   },
 }
@@ -43,12 +42,6 @@ export default function UpdateUserForm() {
   })
 
   const defaultValues = currUser?.data
-  const { handleSubmit, errors, control } = useCreateUpdateUser({
-    defaultValues,
-  })
-
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
 
   const actionWithId = async (prevState: UserFormState, formData: FormData) => {
     return updateUserAction(prevState, formData, defaultValues._id)
