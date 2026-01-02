@@ -6,6 +6,8 @@ type AuthContextType = {
   isInitialized: boolean
   setUser: (user: UserType) => void
   signOut: () => void
+  googleFirebaseSignIn: () => void
+  firebaseSignout: () => void
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)

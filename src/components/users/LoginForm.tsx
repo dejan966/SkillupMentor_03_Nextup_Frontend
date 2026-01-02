@@ -8,11 +8,9 @@ import {
 } from '@/hooks/react-hook-forms/useLogin'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { firebaseLogin, login } from '@/lib/user'
-import { auth, provider } from '@/config/firebase-config'
-import { signInWithPopup } from 'firebase/auth'
+import { login } from '@/lib/user'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
@@ -25,14 +23,14 @@ export default function LoginForm() {
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
+  const { user, googleFirebaseSignIn } = useAuth()
 
-  const googleFirebaseSignIn = () => {
-    signInWithPopup(auth, provider).then(async (data) => {
-      const response = await firebaseLogin(data.user)
-      setUser(response?.data)
+  useEffect(() => {
+    if (user) {
       router.push('/')
-    })
-  }
+    }
+  }, [user])
+
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
     const response = await login(data)
     if (!response) {

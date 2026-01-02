@@ -4,37 +4,22 @@ import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import Image from 'next/image'
 import Link from 'next/link'
-import { firebaseUserSignout, userSignout } from '@/lib/user'
+import { userSignout } from '@/lib/user'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import useFirebaseAuth from '@/hooks/firebase/useFirebaseAuth'
 import Button from './Button'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Navbar = () => {
-  const { user, signOut } = useAuth()
-  const [token, firebaseSignout] = useFirebaseAuth()
+  const { user, signOut, firebaseSignout } = useAuth()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
 
   const router = useRouter()
-  const signOutFirebase = async () => {
-    const response = await firebaseUserSignout()
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else {
-      signout()
-      firebaseSignout()
-    }
-  }
 
   const signout = async () => {
     if (user!.type === 'Google User') {
-      signOutFirebase()
+      firebaseSignout()
       return
     }
     const response = await userSignout()
