@@ -5,7 +5,6 @@ import {
   CreateUserFields,
   UpdateUserFields,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import { User } from 'firebase/auth'
 import axiosInstance from './axiosInstance'
 
 export const userSignout = async () => {
@@ -35,9 +34,11 @@ export const login = async (data: LoginUserFields) => {
   }
 }
 
-export const firebaseLogin = async (user: User) => {
+export const firebaseLogin = async (idToken: string) => {
   try {
-    const response = await axiosInstance.post(apiRoutes.FIREBASE_LOGIN, user)
+    const response = await axiosInstance.post(apiRoutes.FIREBASE_LOGIN, {
+      idToken,
+    })
     return response
   } catch (error: any) {
     return error.response
@@ -55,7 +56,7 @@ export const register = async (data: RegisterUserFields) => {
 
 export const refreshTokens = async () => {
   try {
-    const response = await axiosInstance.get(apiRoutes.REFRESH_TOKENS)
+    const response = await axiosInstance.post(apiRoutes.REFRESH_TOKENS)
     return response
   } catch (error: any) {
     return error.response

@@ -32,7 +32,6 @@ export default function Event({ params }: Props) {
     queryKey: ['fetchEvent'],
     queryFn: () => fetchEvent(params.eventId),
   })
-
   if (isSuccess === true && !eventData?.data._id) {
     notFound()
   }

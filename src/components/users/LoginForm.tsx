@@ -27,7 +27,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (user) {
-      router.push('/')
+      router.push(routes.HOME)
     }
   }, [user])
 
