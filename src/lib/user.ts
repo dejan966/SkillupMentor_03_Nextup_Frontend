@@ -5,11 +5,15 @@ import {
   CreateUserFields,
   UpdateUserFields,
 } from '@/hooks/react-hook-forms/useCreateUpdateUser'
-import axiosInstance from './axiosInstance'
+import axiosInstance, { apiRequest } from './axiosInstance'
+import { UserType } from '@/models/auth'
+import { PaginatedResult } from '@/models/paginated-result'
 
 export const userSignout = async () => {
   try {
-    const response = await axiosInstance.post(apiRoutes.SIGNOUT)
+    const response = await axiosInstance.post<undefined, void>(
+      apiRoutes.SIGNOUT,
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -18,7 +22,9 @@ export const userSignout = async () => {
 
 export const firebaseUserSignout = async () => {
   try {
-    const response = await axiosInstance.post(apiRoutes.FIREBASE_SIGNOUT)
+    const response = await axiosInstance.post<undefined, void>(
+      apiRoutes.FIREBASE_SIGNOUT,
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -26,19 +32,21 @@ export const firebaseUserSignout = async () => {
 }
 
 export const login = async (data: LoginUserFields) => {
-  try {
-    const response = await axiosInstance.post(apiRoutes.LOGIN, data)
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return apiRequest<LoginUserFields, UserType>(
+    `${apiRoutes.LOGIN}`,
+    'POST',
+    data,
+  )
 }
 
 export const firebaseLogin = async (idToken: string) => {
   try {
-    const response = await axiosInstance.post(apiRoutes.FIREBASE_LOGIN, {
-      idToken,
-    })
+    const response = await axiosInstance.post<string, UserType>(
+      apiRoutes.FIREBASE_LOGIN,
+      {
+        idToken,
+      },
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -46,17 +54,18 @@ export const firebaseLogin = async (idToken: string) => {
 }
 
 export const register = async (data: RegisterUserFields) => {
-  try {
-    const response = await axiosInstance.post(apiRoutes.REGISTER, data)
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return apiRequest<RegisterUserFields, UserType>(
+    `${apiRoutes.REGISTER}`,
+    'POST',
+    data,
+  )
 }
 
 export const refreshTokens = async () => {
   try {
-    const response = await axiosInstance.post(apiRoutes.REFRESH_TOKENS)
+    const response = await axiosInstance.post<undefined, UserType>(
+      apiRoutes.REFRESH_TOKENS,
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -65,7 +74,7 @@ export const refreshTokens = async () => {
 
 export const uploadAvatar = async (formData: FormData, _id: string) => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.post<FormData, void>(
       `${apiRoutes.UPLOAD_AVATAR_IMAGE}/${_id}`,
       formData,
     )
@@ -77,7 +86,10 @@ export const uploadAvatar = async (formData: FormData, _id: string) => {
 
 export const createUser = async (data: CreateUserFields) => {
   try {
-    const response = await axiosInstance.post(apiRoutes.USERS_PREFIX, data)
+    const response = await axiosInstance.post<CreateUserFields, UserType>(
+      apiRoutes.USERS_PREFIX,
+      data,
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -86,7 +98,7 @@ export const createUser = async (data: CreateUserFields) => {
 
 export const fetchCurrUser = async () => {
   try {
-    const response = await axiosInstance.get(apiRoutes.ME)
+    const response = await axiosInstance.get<undefined, UserType>(apiRoutes.ME)
     return response
   } catch (error: any) {
     return error.response
@@ -94,14 +106,10 @@ export const fetchCurrUser = async () => {
 }
 
 export const fetchUsers = async (pageNumber: number) => {
-  try {
-    const response = await axiosInstance.get(
-      `${apiRoutes.USERS_PREFIX}?page=${pageNumber}`,
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return await apiRequest<never, PaginatedResult<UserType>>(
+    `${apiRoutes.USERS_PREFIX}?page=${pageNumber}`,
+    'GET',
+  )
 }
 
 export const fetchUser = async (_id: string) => {
@@ -114,38 +122,28 @@ export const fetchUser = async (_id: string) => {
 }
 
 export const updateUser = async (data: UpdateUserFields, _id: string) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${apiRoutes.USERS_PREFIX}/${_id}`,
-      data,
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return await apiRequest<UpdateUserFields, void>(
+    `${apiRoutes.FETCH_USERS}/${_id}`,
+    'PATCH',
+    data,
+  )
 }
 
 export const passwordResetEmail = async ({ email }: UpdateUserFields) => {
-  try {
-    const response = await axiosInstance.post(
-      `${apiRoutes.ME}/reset-password`,
-      { email },
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return apiRequest<UpdateUserFields, void>(
+    `${apiRoutes.ME}/reset-password`,
+    'POST',
+    {
+      email,
+    },
+  )
 }
 
 export const fetchTokenInfo = async (user_id: string, token: string) => {
-  try {
-    const response = await axiosInstance.get(
-      `${apiRoutes.USERS_PREFIX}/${user_id}/${token}`,
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return apiRequest<never, boolean>(
+    `${apiRoutes.USERS_PREFIX}/${user_id}/${token}`,
+    'GET',
+  )
 }
 
 export const updateUserPass = async ({
@@ -153,24 +151,20 @@ export const updateUserPass = async ({
   new_password,
   confirm_password,
 }: UpdateUserFields) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${apiRoutes.ME}/update-password`,
-      { password, new_password, confirm_password },
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return apiRequest<UpdateUserFields, void>(
+    `${apiRoutes.ME}/update-password`,
+    'GET',
+    {
+      password,
+      new_password,
+      confirm_password,
+    },
+  )
 }
 
 export const deleteUser = async (_id: string) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${apiRoutes.USERS_PREFIX}/${_id}`,
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return await apiRequest<never, void>(
+    `${apiRoutes.USERS_PREFIX}/${_id}`,
+    'DELETE',
+  )
 }

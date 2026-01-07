@@ -3,28 +3,22 @@ import {
   CreateEventFields,
   UpdateEventFields,
 } from '@/hooks/react-hook-forms/useCreateUpdateEvent'
-import axiosInstance from './axiosInstance'
+import axiosInstance, { apiRequest } from './axiosInstance'
+import { EventType } from '@/models/event'
+import { PaginatedResult } from '@/models/paginated-result'
 
 export const fetchEvent = async (_id: string) => {
-  try {
-    const response = await axiosInstance.get(`${apiRoutes.FETCH_EVENTS}/${_id}`)
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<undefined, EventType>(
+    `${apiRoutes.FETCH_EVENTS}/${_id}`,
+    'GET',
+  )
 }
 
 export const fetchEvents = async (pageNumber: number) => {
-  try {
-    const response = await axiosInstance.get(
-      `${apiRoutes.FETCH_EVENTS}?page=${pageNumber}`,
-    )
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<never, PaginatedResult<EventType>>(
+    `${apiRoutes.FETCH_EVENTS}?page=${pageNumber}`,
+    'GET',
+  )
 }
 
 export const searchEvents = async (
@@ -32,19 +26,18 @@ export const searchEvents = async (
   dateValue: string,
   pageNumber: number,
 ) => {
-  try {
-    const response = await axiosInstance.get(
-      `${apiRoutes.EVENTS_PREFIX}/search?name=${searchValue}&date=${dateValue}&page=${pageNumber}`,
-    )
-    return response
-  } catch (error: any) {
-    return error.response
-  }
+  return await apiRequest<never, PaginatedResult<EventType>>(
+    `${apiRoutes.EVENTS_PREFIX}/search?name=${searchValue}&date=${dateValue}&page=${pageNumber}`,
+    'GET',
+  )
 }
 
 export const createEvent = async (data: CreateEventFields) => {
   try {
-    const response = await axiosInstance.post(apiRoutes.EVENTS_PREFIX, data)
+    const response = await axiosInstance.post<CreateEventFields, void>(
+      apiRoutes.EVENTS_PREFIX,
+      data,
+    )
     return response
   } catch (error: any) {
     return error.response
@@ -53,7 +46,7 @@ export const createEvent = async (data: CreateEventFields) => {
 
 export const updateEvent = async (data: UpdateEventFields, _id: string) => {
   try {
-    const response = await axiosInstance.patch(
+    const response = await axiosInstance.patch<UpdateEventFields, void>(
       `${apiRoutes.EVENTS_PREFIX}/${_id}`,
       data,
     )
@@ -65,7 +58,7 @@ export const updateEvent = async (data: UpdateEventFields, _id: string) => {
 
 export const uploadEventImage = async (formData: FormData, _id: string) => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.post<FormData, void>(
       `${apiRoutes.UPLOAD_EVENT_IMAGE}/${_id}`,
       formData,
     )
@@ -76,57 +69,36 @@ export const uploadEventImage = async (formData: FormData, _id: string) => {
 }
 
 export const bookUserD = async (_id: string) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${apiRoutes.FETCH_EVENTS}/bookUser/${_id}`,
-    )
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<never, EventType>(
+    `${apiRoutes.FETCH_EVENTS}/bookUser/${_id}`,
+    'PATCH',
+  )
 }
 
 export const getAllUpcomingEvents = async () => {
-  try {
-    const response = await axiosInstance.get(`${apiRoutes.UPCOMING_EVENTS}`)
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<undefined, EventType[]>(
+    `${apiRoutes.UPCOMING_EVENTS}`,
+    'GET',
+  )
 }
 
 export const getUserUpcomingEvents = async () => {
-  try {
-    const response = await axiosInstance.get(
-      `${apiRoutes.EVENTS_PREFIX}/user/upcomingEvents`,
-    )
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<undefined, EventType[]>(
+    `${apiRoutes.EVENTS_PREFIX}/user/upcomingEvents`,
+    'GET',
+  )
 }
 
 export const getRecentEvents = async () => {
-  try {
-    const response = await axiosInstance.get(`${apiRoutes.RECENT_EVENTS}`)
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<undefined, EventType[]>(
+    `${apiRoutes.RECENT_EVENTS}`,
+    'GET',
+  )
 }
 
 export const deleteEvent = async (_id: string) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${apiRoutes.EVENTS_PREFIX}/${_id}`,
-    )
-    return response
-  } catch (error: any) {
-    console.error(error)
-    return error.response
-  }
+  return await apiRequest<never, void>(
+    `${apiRoutes.FETCH_EVENTS}/${_id}`,
+    'DELETE',
+  )
 }

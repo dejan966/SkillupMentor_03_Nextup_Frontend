@@ -3,59 +3,56 @@
 import { useQuery } from '@tanstack/react-query'
 import { deleteEvent, fetchEvents } from '@/lib/event'
 import { notFound } from 'next/navigation'
-import { fetchCurrUser } from '@/lib/user'
 import EventTable from '@/components/events/EventTable'
 import { useState } from 'react'
-import { StatusCode } from '@/constants/errorConstants'
 import Button from '@/components/ui/Button'
+import { useAuth } from '@/contexts/AuthContext'
+import { SafeError } from '@/models/safeError'
+import LoadingCircle from '@/components/ui/LoadingCircle'
 
 export default function AdminPanel() {
+  const { user } = useAuth()
+
   const [pageNumber, setPageNumber] = useState(1)
   const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
 
   const {
     data: allEvents,
+    isLoading,
     isError,
+    error,
     refetch,
   } = useQuery({
     queryKey: ['fetchEvents', pageNumber],
-    queryFn: async () => {
-      return await fetchEvents(pageNumber)
-    },
-  })
-
-  const { data: currUser } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: async () => {
-      const data = await fetchCurrUser()
-      return data
-    },
+    queryFn: async () => fetchEvents(pageNumber),
+    retry: false,
+    throwOnError: false,
   })
 
   const handleDelete = async (_id: string) => {
-    const response = await deleteEvent(_id)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
+    try {
+      await deleteEvent(_id)
       refetch()
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
     }
   }
 
-  if (currUser) {
-    if (currUser?.data.role.name !== 'ADMIN') {
+  if (user) {
+    if (user.role.name !== 'ADMIN') {
       notFound()
     }
+  }
+
+  if (isLoading) {
+    return <LoadingCircle />
   }
 
   if (isError) {
     return (
       <div>
-        <h2>Something went wrong!</h2>
+        <h2>{(error as SafeError).message}</h2>
         <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
         </Button>
@@ -64,11 +61,14 @@ export default function AdminPanel() {
   }
 
   return (
-    <EventTable
-      events={allEvents?.data.data}
-      setPageNumber={setPageNumber}
-      meta={allEvents?.data.meta}
-      handleDelete={handleDelete}
-    />
+    <>
+      <EventTable
+        events={allEvents!.data}
+        setPageNumber={setPageNumber}
+        meta={allEvents!.meta}
+        handleDelete={handleDelete}
+      />
+      <div>{apiError}</div>
+    </>
   )
 }

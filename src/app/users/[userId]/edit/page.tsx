@@ -36,17 +36,13 @@ export default function UsersEdit({ params }: Props) {
   }
 
   if (userDataLoading || roleDataLoading) {
-    return (
-      <div>
-        <LoadingCircle />
-      </div>
-    )
+    return <LoadingCircle />
   }
 
   return (
     <CreateUpdateUser
       title="Update User"
-      roles={roles?.data.data}
+      roles={roles!.data}
       defaultValues={userData?.data}
     />
   )

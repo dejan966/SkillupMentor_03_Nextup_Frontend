@@ -3,6 +3,7 @@
 import CreateUpdateRole from '@/components/roles/CreateUpdateRole'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { fetchRole } from '@/lib/role'
+import { SafeError } from '@/models/safeError'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 
@@ -18,24 +19,23 @@ export default function RoleEdit({ params }: Props) {
     isSuccess,
     isLoading,
     isError,
+    error,
     refetch,
   } = useQuery({
     queryKey: ['fetchRole'],
     queryFn: () => fetchRole(params.roleId),
+    retry: false,
+    throwOnError: false,
   })
 
-  if (roleData?.data.message === 'Unauthorized') {
-    return <div>Unauthorized</div>
-  }
-
-  if (isSuccess === true && !roleData?.data._id) {
+  if (isSuccess === true && !roleData._id) {
     notFound()
   }
 
   if (isError) {
     return (
       <div>
-        <h2>Something went wrong!</h2>
+        <h2>{(error as SafeError).message}</h2>
         <button
           type="button"
           className="blue text-white h-12 w-20 rounded-xl"
@@ -55,5 +55,5 @@ export default function RoleEdit({ params }: Props) {
     )
   }
 
-  return <CreateUpdateRole title="Manage role" defaultValues={roleData?.data} />
+  return <CreateUpdateRole title="Manage role" defaultValues={roleData} />
 }

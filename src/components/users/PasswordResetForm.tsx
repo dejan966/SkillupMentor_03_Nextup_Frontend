@@ -13,9 +13,10 @@ import { Controller } from 'react-hook-form'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
+import { SafeError } from '@/models/safeError'
 
 type Props = {
-  defaultValues?: UserFormData
+  defaultValues: UserFormData
 }
 
 export default function PasswordResetForm({ defaultValues }: Props) {
@@ -33,18 +34,12 @@ export default function PasswordResetForm({ defaultValues }: Props) {
   })
 
   const handleChange = async (data: UpdateUserFields) => {
-    const response = await passwordResetEmail(data)
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
+    try {
+      await passwordResetEmail(data)
       router.push('/')
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
     }
   }
 

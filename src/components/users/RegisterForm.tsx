@@ -15,6 +15,7 @@ import { Controller } from 'react-hook-form'
 import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
+import { SafeError } from '@/models/safeError'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
@@ -38,21 +39,12 @@ export default function RegisterForm() {
   }, [file])
 
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
-    const response = await register(data)
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
+    try {
+      const response = await register(data)
       if (file) {
         const formData = new FormData()
         formData.append('avatar', file, file.name)
-        const fileResponse = await uploadAvatar(formData, response?.data._id)
+        const fileResponse = await uploadAvatar(formData, response?._id)
         if (fileResponse?.status === StatusCode.BAD_REQUEST) {
           setApiError(fileResponse?.data.message)
           setShowError(true)
@@ -62,6 +54,9 @@ export default function RegisterForm() {
         }
       }
       router.push(routes.LOGIN)
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
     }
   })
 

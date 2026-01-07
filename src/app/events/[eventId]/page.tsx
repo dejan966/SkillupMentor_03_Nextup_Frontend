@@ -10,6 +10,7 @@ import { routes } from '@/constants/routesConstants'
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
+import { SafeError } from '@/models/safeError'
 
 type Props = {
   params: {
@@ -27,19 +28,23 @@ export default function Event({ params }: Props) {
     isSuccess,
     isLoading,
     isError,
+    error,
     refetch,
   } = useQuery({
     queryKey: ['fetchEvent'],
     queryFn: () => fetchEvent(params.eventId),
+    retry: false,
+    throwOnError: false,
   })
-  if (isSuccess === true && !eventData?.data._id) {
-    notFound()
+
+  if (isLoading) {
+    return <LoadingCircle />
   }
 
   if (isError) {
     return (
       <div>
-        <h2>Something went wrong!</h2>
+        <h2>{(error as SafeError).message}</h2>
         <Button
           type="button"
           className="h-12 w-20 rounded-none rounded-xl"
@@ -51,89 +56,78 @@ export default function Event({ params }: Props) {
     )
   }
 
-  if (isLoading) {
-    return (
-      <div>
-        <LoadingCircle />
-      </div>
-    )
+  if (isSuccess === true && !eventData._id) {
+    notFound()
   }
 
   const bookUser = async () => {
-    const response = await bookUserD(eventData?.data._id)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.statusText)
+    try {
+      await bookUserD(eventData!._id)
+      setApiError('Event successfully booked.')
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
       setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.statusText)
-      setShowError(true)
-    } else {
-      router.push(routes.HOME)
     }
   }
 
   return (
     <div className="pl-24 pb-16 pt-9">
-      {isSuccess && (
-        <div className="relative">
-          <div className="images pl-4">
-            <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData?.data.image}`}
-              alt="Event image"
-              className="img"
-            />
+      <div className="relative">
+        <div className="images pl-4">
+          <img
+            src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData!.image}`}
+            alt="Event image"
+            className="img"
+          />
+        </div>
+        <div>
+          <div className="flex justify-between">
+            <div>{new Date(eventData!.date).toLocaleDateString()}</div>
+            <div>{eventData!.hour}</div>
           </div>
-          <div>
-            <div className="flex justify-between">
-              <div>{new Date(eventData?.data.date).toLocaleDateString()}</div>
-              <div>{eventData?.data.hour}</div>
+          <h1 className="text-7xl font-bold">{eventData!.name}</h1>
+          <br />
+          <div className="flex justify-between pb-8">
+            <div className="flex justify-start">
+              <Image
+                src="/locationIcon.svg"
+                alt="location icon"
+                width={20}
+                height={20}
+              />
+              {eventData!.location}
             </div>
-            <h1 className="text-7xl font-bold">{eventData?.data.name}</h1>
-            <br />
-            <div className="flex justify-between pb-8">
-              <div className="flex justify-start">
-                <Image
-                  src="/locationIcon.svg"
-                  alt="location icon"
-                  width={20}
-                  height={20}
-                />
-                {eventData?.data.location}
-              </div>
-              <div className="flex justify-start">
-                <Image
-                  src="/avatarIcon.svg"
-                  alt="avatar icon"
-                  width={20}
-                  height={20}
-                />
-                {eventData?.data.max_users}
-              </div>
+            <div className="flex justify-start">
+              <Image
+                src="/avatarIcon.svg"
+                alt="avatar icon"
+                width={20}
+                height={20}
+              />
+              {eventData!.max_users}
             </div>
-            <div className="font-bold">EVENT DESCRIPTION</div>
-            <div className="pb-8">{eventData?.data.description}</div>
-            <div className="text-end">
-              {user ? (
-                <Button
-                  variant="error"
-                  className="h-12 w-20"
-                  onClick={bookUser}
-                >
-                  Book
-                </Button>
-              ) : (
-                <Button
-                  variant="error"
-                  className="h-12 w-20"
-                  onClick={() => router.back()}
-                >
-                  Back
-                </Button>
-              )}
-            </div>
+          </div>
+          <div className="font-bold">EVENT DESCRIPTION</div>
+          <div className="pb-8">{eventData!.description}</div>
+          <div className="text-end">
+            {user ? (
+              <Button variant="error" className="h-12 w-20" onClick={bookUser}>
+                Book
+              </Button>
+            ) : (
+              <Button
+                variant="error"
+                className="h-12 w-20"
+                onClick={() => router.back()}
+              >
+                Back
+              </Button>
+            )}
           </div>
         </div>
-      )}
+      </div>
+      <div>{apiError}</div>
     </div>
   )
 }

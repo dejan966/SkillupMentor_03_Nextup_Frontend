@@ -25,12 +25,12 @@ export default function EventEdit({ params }: Props) {
     queryFn: () => fetchEvent(params.eventId),
   })
 
-  if (eventData?.statusText === 'Unauthorized') {
-    return <div>Unauthorized</div>
+  if (isSuccess === true && !eventData._id) {
+    notFound()
   }
 
-  if (isSuccess === true && !eventData?.data._id) {
-    notFound()
+  if (isLoading) {
+    return <LoadingCircle />
   }
 
   if (isError) {
@@ -44,15 +44,5 @@ export default function EventEdit({ params }: Props) {
     )
   }
 
-  if (isLoading) {
-    return (
-      <div>
-        <LoadingCircle />
-      </div>
-    )
-  }
-
-  return (
-    <CreateUpdateEvent title="Manage event" defaultValues={eventData?.data} />
-  )
+  return <CreateUpdateEvent title="Manage event" defaultValues={eventData} />
 }

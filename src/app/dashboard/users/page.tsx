@@ -1,55 +1,59 @@
 'use client'
 
-import { fetchUsers, fetchCurrUser, deleteUser } from '@/lib/user'
+import { fetchUsers, deleteUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 import { useState } from 'react'
 import UserTable from '@/components/users/UserTable'
 import { StatusCode } from '@/constants/errorConstants'
 import Button from '@/components/ui/Button'
+import { useAuth } from '@/contexts/AuthContext'
+import LoadingCircle from '@/components/ui/LoadingCircle'
+import { SafeError } from '@/models/safeError'
 
 export default function AdminPanel() {
+  const { user } = useAuth()
+
   const [pageNumber, setPageNumber] = useState(1)
   const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
 
   const {
     data: allUsers,
+    isLoading,
     isError,
+    error,
     refetch,
   } = useQuery({
-    queryKey: ['fetchUsers'],
+    queryKey: ['fetchUsers', pageNumber],
     queryFn: async () => fetchUsers(pageNumber),
-  })
-
-  const { data: currUser } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
+    retry: false,
+    throwOnError: false,
   })
 
   const handleDelete = async (_id: string) => {
-    const response = await deleteUser(_id)
-    if (response?.status === StatusCode.BAD_REQUEST) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else if (response?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response?.data.message)
-      setShowError(true)
-    } else {
+    try {
+      await deleteUser(_id)
       refetch()
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
     }
   }
 
-  if (currUser) {
-    if (currUser?.data.role.name !== 'ADMIN') {
+  if (user) {
+    if (user.role.name !== 'ADMIN') {
       notFound()
     }
+  }
+
+  if (isLoading) {
+    return <LoadingCircle />
   }
 
   if (isError) {
     return (
       <div>
-        <h2>Something went wrong!</h2>
+        <h2>{(error as SafeError).message}</h2>
         <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
         </Button>
@@ -58,11 +62,14 @@ export default function AdminPanel() {
   }
 
   return (
-    <UserTable
-      users={allUsers?.data.data}
-      setPageNumber={setPageNumber}
-      meta={allUsers?.data.meta}
-      handleDelete={handleDelete}
-    />
+    <>
+      <UserTable
+        users={allUsers!.data}
+        setPageNumber={setPageNumber}
+        meta={allUsers!.meta}
+        handleDelete={handleDelete}
+      />
+      <div>{apiError}</div>
+    </>
   )
 }

@@ -25,12 +25,8 @@ export default function UsersAdd() {
   })
 
   if (roleDataLoading) {
-    return (
-      <div>
-        <LoadingCircle />
-      </div>
-    )
+    return <LoadingCircle />
   }
 
-  return <CreateUpdateUser title="Create User" roles={roles.data.data} />
+  return <CreateUpdateUser title="Create User" roles={roles!.data} />
 }

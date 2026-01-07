@@ -1,6 +1,5 @@
 'use client'
 
-import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import {
   useLoginForm,
@@ -15,12 +14,12 @@ import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
 import { useAuth } from '../../contexts/AuthContext'
+import { SafeError } from '@/models/safeError'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
   const { setUser } = useAuth()
   const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
 
   const router = useRouter()
   const { user, googleFirebaseSignIn } = useAuth()
@@ -32,19 +31,13 @@ export default function LoginForm() {
   }, [user])
 
   const onSubmit = handleSubmit(async (data: LoginUserFields) => {
-    const response = await login(data)
-    if (!response) {
-      setApiError('Unable to establish connection with server')
-      setShowError(true)
-    } else if (response.status === StatusCode.BAD_REQUEST) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else if (response.status === StatusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message)
-      setShowError(true)
-    } else {
-      setUser(response.data)
+    try {
+      const response = await login(data)
+      setUser(response)
       router.push(routes.HOME)
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
     }
   })
 

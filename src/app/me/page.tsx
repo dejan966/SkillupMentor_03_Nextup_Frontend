@@ -18,7 +18,11 @@ export default function UserInfo() {
         <div>
           <div className="flex justify-center">
             <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`}
+              src={
+                user?.avatar.startsWith('https')
+                  ? user?.avatar
+                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
+              }
               alt="Avatar"
               className="userAvatar"
               width={120}

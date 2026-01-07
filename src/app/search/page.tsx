@@ -7,17 +7,30 @@ import Image from 'next/image'
 import { SearchEvent } from '@/components/events/SearchEvent'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import LoadingCircle from '@/components/ui/LoadingCircle'
+import { SafeError } from '@/models/safeError'
 
 const SearchPage = () => {
-  const { data: upcomingEvents } = useQuery({
+  const {
+    data: upcomingEvents,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['upcomingEvents'],
     queryFn: getAllUpcomingEvents,
+    retry: false,
+    throwOnError: false,
   })
 
   const [pageNumber, setPageNumber] = useState(1)
   const searchParams = useSearchParams()
   const searchLocation = searchParams.get('location') ?? ''
   const searchDate = searchParams.get('date')
+
+  if (isLoading) {
+    return <LoadingCircle />
+  }
 
   return (
     <div className="px-24 pt-[30px] pb-9">
@@ -40,7 +53,19 @@ const SearchPage = () => {
       </div>
       <h1 className="mt-8 mb-2 text-4xl text-black">Events</h1>
       <div className="mb-6">All upcoming events</div>
-      <EventList events={upcomingEvents?.data} type="card" loadmore />
+      {isError == false ? (
+        <EventList events={upcomingEvents!} type="card" loadmore />
+      ) : (
+        <div>
+          <h2>{(error as SafeError).message}</h2>
+          <button
+            type="button"
+            className="blue text-white h-12 w-20 rounded-xl"
+          >
+            Try again
+          </button>
+        </div>
+      )}
     </div>
   )
 }

@@ -7,6 +7,9 @@ import { useEffect, useState } from 'react'
 import EventList from './EventList'
 import Button from '../ui/Button'
 import moment from 'moment'
+import { SafeError } from '@/models/safeError'
+import { EventType } from '@/models/event'
+import { PaginatedResult } from '@/models/paginated-result'
 
 interface Props {
   location?: string | null
@@ -22,11 +25,17 @@ export function SearchEvent({
   setPageNumber,
 }: Props) {
   const router = useRouter()
-  const [searchEvent, setSearchEvent] = useState<any>([])
+  const [searchEvent, setSearchEvent] = useState<PaginatedResult<EventType>>()
+  const [apiError, setApiError] = useState('')
 
   const fetchEvents = async () => {
-    const res = await searchEvents(location!, date!, pageNumber!)
-    setSearchEvent(res?.data)
+    try {
+      const res = await searchEvents(location!, date!, pageNumber!)
+      if (res) setSearchEvent(res)
+    } catch (error) {
+      const safeError = error as SafeError
+      setApiError(safeError.message)
+    }
   }
 
   useEffect(() => {
@@ -101,12 +110,13 @@ export function SearchEvent({
       </form>
       {searchEvent && (
         <EventList
-          events={searchEvent?.data}
+          events={searchEvent!.data}
           type="block"
-          meta={searchEvent?.meta}
+          meta={searchEvent!.meta}
           setPageNumber={setPageNumber}
         />
       )}
+      <div>{apiError}</div>
     </>
   )
 }
