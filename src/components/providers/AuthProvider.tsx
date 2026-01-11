@@ -76,13 +76,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const refreshTokensRefresh = async () => {
     const response = await refreshTokens()
     if (
-      response.data.statusCode === StatusCode.UNAUTHORIZED ||
-      response.data.statusCode === StatusCode.FORBIDDEN
+      response?.data.statusCode === StatusCode.UNAUTHORIZED ||
+      response?.data.statusCode === StatusCode.FORBIDDEN
     ) {
       await userSignout()
       signOut()
     } else {
-      setUser(response.data)
+      setUser(response?.data)
     }
   }
 
@@ -92,11 +92,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (localStorage.getItem('user')) {
       ;(async () => {
         const response = await fetchCurrUser()
-        if (response.data.email) {
+        if (response?.data.email) {
           setUser(response.data)
           clearInterval(timerRef.current)
           timerRef.current = setInterval(refreshTokensRefresh, 840000)
-        } else if (response.data.statusCode === StatusCode.UNAUTHORIZED) {
+        } else if (response?.data.statusCode === StatusCode.UNAUTHORIZED) {
           signOut()
         }
       })()

@@ -2,6 +2,7 @@
 
 import EventList from '@/components/events/EventList'
 import Button from '@/components/ui/Button'
+import Grid from '@/components/ui/Grid'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { useAuth } from '@/contexts/AuthContext'
 import { getRecentEvents, getUserUpcomingEvents } from '@/lib/event'
@@ -73,7 +74,7 @@ export default function UserProfile() {
         {user?.first_name + ' ' + user?.last_name}
       </h1>
       <br />
-      <div className="grid grid-cols-2 pl-24 space-x-8">
+      <Grid className="phone:grid-cols-1 tablet:grid-cols-2 pl-24 space-x-8">
         <div>
           <h1 className="text-2xl">All upcoming events</h1>
           <EventList events={upcomingEvents!} type="card" cardIcon />
@@ -82,7 +83,7 @@ export default function UserProfile() {
           <h1 className="text-2xl">Recent events</h1>
           <EventList events={recentEvents!} type="card" />
         </div>
-      </div>
+      </Grid>
     </div>
   )
 }

@@ -10,6 +10,7 @@ import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { SafeError } from '@/models/safeError'
+import DivTable from '@/components/ui/DivTable'
 
 export default function AdminPanel() {
   const { user } = useAuth()
@@ -65,13 +66,12 @@ export default function AdminPanel() {
 
   return (
     <>
-      <RoleTable
-        roles={allRoles!.data}
-        setPageNumber={setPageNumber}
-        meta={allRoles!.meta}
-        handleDelete={handleDelete}
-      />
       <div>{apiError}</div>
+      <DivTable meta={allRoles!.meta} setPageNumber={setPageNumber}>
+        <table className="min-w-full divide-y divide-gray-300">
+          <RoleTable roles={allRoles!.data} handleDelete={handleDelete} />
+        </table>
+      </DivTable>
     </>
   )
 }

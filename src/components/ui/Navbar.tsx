@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Button from './Button'
 import { useAuth } from '../../contexts/AuthContext'
+import Avatar from './Avatar'
 
 const Navbar = () => {
   const { user, signOut, firebaseSignout } = useAuth()
@@ -49,14 +50,13 @@ const Navbar = () => {
         {user ? (
           <div className="flex items-center space-x-8">
             <Link href={routes.USERPROFILE}>
-              <Image
+              <Avatar
                 src={
-                  user.avatar.startsWith('https')
-                    ? user.avatar
+                  user?.avatar.startsWith('https')
+                    ? user?.avatar
                     : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
                 }
                 alt="Avatar"
-                className="navbarAvatar"
                 width={40}
                 height={40}
               />

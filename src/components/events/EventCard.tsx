@@ -2,6 +2,8 @@ import { EventType } from '@/models/event'
 import Image from 'next/image'
 import Link from 'next/link'
 import Button from '../ui/Button'
+import DivCentered from '../ui/DivCentered'
+import Grid from '../ui/Grid'
 
 interface Props {
   event: EventType
@@ -10,17 +12,17 @@ interface Props {
 
 export default function EventCard({ event, typeIcon }: Props) {
   return (
-    <div className="divGrid rounded-xl bg-white h-20 mr-4 mb-4">
-      <div className="flex justify-center items-center">
+    <Grid className="phone:h-40 tablet:grid-cols-3 tablet:h-20 rounded-xl bg-white my-4">
+      <DivCentered>
         <div className="text-lg text-black font-bold">
           {event.date + ' ' + event.hour}
         </div>
-      </div>
-      <div className="text-lg text-black font-bold centered">
+      </DivCentered>
+      <DivCentered className="text-lg text-black font-bold">
         {event.location}
-      </div>
+      </DivCentered>
       {typeIcon ? (
-        <div className="centered">
+        <DivCentered>
           <Button
             variant="error"
             className="flex justify-center items-center h-12 w-14 row-span-2"
@@ -29,14 +31,14 @@ export default function EventCard({ event, typeIcon }: Props) {
               <Image src={typeIcon} alt="Icon" height={20} width={20} />
             </Link>
           </Button>
-        </div>
+        </DivCentered>
       ) : (
-        <div className="centered">
+        <DivCentered>
           <Button variant="default" className="mb-4" type="button">
             <Link href={`/events/${event._id}`}>Check</Link>
           </Button>
-        </div>
+        </DivCentered>
       )}
-    </div>
+    </Grid>
   )
 }

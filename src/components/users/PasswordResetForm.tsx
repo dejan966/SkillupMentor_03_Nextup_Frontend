@@ -14,6 +14,8 @@ import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
 import { SafeError } from '@/models/safeError'
+import FormContainer from '../ui/FormContainer'
+import DivCentered from '../ui/DivCentered'
 
 type Props = {
   defaultValues: UserFormData
@@ -44,8 +46,8 @@ export default function PasswordResetForm({ defaultValues }: Props) {
   }
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl font-bold mb-4">Reset your password</h1>
         <div className="mb-4">
           Enter your email address and we will send you a password reset link.
@@ -64,8 +66,8 @@ export default function PasswordResetForm({ defaultValues }: Props) {
                   aria-describedby="email"
                   className={
                     errors.email
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.email?.message} />
@@ -77,7 +79,7 @@ export default function PasswordResetForm({ defaultValues }: Props) {
             Send password reset email
           </Button>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

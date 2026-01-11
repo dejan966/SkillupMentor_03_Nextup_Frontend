@@ -16,6 +16,10 @@ import Button from '../ui/Button'
 import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
 import { SafeError } from '@/models/safeError'
+import FormContainer from '../ui/FormContainer'
+import Avatar from '../ui/Avatar'
+import DivCentered from '../ui/DivCentered'
+import Grid from '../ui/Grid'
 
 export default function RegisterForm() {
   const { handleSubmit, errors, control } = useRegisterForm()
@@ -72,22 +76,21 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl">Hello!</h1>
         <p className="text-lg text-black font-bold mb-4">
           Get started with your free account today.
         </p>
         <form method="POST" onSubmit={onSubmit}>
           <div className="flex justify-center">
-            <Image
+            <Avatar
               src={
                 preview
                   ? (preview as string)
                   : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`
               }
               alt="Avatar"
-              className="userAvatar"
               width={110}
               height={110}
               onClick={uploadFile}
@@ -115,7 +118,7 @@ export default function RegisterForm() {
               </div>
             )}
           />
-          <div className="flex justify-between">
+          <Grid className="tablet:grid-cols-2 tablet:gap-4">
             <div className="mb-4">
               <Controller
                 control={control}
@@ -128,11 +131,7 @@ export default function RegisterForm() {
                       type="text"
                       aria-label="First name"
                       aria-describedby="first_name"
-                      className={
-                        errors.first_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
+                      className="w-full rounded-full border border-gray-300 px-5 py-2 text-md"
                     />
                     <FormControl message={errors?.first_name?.message} />
                   </div>
@@ -151,18 +150,14 @@ export default function RegisterForm() {
                       type="text"
                       aria-label="Last name"
                       aria-describedby="last_name"
-                      className={
-                        errors.last_name
-                          ? 'tailwind-form-control-errors'
-                          : 'tailwind-form-control'
-                      }
+                      className="w-full rounded-full border border-gray-300 px-5 py-2 text-md"
                     />
                     <FormControl message={errors?.last_name?.message} />
                   </div>
                 )}
               />
             </div>
-          </div>
+          </Grid>
           <Controller
             control={control}
             name="email"
@@ -176,8 +171,8 @@ export default function RegisterForm() {
                   aria-describedby="email"
                   className={
                     errors.email
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.email?.message} />
@@ -198,8 +193,8 @@ export default function RegisterForm() {
                   aria-describedby="password"
                   className={
                     errors.password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.password?.message} />
@@ -220,8 +215,8 @@ export default function RegisterForm() {
                   aria-describedby="confirm_password"
                   className={
                     errors.confirm_password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.confirm_password?.message} />
@@ -244,7 +239,7 @@ export default function RegisterForm() {
             </Link>
           </div>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

@@ -15,6 +15,8 @@ import Label from '../ui/Label'
 import FormControl from '../ui/FormControl'
 import { useAuth } from '../../contexts/AuthContext'
 import { SafeError } from '@/models/safeError'
+import FormContainer from '../ui/FormContainer'
+import DivCentered from '../ui/DivCentered'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
@@ -42,8 +44,8 @@ export default function LoginForm() {
   })
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl">Welcome back!</h1>
         <p className="text-lg text-black font-bold mb-4">
           We are glad you are back.
@@ -62,8 +64,8 @@ export default function LoginForm() {
                   aria-describedby="email"
                   className={
                     errors.email
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'border border-red-500 rounded-full h-10 w-full p-3.5 focus:outline-none focus:ring-0 focus:border-2 focus:border-red-500'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.email?.message} />
@@ -84,8 +86,8 @@ export default function LoginForm() {
                   aria-describedby="password"
                   className={
                     errors.password
-                      ? 'tailwind-form-control-errors'
-                      : 'tailwind-form-control'
+                      ? 'border border-red-500 rounded-full h-10 w-full p-3.5 focus:outline-none focus:ring-0 focus:border-2 focus:border-red-500'
+                      : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md'
                   }
                 />
                 <FormControl message={errors?.password?.message} />
@@ -116,7 +118,7 @@ export default function LoginForm() {
         >
           Sign in with Google
         </Button>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

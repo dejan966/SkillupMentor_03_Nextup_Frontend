@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import { SafeError } from '@/models/safeError'
 import LoadingCircle from '@/components/ui/LoadingCircle'
+import DivTable from '@/components/ui/DivTable'
 
 export default function AdminPanel() {
   const { user } = useAuth()
@@ -62,13 +63,12 @@ export default function AdminPanel() {
 
   return (
     <>
-      <EventTable
-        events={allEvents!.data}
-        setPageNumber={setPageNumber}
-        meta={allEvents!.meta}
-        handleDelete={handleDelete}
-      />
       <div>{apiError}</div>
+      <DivTable meta={allEvents!.meta} setPageNumber={setPageNumber}>
+        <table className="min-w-full divide-y divide-gray-300">
+          <EventTable events={allEvents!.data} handleDelete={handleDelete} />
+        </table>
+      </DivTable>
     </>
   )
 }

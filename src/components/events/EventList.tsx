@@ -4,6 +4,8 @@ import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import EventCard from './EventCard'
 import Link from 'next/link'
 import Button from '../ui/Button'
+import DivCentered from '../ui/DivCentered'
+import Grid from '../ui/Grid'
 
 interface Props {
   events: EventType[]
@@ -27,7 +29,7 @@ export default function EventList({
   return (
     <div>
       {type == 'block' ? (
-        <div className="grid gap-6 phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 relative">
+        <Grid className="phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-6">
           {events?.map((event: EventType) => {
             return (
               <div key={event._id} className="bg-white w-96">
@@ -51,7 +53,7 @@ export default function EventList({
               />
             </div>
           )}
-        </div>
+        </Grid>
       ) : (
         <div>
           {events?.slice(0, 4).map((event: EventType) => {
@@ -80,11 +82,11 @@ export default function EventList({
             )
           })}
           {loadmore !== undefined && loadmore && (
-            <div className="centered">
+            <DivCentered>
               <Button variant="default" className="w-28" type="button">
                 <Link href={'/events/upcoming-events'}>Load more</Link>
               </Button>
-            </div>
+            </DivCentered>
           )}
         </div>
       )}

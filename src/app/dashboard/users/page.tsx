@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query'
 import { notFound } from 'next/navigation'
 import { useState } from 'react'
 import UserTable from '@/components/users/UserTable'
-import { StatusCode } from '@/constants/errorConstants'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { SafeError } from '@/models/safeError'
+import DivTable from '@/components/ui/DivTable'
 
 export default function AdminPanel() {
   const { user } = useAuth()
@@ -63,13 +63,12 @@ export default function AdminPanel() {
 
   return (
     <>
-      <UserTable
-        users={allUsers!.data}
-        setPageNumber={setPageNumber}
-        meta={allUsers!.meta}
-        handleDelete={handleDelete}
-      />
       <div>{apiError}</div>
+      <DivTable meta={allUsers!.meta} setPageNumber={setPageNumber}>
+        <table className="min-w-full divide-y divide-gray-300">
+          <UserTable users={allUsers!.data} handleDelete={handleDelete} />
+        </table>
+      </DivTable>
     </>
   )
 }

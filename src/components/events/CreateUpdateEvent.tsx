@@ -18,6 +18,7 @@ import moment from 'moment'
 import Input from '../ui/Input'
 import FormControl from '../ui/FormControl'
 import Label from '../ui/Label'
+import Grid from '../ui/Grid'
 
 type Props = {
   defaultValues?: EventType
@@ -98,7 +99,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   }, [file])
 
   return (
-    <div className="grid grid-cols-2 pl-24 pr-24 space-x-8">
+    <Grid className="phone:grid-cols-1 tablet:grid-cols-2 pl-24 pr-24 space-x-8">
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form action={formAction}>
@@ -122,7 +123,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
             errors={state?.errors}
           />
           <FormControl message={state?.errors?.location} />
-          <div className="divGrid">
+          <Grid className="phone:grid-cols-1 tablet:grid-cols-3 tablet:gap-4">
             <div className="w-6/7">
               <Label content="Date" />
               <Input
@@ -164,7 +165,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               />
               <FormControl message={state?.errors?.max_users} />
             </div>
-          </div>
+          </Grid>
           <Label content="Description" />
           <Input
             defaultValue={defaultValues?.description || ''}
@@ -250,6 +251,6 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
           />
         )}
       </div>
-    </div>
+    </Grid>
   )
 }

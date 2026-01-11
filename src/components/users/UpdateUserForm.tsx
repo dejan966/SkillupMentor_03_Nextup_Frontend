@@ -14,6 +14,8 @@ import { UserFormState } from '@/models/userFormState'
 import FormControl from '../ui/FormControl'
 import Input from '../ui/Input'
 import Label from '../ui/Label'
+import FormContainer from '../ui/FormContainer'
+import DivCentered from '../ui/DivCentered'
 
 const initialState = {
   success: '',
@@ -76,8 +78,8 @@ export default function UpdateUserForm() {
   }
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-4">Change your profile settings</div>
         <form action={formAction}>
@@ -131,7 +133,7 @@ export default function UpdateUserForm() {
             <a href={routes.USERINFO}>Cancel</a>
           </div>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

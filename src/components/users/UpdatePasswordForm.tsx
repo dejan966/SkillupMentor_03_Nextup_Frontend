@@ -8,6 +8,8 @@ import FormControl from '../ui/FormControl'
 import { useFormState } from 'react-dom'
 import { updateUserPassword } from '@/actions/createUpdateUser'
 import Input from '../ui/Input'
+import FormContainer from '../ui/FormContainer'
+import DivCentered from '../ui/DivCentered'
 
 const initialState = {
   success: '',
@@ -30,8 +32,8 @@ export default function UpdatePasswordForm() {
   }, [state.success])
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-3">Change your password</div>
         <form action={formAction}>
@@ -73,7 +75,7 @@ export default function UpdatePasswordForm() {
             <button onClick={() => router.back()}>Back</button>
           </div>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

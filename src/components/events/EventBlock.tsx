@@ -1,4 +1,5 @@
 import { EventType } from '@/models/event'
+import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,9 +21,7 @@ export default function EventBlock({ event }: Props) {
       </Link>
       <div className="p-3">
         <div className="text-2xl font-bold">{event.name}</div>
-        <div>
-          {new Date(event.date).toLocaleDateString() + ' ' + event.hour}
-        </div>
+        <div>{moment(event.date).format('D.MM.YYYY') + ' ' + event.hour}</div>
         <br />
         <div className="flex justify-between">
           <div className="flex justify-start">

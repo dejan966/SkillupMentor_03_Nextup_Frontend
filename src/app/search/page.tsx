@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { SafeError } from '@/models/safeError'
+import Button from '@/components/ui/Button'
 
 const SearchPage = () => {
   const {
@@ -16,6 +17,7 @@ const SearchPage = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useQuery({
     queryKey: ['upcomingEvents'],
     queryFn: getAllUpcomingEvents,
@@ -58,12 +60,13 @@ const SearchPage = () => {
       ) : (
         <div>
           <h2>{(error as SafeError).message}</h2>
-          <button
-            type="button"
-            className="blue text-white h-12 w-20 rounded-xl"
+          <Button
+            variant="error"
+            className="h-12 w-20"
+            onClick={() => refetch()}
           >
             Try again
-          </button>
+          </Button>
         </div>
       )}
     </div>

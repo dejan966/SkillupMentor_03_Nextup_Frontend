@@ -12,6 +12,9 @@ import { UserFormState } from '@/models/userFormState'
 import Input from '../ui/Input'
 import FormControl from '../ui/FormControl'
 import Label from '../ui/Label'
+import FormContainer from '../ui/FormContainer'
+import Avatar from '../ui/Avatar'
+import DivCentered from '../ui/DivCentered'
 
 type Props = {
   defaultValues?: UserFormData
@@ -82,19 +85,18 @@ export default function CreateUpdateUser({
   }, [file])
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-2xl text-black font-bold mb-4">{title}</h1>
         <form action={formAction}>
           <div className="flex justify-center">
-            <Image
+            <Avatar
               src={
                 preview
                   ? (preview as string)
                   : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${defaultValues?.avatar}`
               }
               alt="Avatar"
-              className="userAvatar"
               width={110}
               height={110}
               onClick={uploadFile}
@@ -206,7 +208,7 @@ export default function CreateUpdateUser({
             {title}
           </Button>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

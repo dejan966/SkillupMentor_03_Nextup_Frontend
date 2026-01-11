@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { SafeError } from '@/models/safeError'
+import Button from '@/components/ui/Button'
 
 export default function UpdatePassword() {
   const { user } = useAuth()
@@ -18,6 +19,7 @@ export default function UpdatePassword() {
     isLoading,
     isError,
     error,
+    refetch,
   } = useQuery({
     queryKey: ['tokenInfo'],
     queryFn: () => fetchTokenInfo(user!._id, token),
@@ -33,9 +35,9 @@ export default function UpdatePassword() {
     return (
       <div>
         <h2>{(error as SafeError).message}</h2>
-        <button type="button" className="blue text-white h-12 w-20 rounded-xl">
+        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
           Try again
-        </button>
+        </Button>
       </div>
     )
   }

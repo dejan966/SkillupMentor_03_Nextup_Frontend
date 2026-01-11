@@ -11,6 +11,7 @@ import { useState } from 'react'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import { SafeError } from '@/models/safeError'
+import moment from 'moment'
 
 type Props = {
   params: {
@@ -83,7 +84,7 @@ export default function Event({ params }: Props) {
         </div>
         <div>
           <div className="flex justify-between">
-            <div>{new Date(eventData!.date).toLocaleDateString()}</div>
+            <div>{moment(eventData!.date).format('D.MM.YYYY')}</div>
             <div>{eventData!.hour}</div>
           </div>
           <h1 className="text-7xl font-bold">{eventData!.name}</h1>

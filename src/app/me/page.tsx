@@ -2,29 +2,30 @@
 
 import Link from 'next/link'
 import { routes } from '@/constants/routesConstants'
-import Image from 'next/image'
 import Button from '@/components/ui/Button'
 import Label from '@/components/ui/Label'
 import Input from '@/components/ui/Input'
 import { useAuth } from '@/contexts/AuthContext'
+import FormContainer from '@/components/ui/FormContainer'
+import Avatar from '@/components/ui/Avatar'
+import DivCentered from '@/components/ui/DivCentered'
 
 export default function UserInfo() {
   const { user } = useAuth()
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl font-bold text-center">Your info!</h1>
         <div>
           <div className="flex justify-center">
-            <Image
+            <Avatar
               src={
                 user?.avatar.startsWith('https')
                   ? user?.avatar
                   : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
               }
               alt="Avatar"
-              className="userAvatar"
               width={120}
               height={120}
             />
@@ -77,7 +78,7 @@ export default function UserInfo() {
             <button>Delete account</button>
           </div>
         </div>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }

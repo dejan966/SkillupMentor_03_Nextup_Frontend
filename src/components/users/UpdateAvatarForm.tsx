@@ -8,6 +8,9 @@ import Button from '../ui/Button'
 import FormControl from '../ui/FormControl'
 import { useFormState } from 'react-dom'
 import { updateUserAvatar } from '@/actions/createUpdateUser'
+import FormContainer from '../ui/FormContainer'
+import Avatar from '../ui/Avatar'
+import DivCentered from '../ui/DivCentered'
 
 type Props = {
   defaultValues?: UserFormData
@@ -64,23 +67,23 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
   }, [file])
 
   return (
-    <div className="centered">
-      <div className="px-8 pt-6 pb-8 mb-4 w-2/5">
+    <DivCentered>
+      <FormContainer>
         <h1 className="text-6xl font-bold">Profile settings</h1>
         <div className="mb-4">Change your profile photo</div>
         <form action={formAction}>
           <div>
             <div className="flex justify-center mb-4">
-              <Image
+              <Avatar
                 src={
                   preview
                     ? (preview as string)
                     : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${defaultValues?.avatar}`
                 }
                 alt="Avatar"
-                className="userAvatar"
                 width={110}
                 height={110}
+                onClick={uploadFile}
               />
             </div>
             <input
@@ -112,7 +115,7 @@ export default function UpdateAvatarForm({ defaultValues }: Props) {
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </FormContainer>
+    </DivCentered>
   )
 }
