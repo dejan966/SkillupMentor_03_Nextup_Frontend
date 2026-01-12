@@ -23,7 +23,7 @@ export default function RoleEdit({ params }: Props) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['fetchRole'],
+    queryKey: ['fetchRole', params.roleId],
     queryFn: () => fetchRole(params.roleId),
     retry: false,
     throwOnError: false,

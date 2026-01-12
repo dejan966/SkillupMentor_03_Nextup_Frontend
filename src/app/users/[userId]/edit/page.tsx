@@ -19,7 +19,7 @@ export default function UsersEdit({ params }: Props) {
     isLoading: userDataLoading,
     isSuccess,
   } = useQuery({
-    queryKey: ['fetchUser'],
+    queryKey: ['fetchUser', params.userId],
     queryFn: () => fetchUser(params.userId),
   })
 

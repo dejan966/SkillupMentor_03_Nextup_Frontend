@@ -21,7 +21,7 @@ export default function EventEdit({ params }: Props) {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ['fetchEvent'],
+    queryKey: ['fetchEvent', params.eventId],
     queryFn: () => fetchEvent(params.eventId),
   })
 
