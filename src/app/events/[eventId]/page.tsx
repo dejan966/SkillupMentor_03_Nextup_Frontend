@@ -63,7 +63,7 @@ export default function Event({ params }: Props) {
 
   const bookUser = async () => {
     try {
-      await bookUserD(eventData!._id)
+      await bookUserD(eventData!.id)
       setApiError('Event successfully booked.')
     } catch (error) {
       const safeError = error as SafeError

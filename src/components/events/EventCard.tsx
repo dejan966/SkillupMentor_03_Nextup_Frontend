@@ -14,9 +14,7 @@ export default function EventCard({ event, typeIcon }: Props) {
   return (
     <Grid className="phone:h-40 tablet:grid-cols-3 tablet:h-20 rounded-xl bg-white my-4">
       <DivCentered>
-        <div className="text-lg text-black font-bold">
-          {event.date + ' ' + event.hour}
-        </div>
+        <div className="text-lg text-black font-bold">{event.event_date}</div>
       </DivCentered>
       <DivCentered className="text-lg text-black font-bold">
         {event.location}
@@ -27,7 +25,7 @@ export default function EventCard({ event, typeIcon }: Props) {
             variant="error"
             className="flex justify-center items-center h-12 w-14 row-span-2"
           >
-            <Link href={`/events/${event._id}/edit`}>
+            <Link href={`/events/${event.id}/edit`}>
               <Image src={typeIcon} alt="Icon" height={20} width={20} />
             </Link>
           </Button>
@@ -35,7 +33,7 @@ export default function EventCard({ event, typeIcon }: Props) {
       ) : (
         <DivCentered>
           <Button variant="default" className="mb-4" type="button">
-            <Link href={`/events/${event._id}`}>Check</Link>
+            <Link href={`/events/${event.id}`}>Check</Link>
           </Button>
         </DivCentered>
       )}

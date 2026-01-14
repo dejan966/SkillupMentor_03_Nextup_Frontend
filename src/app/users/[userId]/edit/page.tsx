@@ -43,7 +43,7 @@ export default function UsersEdit({ params }: Props) {
     <CreateUpdateUser
       title="Update User"
       roles={roles!.data}
-      defaultValues={userData?.data}
+      defaultValues={userData.data}
     />
   )
 }

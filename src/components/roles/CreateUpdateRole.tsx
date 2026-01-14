@@ -29,7 +29,7 @@ const initialState = {
 export default function CreateUpdateRole({ defaultValues, title }: Props) {
   const actionWithId = async (prevState: RoleFormState, formData: FormData) => {
     if (defaultValues) {
-      return updateRoleAction(prevState, formData, defaultValues._id)
+      return updateRoleAction(prevState, formData, defaultValues.id)
     }
     return createRoleAction(prevState, formData)
   }

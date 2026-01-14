@@ -3,10 +3,8 @@
 import { EventType } from '@/models/event'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { fetchCurrUser } from '@/lib/user'
 import Image from 'next/image'
 import EventList from './EventList'
-import { useQuery } from '@tanstack/react-query'
 import Button from '../ui/Button'
 import { EventFormState } from '@/models/eventFormState'
 import {
@@ -19,6 +17,7 @@ import Input from '../ui/Input'
 import FormControl from '../ui/FormControl'
 import Label from '../ui/Label'
 import Grid from '../ui/Grid'
+import { useAuth } from '@/contexts/AuthContext'
 
 type Props = {
   defaultValues?: EventType
@@ -40,14 +39,7 @@ const initialState = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
-  const {
-    data: currUser,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
-  })
+  const { user } = useAuth()
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -57,7 +49,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
     formData: FormData,
   ) => {
     if (defaultValues) {
-      return updateEventAction(prevState, formData, defaultValues._id)
+      return updateEventAction(prevState, formData, defaultValues.id)
     }
     return createEventAction(prevState, formData)
   }
@@ -130,7 +122,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
                 defaultValue={
                   defaultValues
                     ? defaultValues.date
-                    : moment().format('YYYY-M-D')
+                    : moment().format('YYYY-MM-D')
                 }
                 name="date"
                 type="date"
@@ -235,21 +227,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       </div>
       <div>
         <h1 className="text-2xl text-black font-bold mb-4">Added events</h1>
-        {isError ? (
-          <div>
-            <h2>Something went wrong!</h2>
-            <Button variant="error" onClick={() => refetch()}>
-              Try again
-            </Button>
-          </div>
-        ) : (
-          <EventList
-            events={currUser?.data.created_events}
-            type="card"
-            cardIcon
-            edit
-          />
-        )}
+        <EventList events={user!.created_events} type="card" cardIcon edit />
       </div>
     </Grid>
   )

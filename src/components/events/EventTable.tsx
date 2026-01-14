@@ -22,13 +22,13 @@ export default function EventTable({ events, handleDelete }: Props) {
       <tbody className="bg-gray-50">
         {events?.map((event: EventType) => {
           return (
-            <tr key={event._id}>
+            <tr key={event.id}>
               <TableData>{event.name}</TableData>
               <TableData>{event.location}</TableData>
-              <TableData>{event.date}</TableData>
+              <TableData>{event.event_date}</TableData>
               <TableData>
                 <Link
-                  href={`/events/${event._id}/edit`}
+                  href={`/events/${event.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
@@ -38,7 +38,7 @@ export default function EventTable({ events, handleDelete }: Props) {
                 <button
                   className="text-indigo-600 hover:text-indigo-900"
                   onClick={() => {
-                    handleDelete(event._id)
+                    handleDelete(event.id)
                   }}
                 >
                   Delete

@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 export type UserFormData = {
   _id: string
+  id: string
   first_name: string
   last_name: string
   email: string
@@ -11,6 +12,7 @@ export type UserFormData = {
   password: string
   confirm_password: string
   role: string
+  role_id: string
   avatar: string
 }
 

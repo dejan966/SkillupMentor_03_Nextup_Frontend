@@ -2,7 +2,6 @@
 
 import { UserFormData } from '@/hooks/react-hook-forms/useCreateUpdateUser'
 import { RoleType } from '@/models/role'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import Button from '../ui/Button'
@@ -42,12 +41,14 @@ export default function CreateUpdateUser({
   roles,
   title,
 }: Props) {
+  console.log(defaultValues)
+  console.log(roles)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
   const actionWithId = async (prevState: UserFormState, formData: FormData) => {
     if (defaultValues) {
-      return updateUserAction(prevState, formData, defaultValues._id)
+      return updateUserAction(prevState, formData, defaultValues.id)
     }
     return createUserAction(prevState, formData)
   }
@@ -185,9 +186,8 @@ export default function CreateUpdateUser({
           <FormControl message={state?.errors?.confirm_password} />
           <Label content="Role" />
           <select
-            name="role"
-            key={defaultValues?.role}
-            defaultValue={defaultValues?.role || ''}
+            name="role_id"
+            defaultValue={defaultValues?.role_id || ''}
             className={
               state?.errors?.role
                 ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md mb-4'

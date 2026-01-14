@@ -32,7 +32,7 @@ export default function EventList({
         <Grid className="phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-6">
           {events?.map((event: EventType) => {
             return (
-              <div key={event._id} className="bg-white w-96">
+              <div key={event.id} className="bg-white w-96">
                 <EventBlock event={event} />
               </div>
             )
@@ -63,20 +63,20 @@ export default function EventList({
                   <div>
                     {edit !== undefined && edit ? (
                       <EventCard
-                        key={event._id}
+                        key={event.id}
                         event={event}
                         typeIcon="/settingsIcon.svg"
                       />
                     ) : (
                       <EventCard
-                        key={event._id}
+                        key={event.id}
                         event={event}
                         typeIcon="/tickIcon.svg"
                       />
                     )}
                   </div>
                 ) : (
-                  <EventCard key={event._id} event={event} />
+                  <EventCard key={event.id} event={event} />
                 )}
               </>
             )

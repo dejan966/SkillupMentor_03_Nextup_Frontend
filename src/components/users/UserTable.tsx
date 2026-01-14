@@ -23,14 +23,14 @@ export default function UserTable({ users, handleDelete }: Props) {
       <tbody className="bg-gray-50">
         {users?.map((user: UserType) => {
           return (
-            <tr key={user._id}>
+            <tr key={user.id}>
               <TableData>{user.first_name}</TableData>
               <TableData>{user.last_name}</TableData>
               <TableData>{user.email}</TableData>
-              <TableData>{user.role.name}</TableData>
+              <TableData>{user.role?.name}</TableData>
               <TableData>
                 <Link
-                  href={`/users/${user._id}/edit`}
+                  href={`/users/${user.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
@@ -40,7 +40,7 @@ export default function UserTable({ users, handleDelete }: Props) {
                 <button
                   className="text-indigo-600 hover:text-indigo-900"
                   onClick={() => {
-                    handleDelete(user._id)
+                    handleDelete(user.id)
                   }}
                 >
                   Delete

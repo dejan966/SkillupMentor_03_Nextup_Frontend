@@ -41,7 +41,7 @@ export default function AdminPanel() {
   }
 
   if (user) {
-    if (user.role.name !== 'ADMIN') {
+    if (user.role?.name !== 'ADMIN') {
       notFound()
     }
   }

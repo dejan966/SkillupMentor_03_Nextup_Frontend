@@ -28,7 +28,7 @@ export default function RoleTable({ roles, handleDelete }: Props) {
               <TableData>{role.name}</TableData>
               <TableData>
                 <Link
-                  href={`/roles/${role._id}/edit`}
+                  href={`/roles/${role.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
@@ -38,7 +38,7 @@ export default function RoleTable({ roles, handleDelete }: Props) {
                 <button
                   className="text-indigo-600 hover:text-indigo-900"
                   onClick={() => {
-                    handleDelete(role._id)
+                    handleDelete(role.id)
                   }}
                 >
                   Delete
