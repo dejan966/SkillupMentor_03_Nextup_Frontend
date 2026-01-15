@@ -11,7 +11,6 @@ export type UserFormData = {
   current_password: string
   password: string
   confirm_password: string
-  role: string
   role_id: string
   avatar: string
 }

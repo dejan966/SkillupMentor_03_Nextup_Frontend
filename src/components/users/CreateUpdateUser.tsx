@@ -30,7 +30,7 @@ const initialState = {
     password: '',
     new_password: '',
     confirm_password: '',
-    role: '',
+    role_id: '',
     avatar: '',
     apiError: '',
   },
@@ -41,8 +41,6 @@ export default function CreateUpdateUser({
   roles,
   title,
 }: Props) {
-  console.log(defaultValues)
-  console.log(roles)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
@@ -189,7 +187,7 @@ export default function CreateUpdateUser({
             name="role_id"
             defaultValue={defaultValues?.role_id || ''}
             className={
-              state?.errors?.role
+              state?.errors?.role_id
                 ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md mb-4'
                 : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md mb-4'
             }
@@ -201,7 +199,7 @@ export default function CreateUpdateUser({
               </option>
             ))}
           </select>
-          <FormControl message={state?.errors?.role} />
+          <FormControl message={state?.errors?.role_id} />
           <FormControl message={state?.errors?.apiError} />
           <FormControl classname="text-green-600" message={state?.success} />
           <Button variant="default" className="mb-4" type="submit">

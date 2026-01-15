@@ -1,4 +1,3 @@
-import { Types, ObjectId } from 'mongoose'
 import { UserType } from './auth'
 
 export type EventType = {
@@ -13,4 +12,5 @@ export type EventType = {
   hour: string
   max_users: number
   creator: UserType
+  creator_id: string
 }

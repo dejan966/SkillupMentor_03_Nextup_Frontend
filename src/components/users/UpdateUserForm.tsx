@@ -27,7 +27,7 @@ const initialState = {
     password: '',
     new_password: '',
     confirm_password: '',
-    role: '',
+    role_id: '',
     apiError: '',
   },
 }
