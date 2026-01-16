@@ -19,8 +19,8 @@ const SearchPage = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['upcomingEvents'],
-    queryFn: getAllUpcomingEvents,
+    queryKey: ['upcomingEvents', 1],
+    queryFn: () => getAllUpcomingEvents(1),
     retry: false,
     throwOnError: false,
   })
@@ -54,9 +54,14 @@ const SearchPage = () => {
         />
       </div>
       <h1 className="mt-8 mb-2 text-4xl text-black">Events</h1>
-      <div className="mb-6">All upcoming events</div>
       {isError == false ? (
-        <EventList events={upcomingEvents!} type="card" loadmore />
+        <EventList
+          pageTitle="All Upcoming Events"
+          events={upcomingEvents!.data}
+          type="card"
+          linkTo="/events/upcoming-events"
+          loadmore
+        />
       ) : (
         <div>
           <h2>{(error as SafeError).message}</h2>

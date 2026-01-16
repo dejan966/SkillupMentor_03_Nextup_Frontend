@@ -110,6 +110,7 @@ export function SearchEvent({
       </form>
       {searchEvent && (
         <EventList
+          pageTitle="Search Results"
           events={searchEvent!.data}
           type="block"
           meta={searchEvent!.meta}

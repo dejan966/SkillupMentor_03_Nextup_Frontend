@@ -8,26 +8,33 @@ import DivCentered from '../ui/DivCentered'
 import Grid from '../ui/Grid'
 
 interface Props {
+  pageTitle: string
   events: EventType[]
   type: string
   meta?: any
   loadmore?: boolean
+  linkTo?: string
   cardIcon?: boolean
   edit?: boolean
   setPageNumber?: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function EventList({
+  pageTitle,
   events,
   type,
   meta,
   loadmore,
+  linkTo,
   cardIcon,
   edit,
   setPageNumber,
 }: Props) {
   return (
     <div>
+      <h1 className="text-2xl text-black font-bold mb-4text-5xl">
+        {pageTitle}
+      </h1>
       {type == 'block' ? (
         <Grid className="phone:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-6">
           {events?.map((event: EventType) => {
@@ -84,7 +91,7 @@ export default function EventList({
           {loadmore !== undefined && loadmore && (
             <DivCentered>
               <Button variant="default" className="w-28" type="button">
-                <Link href={'/events/upcoming-events'}>Load more</Link>
+                <Link href={linkTo!}>Load more</Link>
               </Button>
             </DivCentered>
           )}

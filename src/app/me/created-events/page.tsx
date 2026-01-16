@@ -3,12 +3,12 @@
 import EventList from '@/components/events/EventList'
 import Button from '@/components/ui/Button'
 import LoadingCircle from '@/components/ui/LoadingCircle'
-import { getAllUpcomingEvents } from '@/lib/event'
+import { fetchCurrUserCreatedEvents } from '@/lib/event'
 import { SafeError } from '@/models/safeError'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export default function AllUpcomingEvents() {
+export default function CurrUserCreatedEvents() {
   const [pageNumber, setPageNumber] = useState(1)
   const {
     data: allEvents,
@@ -17,8 +17,8 @@ export default function AllUpcomingEvents() {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['getAllUpcomingEvents', pageNumber],
-    queryFn: () => getAllUpcomingEvents(pageNumber),
+    queryKey: ['fetchCurrUserCreatedEvents', pageNumber],
+    queryFn: () => fetchCurrUserCreatedEvents(pageNumber),
     retry: false,
     throwOnError: false,
   })
@@ -40,8 +40,9 @@ export default function AllUpcomingEvents() {
 
   return (
     <div className="pl-24 pr-24">
+      <h1 className="text-5xl">Events</h1>
       <EventList
-        pageTitle="All Upcoming Events"
+        pageTitle="All Events You Created"
         events={allEvents!.data}
         meta={allEvents!.meta}
         setPageNumber={setPageNumber}

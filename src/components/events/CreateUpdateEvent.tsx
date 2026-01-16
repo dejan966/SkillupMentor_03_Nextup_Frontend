@@ -17,7 +17,10 @@ import Input from '../ui/Input'
 import FormControl from '../ui/FormControl'
 import Label from '../ui/Label'
 import Grid from '../ui/Grid'
-import { useAuth } from '@/contexts/AuthContext'
+import { useQuery } from '@tanstack/react-query'
+import { fetchCurrUserCreatedEvents } from '@/lib/event'
+import LoadingCircle from '../ui/LoadingCircle'
+import { SafeError } from '@/models/safeError'
 
 type Props = {
   defaultValues?: EventType
@@ -39,7 +42,16 @@ const initialState = {
 }
 
 export default function CreateUpdateEvent({ defaultValues, title }: Props) {
-  const { user } = useAuth()
+  const {
+    data: currUserData,
+    isLoading: currUserDataLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['fetchCurrUserCreatedEvents', 1],
+    queryFn: () => fetchCurrUserCreatedEvents(1),
+  })
 
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -89,6 +101,10 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
       setPreview('')
     }
   }, [file])
+
+  if (currUserDataLoading) {
+    return <LoadingCircle />
+  }
 
   return (
     <Grid className="phone:grid-cols-1 tablet:grid-cols-2 pl-24 pr-24 space-x-8">
@@ -226,8 +242,28 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
         </form>
       </div>
       <div>
-        <h1 className="text-2xl text-black font-bold mb-4">Added events</h1>
-        <EventList events={user!.created_events} type="card" cardIcon edit />
+        {isError ? (
+          <div>
+            <h2>{(error as SafeError).message}</h2>
+            <Button
+              variant="error"
+              className="h-12 w-20"
+              onClick={() => refetch()}
+            >
+              Try again
+            </Button>
+          </div>
+        ) : (
+          <EventList
+            pageTitle="Added Events"
+            events={currUserData!.data}
+            type="card"
+            cardIcon
+            edit
+            linkTo="/me/created-events"
+            loadmore
+          />
+        )}
       </div>
     </Grid>
   )

@@ -75,23 +75,37 @@ export const bookUserD = async (_id: string) => {
   )
 }
 
-export const getAllUpcomingEvents = async () => {
-  return await apiRequest<undefined, EventType[]>(
-    `${apiRoutes.UPCOMING_EVENTS}`,
+export const getAllUpcomingEvents = async (pageNumber: number) => {
+  return await apiRequest<undefined, PaginatedResult<EventType>>(
+    `${apiRoutes.UPCOMING_EVENTS}?page=${pageNumber}`,
     'GET',
   )
 }
 
-export const getUserUpcomingEvents = async () => {
-  return await apiRequest<undefined, EventType[]>(
-    `${apiRoutes.EVENTS_PREFIX}/user/upcomingEvents`,
+export const getRecentEvents = async (pageNumber: number) => {
+  return await apiRequest<undefined, PaginatedResult<EventType>>(
+    `${apiRoutes.RECENT_EVENTS}?page=${pageNumber}`,
     'GET',
   )
 }
 
-export const getRecentEvents = async () => {
-  return await apiRequest<undefined, EventType[]>(
-    `${apiRoutes.RECENT_EVENTS}`,
+export const fetchCurrUserCreatedEvents = async (pageNumber: number) => {
+  return await apiRequest<never, PaginatedResult<EventType>>(
+    `${apiRoutes.CURR_USER_CREATED_EVENTS}?page=${pageNumber}`,
+    'GET',
+  )
+}
+
+export const fetchCurrUserUpcomingEvents = async (pageNumber: number) => {
+  return await apiRequest<undefined, PaginatedResult<EventType>>(
+    `${apiRoutes.CURR_USER_UPCOMING_EVENTS}?page=${pageNumber}`,
+    'GET',
+  )
+}
+
+export const fetchCurrUserRecentEvents = async (pageNumber: number) => {
+  return await apiRequest<undefined, PaginatedResult<EventType>>(
+    `${apiRoutes.CURR_USER_RECENT_EVENTS}?page=${pageNumber}`,
     'GET',
   )
 }
