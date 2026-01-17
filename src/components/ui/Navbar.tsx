@@ -5,7 +5,7 @@ import { routes } from '@/constants/routesConstants'
 import Image from 'next/image'
 import Link from 'next/link'
 import { userSignout } from '@/lib/user'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Button from './Button'
 import { useAuth } from '../../contexts/AuthContext'
@@ -18,11 +18,22 @@ const Navbar = () => {
   const [showError, setShowError] = useState(false)
   const { isMobile } = useMediaQuery(1038)
   const [showMenu, setShowMenu] = useState(false)
+  const [showAvatarMenu, setShowAvatarMenu] = useState(false)
 
   const router = useRouter()
 
+  useEffect(() => {
+    if (!isMobile && showMenu) {
+      setShowMenu(false)
+    }
+  }, [isMobile, showMenu])
+
   const toggleHamburger = () => {
     setShowMenu((showMenu) => !showMenu)
+  }
+
+  const toggleAvatarMenu = () => {
+    setShowAvatarMenu((showAvatarMenu) => !showAvatarMenu)
   }
 
   const signout = async () => {
@@ -58,19 +69,71 @@ const Navbar = () => {
                 />
               </Link>
             </div>
-            <div onClick={toggleHamburger}>x</div>
+            <div className="cursor-pointer" onClick={toggleHamburger}>
+              x
+            </div>
           </div>
           <div className="flex justify-center text-center items-center mb-3">
-            <ul className="space-y-2">
+            <ul onClick={toggleHamburger} className="space-y-2">
               <li>
                 <Link href={routes.HOME}>Home</Link>
               </li>
               <li>
                 <Link href="/search">Search</Link>
               </li>
-
               {user ? (
-                <>
+                <div className="relative">
+                  <button onClick={toggleAvatarMenu}>
+                    <Avatar
+                      src={
+                        user?.avatar.startsWith('https')
+                          ? user?.avatar
+                          : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
+                      }
+                      alt="Avatar"
+                      width={40}
+                      height={40}
+                    />
+                  </button>
+                  {showAvatarMenu && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={toggleAvatarMenu}
+                      />
+                      <ul
+                        onClick={toggleAvatarMenu}
+                        className="border-2 border-blue-700 bg-white text-left absolute right-6 px-4 py-2 z-50 whitespace-nowrap"
+                      >
+                        <li className="text-black uppercase border-b-2 border-dashed border-black">
+                          <Link href={routes.USERINFO}>{user.full_name}</Link>
+                        </li>
+                        <li className="cursor-pointer py-1">
+                          <Link href={routes.USERPROFILE}>Profile</Link>
+                        </li>
+                        <li className="cursor-pointer py-1">
+                          <Link href={routes.CURRUSER_CREATEDEVENTS}>
+                            Created events
+                          </Link>
+                        </li>
+                        <li className="cursor-pointer py-1">
+                          <Link href={routes.CURRUSER_UPCOMINGEVENTS}>
+                            Upcoming events
+                          </Link>
+                        </li>
+                        <li className="cursor-pointer py-1">
+                          <Link href={routes.CURRUSER_RECENTEVENTS}>
+                            Recent events
+                          </Link>
+                        </li>
+                        <li className="cursor-pointer pt-1">
+                          <Link href={routes.HOME} onClick={signout}>
+                            Signout
+                          </Link>
+                        </li>
+                      </ul>
+                    </>
+                  )}
                   <li>
                     <Link href="/events/add">Event manager</Link>
                   </li>
@@ -79,7 +142,7 @@ const Navbar = () => {
                       Signout
                     </Link>
                   </li>
-                </>
+                </div>
               ) : (
                 <>
                   <li>
@@ -103,9 +166,9 @@ const Navbar = () => {
               className="flex flex-col gap-1 p-2"
               aria-label="Toggle menu"
             >
-              <span className="block h-0.5 w-6 bg-black"></span>
-              <span className="block h-0.5 w-6 bg-black"></span>
-              <span className="block h-0.5 w-6 bg-black"></span>
+              <span className="block h-0.5 w-6 bg-black" />
+              <span className="block h-0.5 w-6 bg-black" />
+              <span className="block h-0.5 w-6 bg-black" />
             </button>
           ) : (
             <>
@@ -125,8 +188,8 @@ const Navbar = () => {
             </>
           )}
           {user ? (
-            <div className="flex items-center space-x-8">
-              <Link href={routes.USERPROFILE}>
+            <>
+              <button onClick={toggleAvatarMenu}>
                 <Avatar
                   src={
                     user?.avatar.startsWith('https')
@@ -137,12 +200,47 @@ const Navbar = () => {
                   width={40}
                   height={40}
                 />
-              </Link>
-              <Link href={routes.USERINFO}>Profile settings</Link>
-              <Link href={routes.HOME} onClick={signout}>
-                Signout
-              </Link>
-            </div>
+              </button>
+              {showAvatarMenu && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={toggleAvatarMenu}
+                  />
+                  <ul
+                    onClick={toggleAvatarMenu}
+                    className="border-2 border-blue-700 bg-white text-left fixed right-6 top-20 px-4 py-2 z-50 whitespace-nowrap"
+                  >
+                    <li className="text-black uppercase border-b-2 border-dashed border-black">
+                      <Link href={routes.USERINFO}>{user.full_name}</Link>
+                    </li>
+                    <li className="cursor-pointer py-1">
+                      <Link href={routes.USERPROFILE}>Profile</Link>
+                    </li>
+                    <li className="cursor-pointer py-1">
+                      <Link href={routes.CURRUSER_CREATEDEVENTS}>
+                        Created events
+                      </Link>
+                    </li>
+                    <li className="cursor-pointer py-1">
+                      <Link href={routes.CURRUSER_UPCOMINGEVENTS}>
+                        Upcoming events
+                      </Link>
+                    </li>
+                    <li className="cursor-pointer py-1">
+                      <Link href={routes.CURRUSER_RECENTEVENTS}>
+                        Recent events
+                      </Link>
+                    </li>
+                    <li className="cursor-pointer pt-1">
+                      <Link href={routes.HOME} onClick={signout}>
+                        Signout
+                      </Link>
+                    </li>
+                  </ul>
+                </>
+              )}
+            </>
           ) : (
             <div className="space-x-8">
               <Link href={routes.LOGIN}>Login</Link>
