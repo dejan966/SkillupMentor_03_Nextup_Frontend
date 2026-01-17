@@ -4,7 +4,7 @@ import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import Image from 'next/image'
 import Link from 'next/link'
-import { userSignout } from '@/lib/user'
+import { checkUserRole, userSignout } from '@/lib/user'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Button from './Button'
@@ -19,8 +19,17 @@ const Navbar = () => {
   const { isMobile } = useMediaQuery(1038)
   const [showMenu, setShowMenu] = useState(false)
   const [showAvatarMenu, setShowAvatarMenu] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const router = useRouter()
+
+  const checkRole = async () => {
+    const response = await checkUserRole()
+    setIsAdmin(response.data)
+  }
+  useEffect(() => {
+    checkRole()
+  }, [user])
 
   useEffect(() => {
     if (!isMobile && showMenu) {
@@ -184,6 +193,9 @@ const Navbar = () => {
                 <Link href={routes.HOME}>Home</Link>
                 <Link href="/search">Search</Link>
                 {user && <Link href="/events/add">Event manager</Link>}
+                {isAdmin === true && (
+                  <Link href="/dashboard">Admin dashboard</Link>
+                )}
               </div>
             </>
           )}

@@ -105,6 +105,17 @@ export const fetchCurrUser = async () => {
   }
 }
 
+export const checkUserRole = async () => {
+  try {
+    const response = await axiosInstance.get<undefined, boolean>(
+      apiRoutes.ADMIN,
+    )
+    return response
+  } catch (error: any) {
+    return error.response
+  }
+}
+
 export const fetchUsers = async (pageNumber: number) => {
   return await apiRequest<never, PaginatedResult<UserType>>(
     `${apiRoutes.USERS_PREFIX}?page=${pageNumber}`,

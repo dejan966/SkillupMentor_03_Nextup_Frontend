@@ -2,18 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { deleteEvent, fetchEvents } from '@/lib/event'
-import { notFound } from 'next/navigation'
 import EventTable from '@/components/events/EventTable'
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
-import { useAuth } from '@/contexts/AuthContext'
 import { SafeError } from '@/models/safeError'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import DivTable from '@/components/ui/DivTable'
+import Link from 'next/link'
 
 export default function AdminPanel() {
-  const { user } = useAuth()
-
   const [pageNumber, setPageNumber] = useState(1)
   const [apiError, setApiError] = useState('')
 
@@ -40,12 +37,6 @@ export default function AdminPanel() {
     }
   }
 
-  if (user) {
-    if (user.role?.name !== 'ADMIN') {
-      notFound()
-    }
-  }
-
   if (isLoading) {
     return <LoadingCircle />
   }
@@ -54,9 +45,6 @@ export default function AdminPanel() {
     return (
       <div>
         <h2>{(error as SafeError).message}</h2>
-        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
-          Try again
-        </Button>
       </div>
     )
   }
@@ -64,6 +52,11 @@ export default function AdminPanel() {
   return (
     <>
       <div>{apiError}</div>
+      <div className="flex justify-end mb-4">
+        <Button className="justify-center w-28">
+          <Link href="/events/add">Create event</Link>
+        </Button>
+      </div>
       <DivTable meta={allEvents!.meta} setPageNumber={setPageNumber}>
         <table className="min-w-full divide-y divide-gray-300">
           <EventTable events={allEvents!.data} handleDelete={handleDelete} />
