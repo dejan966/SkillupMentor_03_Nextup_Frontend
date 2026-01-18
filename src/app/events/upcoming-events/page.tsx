@@ -21,6 +21,7 @@ export default function AllUpcomingEvents() {
     queryFn: () => getAllUpcomingEvents(pageNumber),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {

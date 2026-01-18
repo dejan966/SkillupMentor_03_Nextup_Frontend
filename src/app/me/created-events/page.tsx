@@ -21,6 +21,7 @@ export default function CurrUserCreatedEvents() {
     queryFn: () => fetchCurrUserCreatedEvents(pageNumber),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {

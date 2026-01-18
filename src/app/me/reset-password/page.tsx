@@ -17,6 +17,7 @@ export default function ResetPassword() {
   } = useQuery({
     queryKey: ['currUser'],
     queryFn: fetchCurrUser,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {

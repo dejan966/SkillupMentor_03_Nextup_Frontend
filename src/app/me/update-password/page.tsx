@@ -25,6 +25,7 @@ export default function UpdatePassword() {
     queryFn: () => fetchTokenInfo(user!._id, token),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {
@@ -42,9 +43,9 @@ export default function UpdatePassword() {
     )
   }
 
-  return (
-    <div>
-      {tokenInfo === false ? <div>Token expired</div> : <UpdatePasswordForm />}
-    </div>
-  )
+  if (tokenInfo === false) {
+    return <h2>Token Expired</h2>
+  }
+
+  return <UpdatePasswordForm />
 }

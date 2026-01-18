@@ -4,9 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { routes } from '@/constants/routesConstants'
 import Link from 'next/link'
-import { fetchCurrUser } from '@/lib/user'
-import { useQuery } from '@tanstack/react-query'
-import LoadingCircle from '../ui/LoadingCircle'
 import Button from '../ui/Button'
 import { useFormState } from 'react-dom'
 import { updateUserAction } from '@/actions/createUpdateUser'
@@ -16,6 +13,11 @@ import Input from '../ui/Input'
 import Label from '../ui/Label'
 import FormContainer from '../ui/FormContainer'
 import DivCentered from '../ui/DivCentered'
+import { UserFormData } from '@/hooks/react-hook-forms/useCreateUpdateUser'
+
+type Props = {
+  defaultValues: UserFormData
+}
 
 const initialState = {
   success: '',
@@ -27,24 +29,12 @@ const initialState = {
     password: '',
     new_password: '',
     confirm_password: '',
-    role_id: '',
+    role: '',
     apiError: '',
   },
 }
 
-export default function UpdateUserForm() {
-  const {
-    data: currUser,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
-  })
-
-  const defaultValues = currUser?.data
-
+export default function UpdateUserForm({ defaultValues }: Props) {
   const actionWithId = async (prevState: UserFormState, formData: FormData) => {
     return updateUserAction(prevState, formData, defaultValues._id)
   }
@@ -57,25 +47,6 @@ export default function UpdateUserForm() {
       router.back()
     }
   }, [state.success])
-
-  if (isLoading) {
-    return (
-      <div>
-        <LoadingCircle />
-      </div>
-    )
-  }
-
-  if (isError) {
-    return (
-      <div>
-        <h2>Something went wrong!</h2>
-        <Button variant="error" className="h-12 w-20" onClick={() => refetch()}>
-          Try again
-        </Button>
-      </div>
-    )
-  }
 
   return (
     <DivCentered>

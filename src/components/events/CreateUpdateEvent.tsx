@@ -51,6 +51,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
   } = useQuery({
     queryKey: ['fetchCurrUserCreatedEvents', 1],
     queryFn: () => fetchCurrUserCreatedEvents(1),
+    refetchOnWindowFocus: false,
   })
 
   const [file, setFile] = useState<File | null>(null)

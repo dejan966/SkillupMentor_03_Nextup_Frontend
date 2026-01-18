@@ -13,7 +13,7 @@ import Avatar from '../ui/Avatar'
 import DivCentered from '../ui/DivCentered'
 
 type Props = {
-  defaultValues?: UserFormData
+  defaultValues: UserFormData
 }
 
 const initialState = {
@@ -25,7 +25,7 @@ const initialState = {
     password: '',
     new_password: '',
     confirm_password: '',
-    role_id: '',
+    role: '',
     avatar: '',
     apiError: '',
   },

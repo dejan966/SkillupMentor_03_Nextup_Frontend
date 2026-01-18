@@ -1,12 +1,11 @@
 'use client'
 
 import { fetchEvent, bookUserD } from '@/lib/event'
-import { notFound, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import LoadingCircle from '@/components/ui/LoadingCircle'
 import { StatusCode } from '@/constants/errorConstants'
-import { routes } from '@/constants/routesConstants'
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -26,16 +25,16 @@ export default function Event({ params }: Props) {
   const { user } = useAuth()
   const {
     data: eventData,
-    isSuccess,
     isLoading,
     isError,
     error,
     refetch,
   } = useQuery({
-    queryKey: ['fetchEvent'],
+    queryKey: ['fetchEvent', params.eventId],
     queryFn: () => fetchEvent(params.eventId),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {
@@ -55,10 +54,6 @@ export default function Event({ params }: Props) {
         </Button>
       </div>
     )
-  }
-
-  if (isSuccess === true && !eventData._id) {
-    notFound()
   }
 
   const bookUser = async () => {

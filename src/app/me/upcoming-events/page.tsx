@@ -21,6 +21,7 @@ export default function CurrUserUpcomingEvents() {
     queryFn: () => fetchCurrUserUpcomingEvents(pageNumber),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {

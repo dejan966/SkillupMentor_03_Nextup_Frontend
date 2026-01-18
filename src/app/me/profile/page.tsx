@@ -26,6 +26,7 @@ export default function UserProfile() {
   } = useQuery({
     queryKey: ['upcomingEvents', 1],
     queryFn: () => fetchCurrUserUpcomingEvents(1),
+    refetchOnWindowFocus: false,
   })
 
   const {
@@ -37,6 +38,7 @@ export default function UserProfile() {
   } = useQuery({
     queryKey: ['fetchCurrUserRecentEvents', 1],
     queryFn: () => fetchCurrUserRecentEvents(1),
+    refetchOnWindowFocus: false,
   })
 
   if (isLoadingUpcoming || isLoadingRecent) {

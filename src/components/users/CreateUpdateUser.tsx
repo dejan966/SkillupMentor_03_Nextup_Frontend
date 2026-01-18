@@ -30,7 +30,7 @@ const initialState = {
     password: '',
     new_password: '',
     confirm_password: '',
-    role_id: '',
+    role: '',
     avatar: '',
     apiError: '',
   },
@@ -184,10 +184,10 @@ export default function CreateUpdateUser({
           <FormControl message={state?.errors?.confirm_password} />
           <Label content="Role" />
           <select
-            name="role_id"
-            defaultValue={defaultValues?.role_id || ''}
+            name="role"
+            defaultValue={defaultValues?.role || ''}
             className={
-              state?.errors?.role_id
+              state?.errors?.role
                 ? 'w-full rounded-full border border-red-600 px-5 py-2 text-md mb-4'
                 : 'w-full rounded-full border border-gray-300 px-5 py-2 text-md mb-4'
             }
@@ -199,7 +199,7 @@ export default function CreateUpdateUser({
               </option>
             ))}
           </select>
-          <FormControl message={state?.errors?.role_id} />
+          <FormControl message={state?.errors?.role} />
           <FormControl message={state?.errors?.apiError} />
           <FormControl classname="text-green-600" message={state?.success} />
           <Button variant="default" className="mb-4" type="submit">

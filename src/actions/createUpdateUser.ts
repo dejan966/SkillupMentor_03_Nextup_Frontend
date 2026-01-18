@@ -39,7 +39,7 @@ const createUserSchema = z
     confirm_password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters.' }),
-    role_id: z.string({ required_error: 'A role must be selected.' }),
+    role: z.string().min(1, { message: 'A role must be selected.' }),
     avatar: z
       .instanceof(File, { message: 'It has to be of type file.' })
       .optional()
@@ -82,7 +82,7 @@ const updateUserSchema = z
     password: z.string().optional(),
     new_password: z.string().optional(),
     confirm_password: z.string().optional(),
-    role_id: z.string().optional(),
+    role: z.string().optional(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
     path: ['confirm_password'],
@@ -131,7 +131,7 @@ export async function createUserAction(
     password: formData.get('password'),
     confirm_password: formData.get('confirm_password'),
     new_password: formData.get('new_password') || '',
-    role_id: formData.get('role_id'),
+    role: formData.get('role'),
     avatar: formData.get('avatar'),
   })
 
@@ -146,7 +146,7 @@ export async function createUserAction(
         password: formFieldErrors.password?.[0] || '',
         new_password: '',
         confirm_password: formFieldErrors.confirm_password?.[0] || '',
-        role_id: formFieldErrors.role_id?.[0] || '',
+        role: formFieldErrors.role?.[0] || '',
         avatar: formFieldErrors.avatar?.[0] || '',
         apiError: '',
       },
@@ -178,7 +178,7 @@ export async function createUserAction(
         password: '',
         new_password: '',
         confirm_password: '',
-        role_id: '',
+        role: '',
         apiError: error.response?.data.message,
       },
     }
@@ -193,7 +193,7 @@ export async function createUserAction(
       password: '',
       new_password: '',
       confirm_password: '',
-      role_id: '',
+      role: '',
       avatar: '',
       apiError: '',
     },
@@ -212,7 +212,7 @@ export async function updateUserAction(
     password: formData.get('password') || undefined,
     new_password: formData.get('new_password') || undefined,
     confirm_password: formData.get('confirm_password') || undefined,
-    role_id: formData.get('role_id') || undefined,
+    role: formData.get('role') || undefined,
     avatar: formData.get('avatar') || undefined,
   })
 
@@ -227,7 +227,7 @@ export async function updateUserAction(
         password: formFieldErrors.password?.[0] || '',
         new_password: formFieldErrors.new_password?.[0] || '',
         confirm_password: formFieldErrors.confirm_password?.[0] || '',
-        role_id: formFieldErrors.role_id?.[0] || '',
+        role: formFieldErrors.role?.[0] || '',
         avatar: formFieldErrors.avatar?.[0] || '',
         apiError: '',
       },
@@ -250,7 +250,7 @@ export async function updateUserAction(
         password: '',
         new_password: '',
         confirm_password: '',
-        role_id: '',
+        role: '',
         avatar: '',
         apiError: response?.data.message,
       },
@@ -266,7 +266,7 @@ export async function updateUserAction(
       password: '',
       new_password: '',
       confirm_password: '',
-      role_id: '',
+      role: '',
       avatar: '',
       apiError: '',
     },
@@ -336,7 +336,7 @@ export async function updateUserAvatar(
     password: formData.get('password') || undefined,
     new_password: formData.get('new_password') || undefined,
     confirm_password: formData.get('confirm_password') || undefined,
-    role_id: formData.get('role_id') || undefined,
+    role: formData.get('role') || undefined,
     avatar: formData.get('avatar'),
   })
 
@@ -351,7 +351,7 @@ export async function updateUserAvatar(
         password: formFieldErrors.password?.[0] || '',
         new_password: formFieldErrors.new_password?.[0] || '',
         confirm_password: formFieldErrors.confirm_password?.[0] || '',
-        role_id: formFieldErrors.role_id?.[0] || '',
+        role: formFieldErrors.role?.[0] || '',
         avatar: formFieldErrors.avatar?.[0] || '',
         apiError: '',
       },
@@ -374,7 +374,7 @@ export async function updateUserAvatar(
         password: '',
         new_password: '',
         confirm_password: '',
-        role_id: '',
+        role: '',
         avatar: '',
         apiError: response?.data.message,
       },
@@ -391,7 +391,7 @@ export async function updateUserAvatar(
       password: '',
       new_password: '',
       confirm_password: '',
-      role_id: '',
+      role: '',
       apiError: '',
     },
   }

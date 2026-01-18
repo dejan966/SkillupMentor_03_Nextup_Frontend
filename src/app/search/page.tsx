@@ -23,6 +23,7 @@ const SearchPage = () => {
     queryFn: () => getAllUpcomingEvents(1),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   const [pageNumber, setPageNumber] = useState(1)

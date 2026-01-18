@@ -21,6 +21,7 @@ export default function CurrUserRecentEvents() {
     queryFn: () => fetchCurrUserRecentEvents(pageNumber),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {

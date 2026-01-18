@@ -1,9 +1,8 @@
 'use client'
 
-import { notFound, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { RoleType } from '@/models/role'
-import { fetchCurrUser } from '@/lib/user'
 import { useQuery } from '@tanstack/react-query'
 import Button from '../ui/Button'
 import { createRoleAction, updateRoleAction } from '@/actions/createUpdateRole'
@@ -38,22 +37,11 @@ export default function CreateUpdateRole({ defaultValues, title }: Props) {
 
   const router = useRouter()
 
-  const { data: currUser } = useQuery({
-    queryKey: ['currUser'],
-    queryFn: fetchCurrUser,
-  })
-
   useEffect(() => {
     if (state.success) {
       router.back()
     }
   }, [state.success])
-
-  if (currUser) {
-    if (currUser?.data.role.name !== 'ADMIN') {
-      notFound()
-    }
-  }
 
   return (
     <div className="centeredRoles">

@@ -4,8 +4,8 @@ import LoadingCircle from '@/components/ui/LoadingCircle'
 import CreateUpdateUser from '@/components/users/CreateUpdateUser'
 import { fetchRoles } from '@/lib/role'
 import { fetchUser } from '@/lib/user'
+import { SafeError } from '@/models/safeError'
 import { useQuery } from '@tanstack/react-query'
-import { notFound } from 'next/navigation'
 
 type Props = {
   params: {
@@ -14,29 +14,32 @@ type Props = {
 }
 
 export default function UsersEdit({ params }: Props) {
-  const {
-    data: userData,
-    isLoading: userDataLoading,
-    isSuccess,
-  } = useQuery({
+  const { data: userData, isLoading: userDataLoading } = useQuery({
     queryKey: ['fetchUser', params.userId],
     queryFn: () => fetchUser(params.userId),
   })
 
-  const { data: roles, isLoading: roleDataLoading } = useQuery({
+  const {
+    data: roles,
+    isLoading: roleDataLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['fetchRoles'],
     queryFn: () => fetchRoles(1),
+    refetchOnWindowFocus: false,
   })
-
-  if (
-    isSuccess === true &&
-    (userData?.data.message === 'Unauthorized' || !userData?.data._id)
-  ) {
-    notFound()
-  }
 
   if (userDataLoading || roleDataLoading) {
     return <LoadingCircle />
+  }
+
+  if (isError) {
+    return (
+      <div>
+        <h2>{(error as SafeError).message}</h2>
+      </div>
+    )
   }
 
   return (

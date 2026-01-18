@@ -8,7 +8,7 @@ export default function UsersLayout({
   return (
     <>
       {children}
-      <Footer />
+      <Footer options={'absoluteFooter'} />
     </>
   )
 }

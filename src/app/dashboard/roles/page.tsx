@@ -25,6 +25,7 @@ export default function AdminPanel() {
     queryFn: async () => fetchRoles(pageNumber),
     retry: false,
     throwOnError: false,
+    refetchOnWindowFocus: false,
   })
 
   const handleDelete = async (_id: string) => {

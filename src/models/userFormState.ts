@@ -8,7 +8,7 @@ export type UserFormState = {
     password: string
     new_password: string
     confirm_password: string
-    role_id: string
+    role: string
     apiError: string
   }
 }
