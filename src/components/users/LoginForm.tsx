@@ -20,11 +20,10 @@ import DivCentered from '../ui/DivCentered'
 
 export default function LoginForm() {
   const { handleSubmit, errors, control } = useLoginForm()
-  const { setUser } = useAuth()
+  const { user, setUser, googleFirebaseSignIn } = useAuth()
   const [apiError, setApiError] = useState('')
 
   const router = useRouter()
-  const { user, googleFirebaseSignIn } = useAuth()
 
   useEffect(() => {
     if (user) {
