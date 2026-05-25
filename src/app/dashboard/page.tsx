@@ -1,5 +1,6 @@
 'use client'
 
+import Grid from '@/components/ui/Grid'
 import { useAuth } from '@/contexts/AuthContext'
 import { checkUserRole } from '@/lib/user'
 import Link from 'next/link'
@@ -26,16 +27,19 @@ export default function DashboardPanel() {
     )
   }
   return (
-    <div>
-      <div>
+    <Grid className="laptop:grid-cols-3 tablet:grid-cols-2 gap-4">
+      <Grid className="p-4 phone:h-40 tablet:h-20 rounded-xl bg-white shadow-lg my-4">
         <Link href="/dashboard/users">Users</Link>
-      </div>
-      <div>
+        <div>Operations on Users table</div>
+      </Grid>
+      <Grid className="p-4 phone:h-40 tablet:h-20 rounded-xl bg-white shadow-lg my-4">
         <Link href="/dashboard/events">Events</Link>
-      </div>
-      <div>
+        <div>Operations on Events table</div>
+      </Grid>
+      <Grid className="p-4 phone:h-40 tablet:h-20 rounded-xl bg-white shadow-lg my-4">
         <Link href="/dashboard/roles">Roles</Link>
-      </div>
-    </div>
+        <div>Operations on Roles table</div>
+      </Grid>
+    </Grid>
   )
 }
