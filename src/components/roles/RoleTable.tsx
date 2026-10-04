@@ -3,17 +3,20 @@ import Link from 'next/link'
 import { MetaType } from '@/models/paginated-result'
 import TableHeader from '../ui/TableHeader'
 import TableData from '../ui/TableData'
+import { RolePermissionType } from '@/models/role-permission'
 
 interface Props {
   roles: RoleType[]
   handleDelete: (_id: string) => void
 }
 export default function RoleTable({ roles, handleDelete }: Props) {
+  console.log(roles)
   return (
     <>
       <thead className="bg-gray-50">
         <tr>
           <TableHeader scope="col">Role</TableHeader>
+          <TableHeader scope="col">Permission</TableHeader>
           <TableHeader scope="col">Edit</TableHeader>
           <TableHeader scope="col">Delete</TableHeader>
         </tr>
@@ -26,6 +29,11 @@ export default function RoleTable({ roles, handleDelete }: Props) {
               className="border border-solid border-l-0 border-r-0"
             >
               <TableData>{role.name}</TableData>
+              <TableData>
+                {role.permissions.map((permissions: RolePermissionType) => {
+                  return <div>{permissions.role.name}</div>
+                })}
+              </TableData>
               <TableData>
                 <Link
                   href={`/roles/${role.id}/edit`}

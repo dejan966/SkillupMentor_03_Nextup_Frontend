@@ -109,7 +109,11 @@ export async function createEventAction(
       },
     }
   } else {
-    const fileResponse = await uploadEventImage(formData, response.data._id)
+    const fileResponse = await axiosServerInstance.post(
+`${apiRoutes.UPLOAD_EVENT_IMAGE}/${response.data._id}`,
+    formData
+    )
+    //uploadEventImage(formData, response.data._id)
     if (
       fileResponse?.status === StatusCode.BAD_REQUEST ||
       fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR
