@@ -72,7 +72,7 @@ export default function Event({ params }: Props) {
       <div className="relative">
         <div className="images pl-4">
           <img
-            src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${eventData!.image}`}
+            src={`${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/events/${eventData!.image}`}
             alt="Event image"
             className="img"
           />

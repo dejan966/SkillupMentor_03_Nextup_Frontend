@@ -97,7 +97,7 @@ const Navbar = () => {
                       src={
                         user?.avatar.startsWith('https')
                           ? user?.avatar
-                          : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
+                          : `${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/avatars/${user?.avatar}`
                       }
                       alt="Avatar"
                       width={40}
@@ -206,7 +206,7 @@ const Navbar = () => {
                   src={
                     user?.avatar.startsWith('https')
                       ? user?.avatar
-                      : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${user?.avatar}`
+                      : `${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/avatars/${user?.avatar}`
                   }
                   alt="Avatar"
                   width={40}

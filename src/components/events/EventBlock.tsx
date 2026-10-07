@@ -12,7 +12,7 @@ export default function EventBlock({ event }: Props) {
     <div>
       <Link href={`/events/${event.id}`}>
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${event.image}`}
+          src={`${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/events/${event.image}`}
           alt="Event image"
           width={322}
           height={100}

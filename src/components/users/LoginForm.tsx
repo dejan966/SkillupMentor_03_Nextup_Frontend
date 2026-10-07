@@ -35,7 +35,6 @@ export default function LoginForm() {
     try {
       const response = await login(data)
       setUser(response)
-      router.push(routes.HOME)
     } catch (error) {
       const safeError = error as SafeError
       setApiError(safeError.message)

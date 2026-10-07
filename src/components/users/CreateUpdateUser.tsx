@@ -93,7 +93,7 @@ export default function CreateUpdateUser({
               src={
                 preview
                   ? (preview as string)
-                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/${defaultValues?.avatar}`
+                  : `${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/avatars/${defaultValues?.avatar}`
               }
               alt="Avatar"
               width={110}

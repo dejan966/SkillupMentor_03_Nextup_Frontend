@@ -3,10 +3,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8080',
-        pathname: '/uploads/**',
+        protocol: 'https',
+        hostname: 'negan-playground-131544655377-eu-north-1-an.s3.eu-north-1.amazonaws.com',
       },
       {
         protocol: 'https',

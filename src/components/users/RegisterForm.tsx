@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchCurrUser, login, register, uploadAvatar } from '@/lib/user'
+import { login, register, uploadAvatar } from '@/lib/user'
 import { StatusCode } from '@/constants/errorConstants'
 import { routes } from '@/constants/routesConstants'
 import {
@@ -8,7 +8,6 @@ import {
   RegisterUserFields,
 } from '@/hooks/react-hook-forms/useRegister'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
@@ -20,8 +19,11 @@ import FormContainer from '../ui/FormContainer'
 import Avatar from '../ui/Avatar'
 import DivCentered from '../ui/DivCentered'
 import Grid from '../ui/Grid'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function RegisterForm() {
+  const { user, setUser } = useAuth()
+
   const { handleSubmit, errors, control } = useRegisterForm()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
@@ -29,6 +31,12 @@ export default function RegisterForm() {
   const [preview, setPreview] = useState<string | null>(null)
 
   const router = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      router.push(routes.HOME)
+    }
+  }, [user])
 
   useEffect(() => {
     if (file) {
@@ -45,19 +53,14 @@ export default function RegisterForm() {
   const onSubmit = handleSubmit(async (data: RegisterUserFields) => {
     try {
       const response = await register(data)
+      const loginResponse = await login({email: response.email, password: data.password})
+      setUser(loginResponse)
       if (file) {
         const formData = new FormData()
         formData.append('avatar', file, file.name)
-        const fileResponse = await uploadAvatar(formData, response?._id)
-        if (fileResponse?.status === StatusCode.BAD_REQUEST) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        } else if (fileResponse?.status === StatusCode.INTERNAL_SERVER_ERROR) {
-          setApiError(fileResponse?.data.message)
-          setShowError(true)
-        }
+        await uploadAvatar(formData, loginResponse?._id)
+        return;
       }
-      router.push(routes.LOGIN)
     } catch (error) {
       const safeError = error as SafeError
       setApiError(safeError.message)
@@ -88,7 +91,7 @@ export default function RegisterForm() {
               src={
                 preview
                   ? (preview as string)
-                  : `${process.env.NEXT_PUBLIC_API_URL}/uploads/avatars/default-profile.png`
+                  : `${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/avatars/default-profile.png`
               }
               alt="Avatar"
               width={110}

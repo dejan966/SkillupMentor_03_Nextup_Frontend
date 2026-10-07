@@ -206,7 +206,7 @@ export default function CreateUpdateEvent({ defaultValues, title }: Props) {
               defaultValues && (
                 <div className="mb-4">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/events/${defaultValues?.image}`}
+                    src={`${process.env.NEXT_PUBLIC_AWS_AMAZON_S3_BUCKET}/uploads/events/${defaultValues?.image}`}
                     alt="event img"
                     width={123}
                     height={123}
